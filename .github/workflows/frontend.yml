@@ -2,7 +2,7 @@ name: Frontend
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -24,3 +24,17 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test --if-present
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+    - name: Deploy code to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
+          cd /root/frontEnd/airoshotblast.in  # Navigate to the project folder on your EC2 instance
+          git pull origin main  # Pull the latest changes from the repository
+          npm install  # Optional: Install dependencies (e.g., for Node.js apps)
+          pm2 restart frontend  # Optional: Restart app if using PM2
+        EOF
