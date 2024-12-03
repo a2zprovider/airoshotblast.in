@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 
 const ProductSlider = ({ products }: any) => {
@@ -8,7 +8,7 @@ const ProductSlider = ({ products }: any) => {
 
     // Adjust the number of visible items based on the window size (responsive behavior)
     useEffect(() => {
-        console.log('window.innerWidth : ', window.innerWidth);
+        // console.log('window.innerWidth : ', window.innerWidth);
 
         const updateVisibleItems = () => {
             if (window.innerWidth < 640) {

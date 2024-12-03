@@ -3,11 +3,12 @@ import { json, Link, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import Filter from "~/components/Filter";
 import ProductCard from "~/components/ProductCard";
-import imageUrl from "~/config";
+import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
 
-    const cat = await fetch('http://localhost:5000/api/category/' + params.catslug);
+    
+    const cat = await fetch(config.apiBaseURL +'category/' + params.catslug);
     const category = await cat.json();
 
     const full_url = request.url;
@@ -26,14 +27,14 @@ export const meta: MetaFunction = ({ data }) => {
         // OG Details
         { name: "og:title", content: category.data.title },
         { name: "og:description", content: category.data.seo_description },
-        { name: "og:image", content: imageUrl + 'category/' + category.data.image },
+        { name: "og:image", content: config.imgBaseURL + 'category/' + category.data.image },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:twitter", content: "summary_large_image" },
         { name: "twitter:title", content: category.data.title },
         { name: "twitter:description", content: category.data.seo_description },
-        { name: "twitter:image", content: imageUrl + 'category/' + category.data.image },
+        { name: "twitter:image", content: config.imgBaseURL + 'category/' + category.data.image },
     ];
 };
 

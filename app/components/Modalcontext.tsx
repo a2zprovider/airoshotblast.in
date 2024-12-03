@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-
 // Modal context definition
 const ModalContext = createContext<{
   isEnquiryOpen: boolean;

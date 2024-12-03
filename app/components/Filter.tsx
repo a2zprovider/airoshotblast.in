@@ -1,15 +1,5 @@
-import { Link } from "@remix-run/react";
-import { useState } from "react";
-
 export default function Filter(data: any) {
-    const { isOpen, onClose, product } = data;
-    const categories = {
-        Electronics: ["Laptops", "Mobile Phones", "Headphones", "Cameras"],
-        Clothing: ["Men", "Women", "Kids", "Accessories"],
-        HomeAppliances: ["Refrigerators", "Washing Machines", "Microwaves", "Air Conditioners"],
-        Books: ["Fiction", "Non-Fiction", "Science", "History"],
-        Sports: ["Football", "Basketball", "Badminton", "Cycling"],
-    };
+    const { isOpen, onClose } = data;
     if (!isOpen) return null;
     return (
         <div>

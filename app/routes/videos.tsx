@@ -12,12 +12,12 @@ export const meta: MetaFunction = () => {
 export default function Videos() {
     // const data = useLoaderData();
     const videos = [
-        { id: 1, name: 'Video 1', imageUrl: 'https://via.placeholder.com/150' },
-        { id: 2, name: 'Video 2', imageUrl: 'https://via.placeholder.com/150' },
-        { id: 3, name: 'Video 3', imageUrl: 'https://via.placeholder.com/150' },
-        { id: 4, name: 'Video 4', imageUrl: 'https://via.placeholder.com/150' },
-        { id: 5, name: 'Video 5', imageUrl: 'https://via.placeholder.com/150' },
-        { id: 6, name: 'Video 6', imageUrl: 'https://via.placeholder.com/150' },
+        { id: 1, name: 'Video 1', image_url: 'https://via.placeholder.com/150' },
+        { id: 2, name: 'Video 2', image_url: 'https://via.placeholder.com/150' },
+        { id: 3, name: 'Video 3', image_url: 'https://via.placeholder.com/150' },
+        { id: 4, name: 'Video 4', image_url: 'https://via.placeholder.com/150' },
+        { id: 5, name: 'Video 5', image_url: 'https://via.placeholder.com/150' },
+        { id: 6, name: 'Video 6', image_url: 'https://via.placeholder.com/150' },
     ];
     return (
         <div className="bg-[#E9F1F7]">
