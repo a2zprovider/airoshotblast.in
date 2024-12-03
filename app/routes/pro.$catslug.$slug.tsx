@@ -2,13 +2,12 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json, Link, useParams } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import BlogSlider from "~/components/BlogSlider";
 import ProductSlider from "~/components/ProductSlider";
-import imageUrl from "~/config";
+import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
 
-    const product_detail = await fetch('http://localhost:5000/api/product/' + params.slug);
+    const product_detail = await fetch(config.apiBaseURL + 'product/' + params.slug);
     const product = await product_detail.json();
 
     const full_url = request.url;
@@ -28,14 +27,14 @@ export const meta: MetaFunction = ({ data }) => {
         // OG Details
         { name: "og:title", content: product.data.title },
         { name: "og:description", content: product.data.seo_description },
-        { name: "og:image", content: imageUrl + 'product/' + product.data.image },
+        { name: "og:image", content: config.imgBaseURL + 'product/' + product.data.image },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:twitter", content: "summary_large_image" },
         { name: "twitter:title", content: product.data.title },
         { name: "twitter:description", content: product.data.seo_description },
-        { name: "twitter:image", content: imageUrl + 'product/' + product.data.image },
+        { name: "twitter:image", content: config.imgBaseURL + 'product/' + product.data.image },
     ];
 };
 
@@ -62,24 +61,11 @@ export default function ProductSingle() {
     const tabs = ["Additional Information", "Applications", "Product Description"]; // Define your tabs here
 
     const images = [];
-    images.push(`${imageUrl}product/${product.data.image}`);
-    console.log('images : ', JSON.parse(product.data.images));
-    const imgs = JSON.parse(product.data.images);
-    console.log('imgs : ', imgs);
-    imgs.forEach(element => {
-        images.push(`${imageUrl}product/imgs/${element}`);
-        
+    images.push(`${config.imgBaseURL}product/${product.data.image}`);
+    const imgs: [string] = JSON.parse(product.data.images);
+    imgs.forEach(img => {
+        images.push(`${config.imgBaseURL}product/imgs/${img}`);
     });
-    console.log('images : ', images);
-
-
-    // imgs.forEach(val: any => {
-    //     images.push(`${imageUrl}product/${val}`);
-    // });
-    // imgs.forEach({ img }:any=> {
-
-    // images.push(`${imageUrl}product/imgs/${element}`);
-
 
     return (
         <>

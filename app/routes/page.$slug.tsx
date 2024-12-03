@@ -1,17 +1,18 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json, Link, NavLink, useLoaderData, useNavigate, useParams } from "@remix-run/react";
-import { useState } from "react";
+import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
+    
     const { slug } = params;
 
-    const page = await fetch('http://localhost:5000/api/pages?limit=100');
+    const page = await fetch(config.apiBaseURL +'pages?limit=100');
     const pages = await page.json();
 
-    const p_detail = await fetch('http://localhost:5000/api/page/' + params.slug);
+    const p_detail = await fetch(config.apiBaseURL +'page/' + params.slug);
     const page_detail = await p_detail.json();
 
-    const setting = await fetch('http://localhost:5000/api/setting');
+    const setting = await fetch(config.apiBaseURL +'setting');
     const settings = await setting.json();
 
     const full_url = request.url;
@@ -32,14 +33,14 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 //         // OG Details
 //         { name: "og:title", content: seo_details.p_seo_title },
 //         { name: "og:description", content: seo_details.p_seo_description },
-//         { name: "og:image", content: imageUrl + 'setting/logo/' + settings.data.logo },
+//         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
 //         { name: "og:url", content: full_url },
 
 //         // Twitter Card Details
 //         { name: "twitter:twitter", content: "summary_large_image" },
 //         { name: "twitter:title", content: seo_details.p_seo_title },
 //         { name: "twitter:description", content: seo_details.p_seo_description },
-//         { name: "twitter:image", content: imageUrl + 'setting/logo/' + settings.data.logo },
+//         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
 //     ];
 // };
 

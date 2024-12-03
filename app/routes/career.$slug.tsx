@@ -1,27 +1,34 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link, NavLink, useNavigate, useParams } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json, Link, NavLink, useLoaderData, useNavigate, useParams } from "@remix-run/react";
+import config from "~/config";
 
-export const meta: MetaFunction = () => {
-    return [
-        { title: "New Remix App Page" },
-        { name: "Page description", content: "Welcome to Remix Page!" },
-    ];
+export let loader: LoaderFunction = async ({ request, params }) => {
+    
+
+    const page = await fetch(config.apiBaseURL + 'pages?limit=100');
+    const pages = await page.json();
+
+    const career = await fetch(config.apiBaseURL + 'career/' + params.slug);
+    const careers = await career.json();
+
+    const setting = await fetch(config.apiBaseURL + 'setting');
+    const settings = await setting.json();
+
+    const full_url = request.url;
+    const slug = "careers";
+
+    return json({ pages, settings, full_url, slug, careers });
 };
 
 export default function CareerDetail() {
 
     const navigate = useNavigate();
-    const slug = 'careers';
+    const { slug, pages, settings, full_url, careers }: any = useLoaderData();
 
     const handleClick = (url: any) => {
         navigate(`/${url}`);
     };
 
-    const pages = [
-        { id: 1, slug: 'privacy-policy', title: 'Privacy Policy', imageUrl: 'https://via.placeholder.com/150' },
-        { id: 2, slug: 'terms-conditions', title: 'Terms & Conditions', imageUrl: 'https://via.placeholder.com/150' },
-        { id: 3, slug: 'careers', title: 'Careers', imageUrl: 'https://via.placeholder.com/150' },
-    ];
     return (
         <>
             <div className="bg-[#E9F1F7]">
@@ -35,19 +42,29 @@ export default function CareerDetail() {
                                 {/* Sidebar (Tabs) */}
                                 <div className="md:w-1/4 ">
                                     <ul className="space-y-2 w-full">
-                                        {pages.map((page, index) => (
-                                            <li key={index}>
-                                                <button
-                                                    className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${slug == page.slug
-                                                        ? "bg-[#4356A2] border-[#4356A2] text-white"
-                                                        : "bg-white text-gray-700 border-[#CCCCCC80]"
-                                                        }`}
-                                                    onClick={() => handleClick(page.slug)}
-                                                >
-                                                    {page.title}
-                                                </button>
-                                            </li>
+                                        {pages.data.data.map((page: any, index: any) => (
+                                            page.slug != 'about-us' ?
+                                                <li key={index}>
+                                                    <button
+                                                        className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${slug == page.slug
+                                                            ? "bg-[#4356A2] border-[#4356A2] text-white"
+                                                            : "bg-white text-gray-700 border-[#CCCCCC80]"
+                                                            }`}
+                                                        onClick={() => handleClick('/page/' + page.slug)}
+                                                    >
+                                                        {page.title}
+                                                    </button>
+                                                </li>
+                                                : ''
                                         ))}
+                                        <li>
+                                            <button
+                                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-[#4356A2] border-[#4356A2] text-white"
+                                                onClick={() => handleClick('/careers')}
+                                            >
+                                                Career
+                                            </button>
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -57,11 +74,11 @@ export default function CareerDetail() {
                                         <div className="content-detail">
                                             <div className="pb-4">
                                                 <div className="font-medium text-2xl text-[#4356A2]">Job Title:</div>
-                                                <p className="font-normal text-[#131B23] text-lg">Sales Engineer</p>
+                                                <p className="font-normal text-[#131B23] text-lg">{careers.data.title}</p>
                                             </div>
                                             <div className="pb-4">
-                                                <div className="font-medium text-2xl text-[#4356A2]">Job Location:</div>
-                                                <p className="font-normal text-[#131B23] text-lg">Jodhpur, Rajasthan</p>
+                                                <div className="font-medium text-2xl text-[#4356A2]">Job Vacancy:</div>
+                                                <p className="font-normal text-[#131B23] text-lg">{careers.data.vacancy}</p>
                                             </div>
                                             <div className="pb-4">
                                                 <div className="font-medium text-2xl text-[#4356A2]">Office Address:</div>

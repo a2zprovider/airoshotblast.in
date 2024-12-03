@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import config from "~/config";
 
 // app/components/Footer.tsx
 export default function Footer({ settings }: any) {
@@ -10,7 +11,7 @@ export default function Footer({ settings }: any) {
   useEffect(() => {
     const fetchPages = async () => {
       try {
-        const page = await fetch('http://localhost:5000/api/pages');
+        const page = await fetch(config.apiBaseURL + 'pages');
         const pages = await page.json();
 
         setPages(pages.data.data);

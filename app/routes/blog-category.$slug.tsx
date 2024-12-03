@@ -3,20 +3,21 @@ import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import BlogCard from "~/components/BlogCard";
-import imageUrl from "~/config";
+import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
 
-    const blog = await fetch('http://localhost:5000/api/blogcategory/' + params.slug);
+    
+    const blog = await fetch(config.apiBaseURL +'blogcategory/' + params.slug);
     const blogs = await blog.json();
 
-    const tag = await fetch('http://localhost:5000/api/tags');
+    const tag = await fetch(config.apiBaseURL +'tags');
     const tags = await tag.json();
 
-    const blogcategory = await fetch('http://localhost:5000/api/blogcategory');
+    const blogcategory = await fetch(config.apiBaseURL +'blogcategory');
     const blogcategories = await blogcategory.json();
 
-    const recent_blog = await fetch('http://localhost:5000/api/blogs?limit=5');
+    const recent_blog = await fetch(config.apiBaseURL +'blogs?limit=5');
     const recent_blogs = await recent_blog.json();
 
     const full_url = request.url;
@@ -35,14 +36,14 @@ export const meta: MetaFunction = ({ data }) => {
         // OG Details
         { name: "og:title", content: blogs.data.title },
         { name: "og:description", content: blogs.data.seo_description },
-        { name: "og:image", content: imageUrl + 'blog/' + blogs.data.image },
+        { name: "og:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:twitter", content: "summary_large_image" },
         { name: "twitter:title", content: blogs.data.title },
         { name: "twitter:description", content: blogs.data.seo_description },
-        { name: "twitter:image", content: imageUrl + 'blog/' + blogs.data.image },
+        { name: "twitter:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
     ];
 };
 

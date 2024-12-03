@@ -62,7 +62,10 @@ body {
         @apply px-4 py-2
     }
 
-    .content-details.applications ul li::before {
+    .applications.content-details ul li {
+        list-style: none;
+    }
+    .applications.content-details ul li::before {
         content: "\f0a4";
         font-family: 'Font Awesome 5 Free';
         margin-right: 15px;

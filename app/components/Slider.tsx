@@ -1,6 +1,5 @@
-// Remix Component (Slider.jsx)
 import { useEffect, useState } from 'react';
-import imageUrl from '~/config';
+import config from '~/config';
 
 export default function Slider() {
     const [sliders, setSliders] = useState<any[]>([]);
@@ -23,7 +22,7 @@ export default function Slider() {
     useEffect(() => {
         const fetchSliders = async () => {
             try {
-                const slider = await fetch('http://localhost:5000/api/sliders');
+                const slider = await fetch(config.apiBaseURL + 'sliders');
                 const sliders = await slider.json();
 
                 setSliders(sliders.data.data);
@@ -53,7 +52,7 @@ export default function Slider() {
                     {sliders.map((slider: any, index: any) => (
                         <img
                             key={index}
-                            src={imageUrl + `/slider/${slider.image}`}
+                            src={config.imgBaseURL + `/slider/${slider.image}`}
                             alt={slider.title}
                             className="w-full flex-shrink-0"
                         />

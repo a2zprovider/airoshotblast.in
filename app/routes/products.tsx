@@ -3,14 +3,13 @@ import { json, Link, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import Filter from "~/components/Filter";
 import ProductCard from "~/components/ProductCard";
-import imageUrl from "~/config";
+import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request }) => {
-
-    const product = await fetch('http://localhost:5000/api/products?limit=100');
+    const product = await fetch(config.apiBaseURL + 'products?limit=100');
     const products = await product.json();
 
-    const setting = await fetch('http://localhost:5000/api/setting');
+    const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
     const full_url = request.url;
@@ -31,14 +30,14 @@ export const meta: MetaFunction = ({ data }) => {
         // OG Details
         { name: "og:title", content: seo_details.p_seo_title },
         { name: "og:description", content: seo_details.p_seo_description },
-        { name: "og:image", content: imageUrl + 'setting/logo/' + settings.data.logo },
+        { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:twitter", content: "summary_large_image" },
         { name: "twitter:title", content: seo_details.p_seo_title },
         { name: "twitter:description", content: seo_details.p_seo_description },
-        { name: "twitter:image", content: imageUrl + 'setting/logo/' + settings.data.logo },
+        { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
     ];
 };
 
@@ -46,7 +45,6 @@ export const meta: MetaFunction = ({ data }) => {
 export default function Products() {
 
     const { products, settings, full_url }: any = useLoaderData();
-    console.log('data cate : ', products.data.data);
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const openFilter = () => setIsFilterOpen(true);
@@ -83,8 +81,8 @@ export default function Products() {
                     <Filter isOpen={isFilterOpen} onClose={closeFilter} />
                     <div className="py-3">
                         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                            {products.data.data.map((product: any) => (
-                                <div key={product.id}>
+                            {products.data.data.map((product: any, index: any) => (
+                                <div key={index}>
                                     <ProductCard product={product} />
                                 </div>
                             ))}

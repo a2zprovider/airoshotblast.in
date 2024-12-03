@@ -1,7 +1,6 @@
 import {
   json,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -13,7 +12,7 @@ import { useEffect, useState } from "react";
 import "./tailwind.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import imageUrl from "./config";
+import config from "./config";
 import { ModalProvider } from "./components/Modalcontext";
 import Enquiry from "./components/Enquiry";
 import QuickView from "./components/QuickView";
@@ -38,7 +37,7 @@ export const links: LinksFunction = () => [
 
 export let loader: LoaderFunction = async ({ request }) => {
 
-  const setting = await fetch("http://localhost:5000/api/setting");
+  const setting = await fetch(config.apiBaseURL + 'setting');
   const settings = await setting.json();
 
   const newSettings: any = {
@@ -55,45 +54,47 @@ export default function App() {
   const { settings }: any = useLoaderData();
   // console.log('settings : ', settings);
 
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:4000"); // Make sure this URL matches the server
+  // useEffect(() => {
+  //   const ws = new WebSocket("ws://localhost:5173"); // Make sure this URL matches the server
 
-    ws.onopen = () => {
-      console.log("WebSocket connection established");
-    };
+  //   ws.onopen = () => {
+  //     console.log("WebSocket connection established");
+  //   };
 
-    ws.onmessage = (event) => {
-      setMessages((prevMessages) => [...prevMessages, event.data]);
-    };
+  //   ws.onmessage = (event) => {
+  //     setMessages((prevMessages) => [...prevMessages, event.data]);
+  //   };
 
-    ws.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
+  //   ws.onclose = () => {
+  //     console.log("WebSocket connection closed");
+  //   };
 
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+  //   ws.onerror = (error) => {
+  //     console.error("WebSocket error:", error);
+  //   };
 
-    return () => {
-      ws.close();
-    };
-  }, []);
+  //   return () => {
+  //     ws.close();
+  //   };
+  // }, []);
 
   return (
     <ModalProvider>
       <html lang="en">
         <head>
-          <meta charSet="utf-8" />
+          <meta charSet="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
 
           {/* <!-- Favicon --> */}
-          <link rel="icon" href={imageUrl + 'setting/favicon/' + settings.data.favicon} type="image/x-icon" />
+          <link rel="icon" href={config.imgBaseURL + 'setting/favicon/' + settings.data.favicon} type="image/x-icon" />
           {/* <!-- Apple Touch Icon --> */}
-          <link rel="apple-touch-icon" href={imageUrl + 'setting/favicon/' + settings.data.favicon} />
-          <link rel="apple-touch-icon" sizes="180x180" href={imageUrl + 'setting/favicon/' + settings.data.favicon} />
+          <link rel="apple-touch-icon" href={config.imgBaseURL + 'setting/favicon/' + settings.data.favicon} />
+          <link rel="apple-touch-icon" sizes="180x180" href={config.imgBaseURL + 'setting/favicon/' + settings.data.favicon} />
 
           <Meta />
           <Links />
+
+          <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
         <body>
           <Header settings={settings.data} />
@@ -107,6 +108,7 @@ export default function App() {
           <Scripts />
           {/* Conditionally include LiveReload if Vite is not in use */}
           {/* {process.env.NODE_ENV === "development" && <LiveReload />} */}
+
         </body>
       </html>
     </ModalProvider>
