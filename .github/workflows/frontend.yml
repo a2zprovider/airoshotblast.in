@@ -24,7 +24,10 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test --if-present
-
+    
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+      
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
