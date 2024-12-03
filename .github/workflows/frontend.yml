@@ -34,7 +34,9 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
           cd /root/frontEnd/airoshotblast.in  # Navigate to the project folder on your EC2 instance
+          ls
           git pull origin main  # Pull the latest changes from the repository
+          ls
           npm install  # Optional: Install dependencies (e.g., for Node.js apps)
           pm2 restart frontend  # Optional: Restart app if using PM2
         EOF
