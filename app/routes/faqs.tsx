@@ -2,6 +2,7 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import Accordion from "~/components/Accordion";
+import config from "~/config";
 
 export const meta: MetaFunction = () => {
     return [
@@ -11,8 +12,9 @@ export const meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async () => {
+    
 
-    const faq = await fetch('http://localhost:5000/api/faqs');
+    const faq = await fetch(config.apiBaseURL +'faqs');
     const faqs = await faq.json();
 
     return json({ faqs });

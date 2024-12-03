@@ -2,20 +2,21 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
-import imageUrl from "~/config";
+import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
+    
 
-    const blog_detail = await fetch('http://localhost:5000/api/blog/' + params.slug);
+    const blog_detail = await fetch(config.apiBaseURL +'blog/' + params.slug);
     const blog = await blog_detail.json();
 
-    const tag = await fetch('http://localhost:5000/api/tags');
+    const tag = await fetch(config.apiBaseURL +'tags');
     const tags = await tag.json();
 
-    const recent_blog = await fetch('http://localhost:5000/api/blogs?limit=5');
+    const recent_blog = await fetch(config.apiBaseURL +'blogs?limit=5');
     const recent_blogs = await recent_blog.json();
 
-    const blogcategory = await fetch('http://localhost:5000/api/blogcategory');
+    const blogcategory = await fetch(config.apiBaseURL +'blogcategory');
     const blogcategories = await blogcategory.json();
 
     const full_url = request.url;
@@ -34,14 +35,14 @@ export const meta: MetaFunction = ({ data }) => {
         // OG Details
         { name: "og:title", content: blog.data.title },
         { name: "og:description", content: blog.data.seo_description },
-        { name: "og:image", content: imageUrl + 'blog/' + blog.data.image },
+        { name: "og:image", content: config.imgBaseURL + 'blog/' + blog.data.image },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:twitter", content: "summary_large_image" },
         { name: "twitter:title", content: blog.data.title },
         { name: "twitter:description", content: blog.data.seo_description },
-        { name: "twitter:image", content: imageUrl + 'blog/' + blog.data.image },
+        { name: "twitter:image", content: config.imgBaseURL + 'blog/' + blog.data.image },
     ];
 };
 
@@ -110,7 +111,7 @@ export default function BlogSingle() {
                                     }
                                 </div>
                                 <div>
-                                    <img src={imageUrl + 'blog/' + blog.data.image} alt={blog.data.title} className="lg:h-[425px] w-full object-contain" />
+                                    <img src={config.imgBaseURL + 'blog/' + blog.data.image} alt={blog.data.title} className="lg:h-[425px] w-full object-contain" />
                                 </div>
                                 <div className="content-details font-normal text-lg text-justify space-y-4 py-8">
                                     <div dangerouslySetInnerHTML={{ __html: blog.data.description }} ></div>
@@ -121,7 +122,7 @@ export default function BlogSingle() {
                                     <Link target="_blank" to={'https://api.whatsapp.com/send?text=' + blog.data.title + ' ' + full_url} ><i className="fab fa-whatsapp"></i></Link>
                                     <Link target="_blank" to={'https://www.linkedin.com/sharing/share-offsite/?url=' + full_url} ><i className="fab fa-linkedin"></i></Link>
                                     <Link target="_blank" to={'https://twitter.com/intent/tweet?url=' + full_url + '&text=' + blog.data.title} ><i className="fab fa-twitter"></i></Link>
-                                    <Link target="_blank" to={'https://pinterest.com/pin/create/button/?url=' + full_url + '&media=' + imageUrl + 'blog/' + blog.data.image + '&description=' + blog.data.title} ><i className="fab fa-pinterest"></i></Link>
+                                    <Link target="_blank" to={'https://pinterest.com/pin/create/button/?url=' + full_url + '&media=' + config.imgBaseURL + 'blog/' + blog.data.image + '&description=' + blog.data.title} ><i className="fab fa-pinterest"></i></Link>
                                 </div>
                                 <hr />
                                 <div className="flex justify-between">

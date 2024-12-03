@@ -1,5 +1,4 @@
-import { Link } from '@remix-run/react';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import BlogCard from './BlogCard';
 
 const BlogSlider = ({ blogs }: any) => {
@@ -9,7 +8,7 @@ const BlogSlider = ({ blogs }: any) => {
 
     // Adjust the number of visible items based on the window size (responsive behavior)
     useEffect(() => {
-        console.log('window.innerWidth : ', window.innerWidth);
+        // console.log('window.innerWidth : ', window.innerWidth);
 
         const updateVisibleItems = () => {
             if (window.innerWidth < 640) {

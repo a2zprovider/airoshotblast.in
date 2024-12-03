@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import BlogSlider from "~/components/BlogSlider";
 import ProductSlider from "~/components/ProductSlider";
-import imageUrl from "~/config";
+import config from "~/config";
 
 export const meta: MetaFunction = () => {
     return [
@@ -14,8 +14,9 @@ export const meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ params }) => {
+    
 
-    const product_detail = await fetch('http://localhost:5000/api/product/' + params.slug);
+    const product_detail = await fetch(config.apiBaseURL +'product/' + params.slug);
     const product = await product_detail.json();
 
     return json({ product });
@@ -59,7 +60,7 @@ export default function ProductSingle() {
                                             <div className="relative">
                                                 <div className="flex justify-center">
                                                     <img
-                                                        src={imageUrl + 'product/imgs/' + JSON.parse(product.data.images)[selectedImageIndex]}
+                                                        src={config.imgBaseURL + 'product/imgs/' + JSON.parse(product.data.images)[selectedImageIndex]}
                                                         alt={`.images Image ${selectedImageIndex + 1}`}
                                                         className="h-[425px] width-full object-contain rounded-2xl"
                                                     />
@@ -90,7 +91,7 @@ export default function ProductSingle() {
                                                         onClick={() => handleThumbnailClick(index)}
                                                     >
                                                         <img
-                                                            src={imageUrl + 'product/imgs/' + image}
+                                                            src={config.imgBaseURL + 'product/imgs/' + image}
                                                             alt={`Thumbnail ${index + 1}`}
                                                             className="w-[100px] h-[100px] object-cover"
                                                         />

@@ -1,16 +1,72 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link } from "@remix-run/react";
+import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json, Link, useActionData, useFetcher } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
-import imageUrl from "~/config";
+import config from "~/config";
+import { useState } from "react";
 
 export let loader: LoaderFunction = async ({ request }) => {
-
-    const setting = await fetch('http://localhost:5000/api/setting');
+    const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
     const full_url = request.url;
 
     return json({ settings, full_url });
+};
+
+export let action: ActionFunction = async ({ request }: { request: Request }) => {
+    const formData = new URLSearchParams(await request.text());
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const mobile = `${formData.get("code")} ${formData.get("mobile")}`;
+    const message = formData.get("message");
+    const captchaToken = formData.get("g-recaptcha-response");
+
+    // Ensure CAPTCHA response exists
+    if (!captchaToken) {
+        return json({ error: "Please complete the CAPTCHA.", status: 0 });
+    }
+
+    // Verify CAPTCHA
+    const captchaResponse = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        body: new URLSearchParams({
+            secret: config.RECAPTCHA_SECRET_KEY,
+            response: captchaToken,
+        }),
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
+    const captchaResult = await captchaResponse.json();
+
+    if (!captchaResult.success) {
+        return json({ error: "CAPTCHA validation failed. Please try again.", status: 0 });
+    }
+
+    // Process the form data (you could save to a database or send an email)
+    try {
+        // Add your custom form processing here (like saving to DB or sending an email)
+        console.log("Form submitted:", { name, email, mobile, message });
+
+        const response = await fetch(config.apiBaseURL + 'enquiry', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, email, mobile, message }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            return json({ error: data.message, status: response.status });
+        }
+
+        return json({ success: "Your enquiry has been submitted successfully!", status: 1 });
+    } catch (error) {
+        return json({ error: "Failed to submit the form. Please try again later.", status: 0 });
+    }
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -25,19 +81,21 @@ export const meta: MetaFunction = ({ data }) => {
         // OG Details
         { name: "og:title", content: seo_details.c_seo_title },
         { name: "og:description", content: seo_details.c_seo_description },
-        { name: "og:image", content: imageUrl + 'setting/logo/' + settings.data.logo },
+        { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:twitter", content: "summary_large_image" },
         { name: "twitter:title", content: seo_details.c_seo_title },
         { name: "twitter:description", content: seo_details.c_seo_description },
-        { name: "twitter:image", content: imageUrl + 'setting/logo/' + settings.data.logo },
+        { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
     ];
 };
 
 export default function Contact() {
     const { settings }: any = useLoaderData();
+    const { status, error, success }: any = useActionData() || {};
+
     return (
         <div className="bg-[#E9F1F7]">
             <div className="container mx-auto">
@@ -49,12 +107,16 @@ export default function Contact() {
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
                             <div className="bg-[#4356A2] p-4">
                                 <div className="font-medium text-lg text-[#f6f6f6] text-center py-2">Tell us your requirement, and we'll send you quotes</div>
-                                <form className="mt-4">
+                                {status === 0 && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
+                                {status === 1 && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
+
+                                <form method="POST" className="mt-4">
                                     <div className="flex flex-col mb-2">
                                         <label htmlFor="name" className="text-white text-lg font-medium">Name</label>
                                         <input
                                             type="text"
                                             name="name"
+                                            required
                                             placeholder="Enter Your Name"
                                             className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
                                         />
@@ -64,6 +126,8 @@ export default function Contact() {
                                         <input
                                             type="email"
                                             name="email"
+                                            required
+                                            pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                                             placeholder="Enter Your E-Mail"
                                             className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
                                         />
@@ -71,15 +135,21 @@ export default function Contact() {
                                     <div className="flex flex-col mb-2">
                                         <label htmlFor="mobile" className="text-white text-lg font-medium">Mobile No.</label>
                                         <div className="flex items-center">
-                                            <select
-                                                className="h-[44px] px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r"
-                                                name="options"
-                                                id="options"
-                                            >
-                                                <option value="option1">+91</option>
-                                                <option value="option2">+1</option>
-                                                <option value="option3">+001</option>
-                                            </select>
+                                            <div className="relative">
+                                                <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                    name="code"
+                                                    defaultValue="+91"
+                                                    id="code">
+                                                    <option value="+91">+91</option>
+                                                    <option value="+1">+1</option>
+                                                    <option value="+001">+001</option>
+                                                </select>
+                                                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                                    <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                                                    </svg>
+                                                </span>
+                                            </div>
                                             <input
                                                 type="mobile"
                                                 name="mobile"
@@ -90,9 +160,10 @@ export default function Contact() {
                                     </div>
                                     <div className="flex flex-col mb-4">
                                         <label htmlFor="requirement" className="text-white text-lg font-medium">Your Requirement</label>
-                                        <textarea name="requirement" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
+                                        <textarea name="message" id="" required rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
                                     </div>
-                                    <div className="flex flex-col mb-2">
+                                    <div className="flex flex-row mb-2 items-center gap-2">
+                                        <div className="g-recaptcha" data-sitekey={config.RECAPTCHA_SITE_KEY}></div>
                                         <button className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px]">Submit</button>
                                     </div>
                                 </form>

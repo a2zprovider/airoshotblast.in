@@ -1,32 +1,27 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, NavLink, useLoaderData, useNavigate, useParams } from "@remix-run/react";
-
-export const meta: MetaFunction = () => {
-    return [
-        { title: "New Remix App Page" },
-        { name: "Page description", content: "Welcome to Remix Page!" },
-    ];
-};
-
+import type { LoaderFunction } from "@remix-run/node";
+import { json, Link, useLoaderData, useNavigate, useParams } from "@remix-run/react";
+import config from "~/config";
 export let loader: LoaderFunction = async ({ request, params }) => {
 
-    const page = await fetch('http://localhost:5000/api/pages?limit=100');
+
+    const page = await fetch(config.apiBaseURL + 'pages?limit=100');
     const pages = await page.json();
 
-    const p_detail = await fetch('http://localhost:5000/api/pages');
-    const page_detail = await p_detail.json();
+    const career = await fetch(config.apiBaseURL + 'careers');
+    const careers = await career.json();
 
-    const setting = await fetch('http://localhost:5000/api/setting');
+    const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
     const full_url = request.url;
+    const slug = "careers";
 
-    return json({ pages, page_detail, settings, full_url });
+    return json({ pages, settings, full_url, slug, careers });
 };
 
 export default function Careers() {
     const navigate = useNavigate();
-    const { slug, pages, page_detail, settings, full_url }: any = useLoaderData();
+    const { slug, pages, settings, full_url, careers }: any = useLoaderData();
 
     const handleClick = (url: any) => {
         navigate(`${url}`);
@@ -74,50 +69,30 @@ export default function Careers() {
                                 <div className="md:w-3/4">
                                     <div className="px-2">
                                         <div className="text-medium text-2xl text-[#4356A2] pb-4">Open Job Positions</div>
-                                        <div className="grid grid-cols-3 gap-2 bg-[#F1F1F1] shadow-md divide-x divide-[#ccc] mb-4 p-3">
-                                            <div className="px-4 py-2">
-                                                <div className="text-[#4356A2] text-xl font-medium py-1">Sales Engineer</div>
-                                                <div className="flex items-center gap-2 py-1">
-                                                    <i className="fa fa-map-marker-alt"></i>
-                                                    <div className="text-[#131B23] font-normal text-lg">Jodhpur, Rajasthan</div>
+                                        {careers.data.data.map((career: any, index: any) => (
+                                            <div key={index} className="grid grid-cols-3 gap-2 bg-[#F1F1F1] shadow-md divide-x divide-[#ccc] mb-4 p-3">
+                                                <div className="px-4 py-2">
+                                                    <div className="text-[#4356A2] text-xl font-medium py-1">{career.title}</div>
+                                                    <div className="flex items-center gap-2 py-1">
+                                                        <i className="fa fa-map-marker-alt"></i>
+                                                        <div className="text-[#131B23] font-normal text-lg">{career.address}</div>
+                                                    </div>
+                                                </div>
+                                                <div className="px-4 py-2">
+                                                    <div className="font-normal text-[#131B23] text-lg py-1">
+                                                        <span>Posted on: </span>
+                                                        <span className="text-[#4356A2] text-xl font-medium">Nov 13, 2024</span>
+                                                    </div>
+                                                    <div className="font-normal text-[#131B23] text-lg py-1">
+                                                        <span>No. of Vacancies: </span>
+                                                        <span className="text-[#4356A2] text-xl font-medium">{career.vacancy}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="p-5 flex items-center justify-center">
+                                                    <button onClick={() => navigate('/career/' + career.slug)} className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px]">Apply Now</button>
                                                 </div>
                                             </div>
-                                            <div className="px-4 py-2">
-                                                <div className="font-normal text-[#131B23] text-lg py-1">
-                                                    <span>Posted on: </span>
-                                                    <span className="text-[#4356A2] text-xl font-medium">Nov 13, 2024</span>
-                                                </div>
-                                                <div className="font-normal text-[#131B23] text-lg py-1">
-                                                    <span>No. of Vacancies: </span>
-                                                    <span className="text-[#4356A2] text-xl font-medium">5</span>
-                                                </div>
-                                            </div>
-                                            <div className="p-5 flex items-center justify-center">
-                                                <button onClick={() => handleClick('career/first')} className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px]">Apply Now</button>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-2 bg-[#F1F1F1] shadow-md divide-x divide-[#ccc] mb-4 p-3">
-                                            <div className="px-4 py-2">
-                                                <div className="text-[#4356A2] text-xl font-medium py-1">Sales Engineer</div>
-                                                <div className="flex items-center gap-2 py-1">
-                                                    <i className="fa fa-map-marker-alt"></i>
-                                                    <div className="text-[#131B23] font-normal text-lg">Jodhpur, Rajasthan</div>
-                                                </div>
-                                            </div>
-                                            <div className="px-4 py-2">
-                                                <div className="font-normal text-[#131B23] text-lg py-1">
-                                                    <span>Posted on: </span>
-                                                    <span className="text-[#4356A2] text-xl font-medium">Nov 13, 2024</span>
-                                                </div>
-                                                <div className="font-normal text-[#131B23] text-lg py-1">
-                                                    <span>No. of Vacancies: </span>
-                                                    <span className="text-[#4356A2] text-xl font-medium">5</span>
-                                                </div>
-                                            </div>
-                                            <div className="p-5 flex items-center justify-center">
-                                                <button onClick={() => handleClick('career/second')} className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px]">Apply Now</button>
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>

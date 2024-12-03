@@ -3,21 +3,21 @@ const WebSocket = require("ws");
 const { createRequestHandler } = require("@remix-run/express");
 
 const app = express();
-const port = 4000; // Ensure the port matches
+const port = 5173; // Ensure the port matches
 
 // WebSocket server setup
 const wss = new WebSocket.Server({ noServer: true });
 
 wss.on("connection", (ws) => {
-  console.log("WebSocket connection established");
+  // console.log("WebSocket connection established");
 
   ws.on("message", (message) => {
-    console.log("Received:", message);
+    // console.log("Received:", message);
     ws.send(`Echo from server: ${message}`);
   });
 
   ws.on("close", () => {
-    console.log("WebSocket connection closed");
+    // console.log("WebSocket connection closed");
   });
 });
 
