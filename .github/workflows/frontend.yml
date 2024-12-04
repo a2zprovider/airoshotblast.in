@@ -36,8 +36,8 @@ jobs:
     - name: Deploy code to EC2
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
+          source ~/.bashrc
           cd /root/frontEnd/airoshotblast.in  # Navigate to the project folder on your EC2 instance
-          ls
           git pull origin main  # Pull the latest changes from the repository
           ls
           npm install  # Optional: Install dependencies (e.g., for Node.js apps)
