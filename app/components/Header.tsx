@@ -11,7 +11,7 @@ export default function Header({ settings }: any) {
 
   return (
     <>
-      <header className="bg-[#E9F1F7]">
+      <header className="bg-[#E9F1F799]">
         <div className="container mx-auto md:py-3">
           <div className="flex items-center justify-between">
             <div className="text-left">
@@ -43,7 +43,7 @@ export default function Header({ settings }: any) {
                     type="text"
                     name="s"
                     placeholder="Search Here..."
-                    className="px-3 py-2 bg-[#E9F1F7] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
+                    className="px-3 py-2 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
                   />
                   <button
                     type="submit"
@@ -120,7 +120,7 @@ export default function Header({ settings }: any) {
                   type="text"
                   name="s"
                   placeholder="Search Here..."
-                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F7] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
+                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
                 />
                 <button
                   type="submit"

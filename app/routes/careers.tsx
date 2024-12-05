@@ -28,7 +28,7 @@ export default function Careers() {
     };
     return (
         <>
-            <div className="bg-[#E9F1F7]">
+            <div className="bg-[#E9F1F799]">
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
@@ -68,7 +68,7 @@ export default function Careers() {
                                 {/* Content Area */}
                                 <div className="md:w-3/4">
                                     <div className="px-2">
-                                        <div className="text-medium text-2xl text-[#4356A2] pb-4">Open Job Positions</div>
+                                        <div className="font-medium text-2xl text-[#4356A2] pb-4">Open Job Positions</div>
                                         {careers.data.data.map((career: any, index: any) => (
                                             <div key={index} className="grid grid-cols-3 gap-2 bg-[#F1F1F1] shadow-md divide-x divide-[#ccc] mb-4 p-3">
                                                 <div className="px-4 py-2">
