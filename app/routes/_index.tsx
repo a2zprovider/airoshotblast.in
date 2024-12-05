@@ -2,7 +2,7 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json, Link, useNavigate, useLoaderData } from "@remix-run/react";
 import Accordion from "~/components/Accordion";
 import BlogSlider from "~/components/BlogSlider";
-import CategorySection from "~/components/CategorySection";
+import CategorySection from "~/components/CategoryProductSection";
 import EnquiryForm from "~/components/EnquiryForm";
 import ProductSlider from "~/components/ProductSlider";
 import Slider from "~/components/Slider";
@@ -11,7 +11,7 @@ import config from "~/config";
 export let loader: LoaderFunction = async ({ request }) => {
 
   // Fetching data from an external API
-  const category = await fetch(config.apiBaseURL + 'category?limit=100');
+  const category = await fetch(config.apiBaseURL + 'category?limit=9');
   const categories = await category.json();
 
   const product = await fetch(config.apiBaseURL + 'products');
@@ -65,14 +65,14 @@ export default function Index() {
 
   return (
     <div>
-      <div className="bg-[#E9F1F7]">
+      <div className="bg-[#E9F1F799]">
         <div className="container mx-auto py-8">
           <div className="flex lg:justify-center items-start w-full lg:gap-8 md:gap-4 overflow-x-auto">
             {categories.data.data.map((category: any, index: any) => (
               category.parent == null ?
                 <Link to={'/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
                   <div className="mb-4 overflow-hidden">
-                    <img src={config.imgBaseURL + `/category/${category.image}`} alt={category.title} className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F7] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out" />
+                    <img src={config.imgBaseURL + `/category/${category.image}`} alt={category.title} className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out" />
                   </div>
                   <p className="text-sm font-normal">{category.title}</p>
                 </Link>
@@ -80,7 +80,7 @@ export default function Index() {
             ))}
             <Link to="/products" className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
               <div className="mb-4 overflow-hidden text-[40px] text-[#4356A2]">
-                <div className="flex justify-center items-center w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F7] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out">
+                <div className="flex justify-center items-center w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out">
                   <i className="fa fa-th-large"></i>
                 </div>
               </div>
@@ -92,28 +92,7 @@ export default function Index() {
       <div>
         <Slider />
       </div>
-      {/* <CategorySection /> */}
-
-      <div className="bg-[#E9F1F7]">
-        <div className="container mx-auto py-8">
-          {/* Section 1 */}
-          <div className="py-6">
-            <div className="text-3xl font-bold text-center">Sand Blasting</div>
-            <p className="text-sm font-normal text-center my-2">We are one of the leading manufacturer, supplier, exporter of sand blasting equipments, machines, sand blasting cabinets, sand blasting rooms, vacuum sand blasting machine </p>
-            <ProductSlider products={products.data.data} />
-          </div>
-          {/* Section 2 */}
-          <div className="py-6">
-            <div className="text-3xl font-bold text-center">Shot Blasting</div>
-            <p className="text-sm font-normal text-center my-2">Shot Blasting
-              We are one of the leading manufacturer, supplier, exporter of airless shot blasting machine, tumble shot blasting machine & spinner hanger shot blast machine</p>
-            <div>
-              <ProductSlider products={products.data.data} />
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <CategorySection />
       <div>
         <div className="container mx-auto py-8">
           <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
@@ -121,7 +100,7 @@ export default function Index() {
               <div className="font-bold text-3xl">Product Videos</div>
               <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
               <div className="flex justify-center py-5">
-                <iframe src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe>
+                <iframe className="w-auto h-auto md:w-[480px] md:h-[360px]" src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe>
               </div>
               <button onClick={() => navigateTo('/videos')} className="bg-[#4356A2]  text-lg text-white font-medium rounded-md w-[196px] h-[46px]">
                 View all Videos
@@ -135,7 +114,7 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="bg-[#E9F1F7]">
+      <div className="bg-[#E9F1F799]">
         <div className="container mx-auto py-8">
 
           {/* Section 1 */}
@@ -150,7 +129,7 @@ export default function Index() {
             <div className="my-5 content-details text-[#131B23] text-lg font-normal text-justify">
               <div dangerouslySetInnerHTML={{ __html: settings.data.description }} ></div>
             </div>
-            {/* <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-6 py-10">
+            <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-6 py-10">
               <div>
                 <div className="text-[#4356A2] text-[22px] font-medium mb-2">Sand Blasting Machine</div>
                 <p className="text-[#131B23] text-lg font-normal text-justify">Sand blasting machine is a type of equipment used for sandblasting. It uses high-speed centrifugal force to remove paint, coatings, and even rust from metal surfaces. Sand blasting is an environmentally friendly process that can be used on all kinds of metals. The equipment comes in different sizes and capacities to suit the needs of various users. Sand blasting involves blasting abrasive particles at a surface to abrade away paint or other coatings. Sand blasting is an effective method of cleaning rust off metal surfaces as well as removing paint and other coatings.
@@ -169,12 +148,12 @@ export default function Index() {
                 <p className="text-[#131B23] text-lg font-normal text-justify">Sand blasting machine is a type of equipment used for sandblasting. It uses high-speed centrifugal force to remove paint, coatings, and even rust from metal surfaces. Sand blasting is an environmentally friendly process that can be used on all kinds of metals. The equipment comes in different sizes and capacities to suit the needs of various users. Sand blasting involves blasting abrasive particles at a surface to abrade away paint or other coatings. Sand blasting is an effective method of cleaning rust off metal surfaces as well as removing paint and other coatings.
                   The sand particles are propelled by the compressed air and impact against the surface at very high velocity. The particles wear away at the target material's surface creating cavities that can be used for subsequent chemical etching or electroplating processes. It may also be referred to as dry sanding because no water is involved in its operation, unlike wet sanding which uses liquid abrasives like grinding paste or paint remover with water added to create slurry before it's applied to the workpiece.</p>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-[#E9F1F7]">
+      <div className="bg-[#E9F1F799]">
         <div className="container mx-auto pb-8">
           <div>
             <div className="text-3xl font-bold text-center">Frequently Asked Questions</div>

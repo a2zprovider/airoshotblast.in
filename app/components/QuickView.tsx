@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react';
 import { useModal } from './Modalcontext';
+import config from '~/config';
 
 const QuickView = () => {
     const { isQuickViewOpen, modalQuickViewData, closeQuickView, openEnquiry } = useModal();
@@ -24,14 +25,14 @@ const QuickView = () => {
                     &times; {/* Close button (X) */}
                 </button>
                 <div className="flex overflow-hidden">
-                    <div className="md:block hidden md:w-[40%] md:max-w-[60%]">
+                    <div className="md:block hidden md:w-[50%] md:max-w-[60%]">
                         <img
-                            src="/product/1.png"
+                            src={product.thumb_image ? config.imgBaseURL + `/product/thumb/${product.thumb_image}` : config.imgBaseURL + `/product/${product.image}`}
                             alt="Product 1"
                             className="h-full width-full object-contain rounded-2xl"
                         />
                     </div>
-                    <div className="py-8 md:w-[60%] md:max-w-[60%] overflow-hidden">
+                    <div className="py-8 md:w-[50%] md:max-w-[60%] overflow-hidden">
                         <div className="px-3">
                             <div className="text-3xl text-[#131B23] font-normal line-clamp-1">{product.title}</div>
                             <div className="text-2xl text-[#BF0707] font-normal py-2">₹ {product.price}</div>
@@ -40,9 +41,9 @@ const QuickView = () => {
                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                             <div className="p-4 font-normal text-[#131B23] text-xl">
                                 {JSON.parse(product.field).name.map((f: any, index: any) => (
-                                    <div className="flex gap-2 flex-wrap" key={index}>
-                                        <div>{f} :</div>
-                                        <div>{JSON.parse(product.field).value[index]}</div>
+                                    <div className="flex gap-4 flex-wrap items-center border-b-[1px] border-[#cccccc61]" key={index}>
+                                        <div className='w-[40%]'>{f}</div>
+                                        <div className='w-[55%]'>{JSON.parse(product.field).value[index]}</div>
                                     </div>
                                 ))}
                             </div>

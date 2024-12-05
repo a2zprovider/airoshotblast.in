@@ -48,7 +48,7 @@ export default function Category() {
     const closeFilter = () => setIsFilterOpen(false);
 
     return (
-        <div className="bg-[#E9F1F7]">
+        <div className="bg-[#E9F1F799]">
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex flex-row overflow-auto items-center py-2 gap-4">

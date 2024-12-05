@@ -20,10 +20,14 @@ const EnquiryForm = () => {
     useEffect(() => {
         if (fetcher.data) {
             const { status, error, success }: any = fetcher.data || {};
-            console.log('fetcher.data : ', fetcher.data);
             setStatus(status);
             setError(error);
             setSuccess(success);
+
+            if (status == '1') {
+                const form = document.getElementById('enquiry-form') as HTMLFormElement;
+                if (form) form.reset();
+            }
         }
     }, [fetcher.data]);
 
@@ -31,7 +35,7 @@ const EnquiryForm = () => {
         <>
             {status == '0' && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
             {status == '1' && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
-            <form className="mt-4" onSubmit={handleSubmit}>
+            <form className="mt-4" id="enquiry-form" onSubmit={handleSubmit}>
                 <div className="flex flex-col mb-2">
                     <label htmlFor="name" className="text-white text-lg font-medium">Name</label>
                     <input
