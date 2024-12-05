@@ -2,7 +2,7 @@ import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/no
 import { json, Link, useActionData, useFetcher } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import config from "~/config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export let loader: LoaderFunction = async ({ request }) => {
     const setting = await fetch(config.apiBaseURL + 'setting');
@@ -94,10 +94,36 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Contact() {
     const { settings }: any = useLoaderData();
-    const { status, error, success }: any = useActionData() || {};
+
+    const fetcher = useFetcher();
+    const [status, setStatus] = useState();
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+
+        fetcher.submit(formData, { method: "post", action: "/contact" });
+    };
+
+    useEffect(() => {
+        if (fetcher.data) {
+            const { status, error, success }: any = fetcher.data || {};
+            setStatus(status);
+            setError(error);
+            setSuccess(success);
+
+            if (status == '1') {
+                const form = document.getElementById('enquiry-form') as HTMLFormElement;
+                if (form) form.reset();
+            }
+        }
+    }, [fetcher.data]);
 
     return (
-        <div className="bg-[#E9F1F7]">
+        <div className="bg-[#E9F1F799]">
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
@@ -107,10 +133,10 @@ export default function Contact() {
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
                             <div className="bg-[#4356A2] p-4">
                                 <div className="font-medium text-lg text-[#f6f6f6] text-center py-2">Tell us your requirement, and we'll send you quotes</div>
-                                {status === 0 && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
-                                {status === 1 && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
+                                {status == '0' && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
+                                {status == '1' && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
 
-                                <form method="POST" className="mt-4">
+                                <form onSubmit={handleSubmit} className="mt-4">
                                     <div className="flex flex-col mb-2">
                                         <label htmlFor="name" className="text-white text-lg font-medium">Name</label>
                                         <input
@@ -164,12 +190,12 @@ export default function Contact() {
                                     </div>
                                     <div className="flex flex-row mb-2 items-center gap-2">
                                         <div className="g-recaptcha" data-sitekey={config.RECAPTCHA_SITE_KEY}></div>
-                                        <button className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px]">Submit</button>
+                                        <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px]">Submit</button>
                                     </div>
                                 </form>
                             </div>
                             <div className="bg-white text-center px-4 py-8">
-                                <div className="text-[#131B23] text-xl text-medium py-2">Get In Touch</div>
+                                <div className="text-[#131B23] text-xl font-medium py-2">Get In Touch</div>
                                 <p className="text-[#131B23] text-base text-normal">If you have any requirement, you can connect with us. Our customer service representative will send you quote ASAP.</p>
                                 <hr className="my-4" />
                                 <div className="px-4">

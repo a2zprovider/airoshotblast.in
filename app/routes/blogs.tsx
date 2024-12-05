@@ -56,7 +56,7 @@ export default function Blog() {
     const { blogs, blogcategories, tags, recent_blogs }: any = useLoaderData();
 
     return (
-        <div className="bg-[#E9F1F7]">
+        <div className="bg-[#E9F1F799]">
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">

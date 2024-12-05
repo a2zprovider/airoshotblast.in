@@ -2,6 +2,8 @@ const express = require("express");
 const WebSocket = require("ws");
 const { createRequestHandler } = require("@remix-run/express");
 
+require('dotenv').config();
+
 const app = express();
 const port = 5173; // Ensure the port matches
 

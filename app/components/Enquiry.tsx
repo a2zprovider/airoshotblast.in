@@ -1,4 +1,4 @@
-import { useFetcher } from '@remix-run/react';
+import { useFetcher, useLoaderData } from '@remix-run/react';
 import { useModal } from './Modalcontext';
 import { useEffect, useState } from 'react';
 import config from '~/config';
@@ -22,10 +22,14 @@ const Enquiry = () => {
     useEffect(() => {
         if (fetcher.data) {
             const { status, error, success }: any = fetcher.data || {};
-            console.log('fetcher.data : ', fetcher.data);
             setStatus(status);
             setError(error);
             setSuccess(success);
+
+            if (status == '1') {
+                const form = document.getElementById('enquiry-form') as HTMLFormElement;
+                if (form) form.reset();
+            }
         }
     }, [fetcher.data]);
 
@@ -50,7 +54,7 @@ const Enquiry = () => {
                     <div className="p-6">
                         {status == '0' && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
                         {status == '1' && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} id="enquiry-form">
                             <div className="flex flex-col mb-2">
                                 <label htmlFor="name" className="text-[#131B23] text-lg font-medium">Name</label>
                                 <input
