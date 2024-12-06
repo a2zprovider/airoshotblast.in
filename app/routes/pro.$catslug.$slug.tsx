@@ -1,7 +1,8 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useParams } from "@remix-run/react";
+import { json, Link, useFetcher, useParams } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useModal } from "~/components/Modalcontext";
 import ProductSlider from "~/components/ProductSlider";
 import config from "~/config";
 
@@ -58,6 +59,8 @@ export default function ProductSingle() {
 
     const [activeTab, setActiveTab] = useState(0);
 
+    const [btnLoading, setBtnLoading] = useState(false);
+
     const tabs = ["Additional Information", "Applications", "Product Description"]; // Define your tabs here
 
     const images = [];
@@ -66,6 +69,32 @@ export default function ProductSingle() {
     imgs.forEach(img => {
         images.push(`${config.imgBaseURL}product/imgs/${img}`);
     });
+
+    const { openStatusShow } = useModal();
+    const fetcher = useFetcher();
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setBtnLoading(true);
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+
+        fetcher.submit(formData, { method: "post", action: "/contact" });
+    };
+
+    useEffect(() => {
+        if (fetcher.data) {
+            const { status, error, success }: any = fetcher.data || {};
+
+            openStatusShow({ success: success, error: error, status: status });
+            setBtnLoading(false);
+
+            if (status && status == '1') {
+                const form = document.getElementById('enquiry-form') as HTMLFormElement;
+                if (form) form.reset();
+            }
+        }
+    }, [fetcher.data]);
 
     return (
         <>
@@ -84,7 +113,7 @@ export default function ProductSingle() {
                                                 <div className="flex justify-center">
                                                     <img
                                                         src={images[selectedImageIndex]}
-                                                        alt={`.images Image ${selectedImageIndex + 1}`}
+                                                        alt={`.images Image ${selectedImageIndex + 1}`} loading="lazy"
                                                         className="h-[425px] width-full object-contain rounded-2xl"
                                                     />
                                                 </div>
@@ -115,7 +144,7 @@ export default function ProductSingle() {
                                                     >
                                                         <img
                                                             src={image}
-                                                            alt={`Thumbnail ${index + 1}`}
+                                                            alt={`Thumbnail ${index + 1}`} loading="lazy"
                                                             className="w-[100px] h-[100px] object-cover"
                                                         />
 
@@ -131,7 +160,7 @@ export default function ProductSingle() {
                                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                                             <div className="p-4">
                                                 {JSON.parse(product.data.field).name.map((f: any, index: any) => (
-                                                    <div className="grid grid-cols-2">
+                                                    <div className="grid grid-cols-2" key={index}>
                                                         <div>{f} :</div>
                                                         <div>{JSON.parse(product.data.field).value[index]}</div>
                                                     </div>
@@ -140,31 +169,49 @@ export default function ProductSingle() {
                                         </div>
                                         <div className="bg-[#00539C] p-4">
                                             <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
-                                            <form className="mt-4 flex flex-col md:flex-row  gap-4">
+                                            <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                 <div className="flex items-center">
-                                                    <select
-                                                        className="h-[44px] px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r"
-                                                        name="options"
-                                                        id="options"
-                                                    >
-                                                        <option value="option1">+91</option>
-                                                        <option value="option2">+1</option>
-                                                        <option value="option3">+001</option>
-                                                    </select>
+                                                    <div className="relative">
+                                                        <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                            name="code"
+                                                            defaultValue="+91"
+                                                            id="code">
+                                                            <option value="+91">+91</option>
+                                                            <option value="+1">+1</option>
+                                                            <option value="+001">+001</option>
+                                                        </select>
+                                                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                                            <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
                                                     <input
                                                         type="mobile"
                                                         name="mobile"
+                                                        required
                                                         placeholder="Enter Your Mobile No."
-                                                        className="flex-1 px-3 py-2 w-[100%] bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
+                                                        className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
                                                     />
                                                 </div>
+                                                <input type="hidden" name="message" defaultValue={product.data.title} />
+                                                <input type="hidden" name="captcha" defaultValue="false" />
                                                 <input
                                                     type="text"
-                                                    name="qty"
+                                                    name="subject"
                                                     placeholder="Qty"
                                                     className="px-3 py-2 md:w-[100px] w-[100%] bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
                                                 />
-                                                <button className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span></button>
+                                                {
+                                                    btnLoading ?
+                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4" disabled>
+                                                            <i className="fa fa-spinner animate-spin"></i> <span className="text-lg">Processing...</span>
+                                                        </button>
+                                                        :
+                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4">
+                                                            <i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span>
+                                                        </button>
+                                                }
                                             </form>
                                         </div>
                                     </div>
@@ -199,7 +246,7 @@ export default function ProductSingle() {
                                                 <table className="w-full">
                                                     <tbody>
                                                         {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
-                                                            <tr className="bg-[#f1f1f1]">
+                                                            <tr className="bg-[#f1f1f1]" key={index}>
                                                                 <td className="px-4 py-2">{f1} : </td>
                                                                 <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
                                                             </tr>

@@ -12,9 +12,7 @@ export const meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async () => {
-    
-
-    const faq = await fetch(config.apiBaseURL +'faqs');
+    const faq = await fetch(config.apiBaseURL + 'faqs');
     const faqs = await faq.json();
 
     return json({ faqs });

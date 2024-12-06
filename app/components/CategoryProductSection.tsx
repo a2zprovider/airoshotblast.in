@@ -26,10 +26,7 @@ export default function CategoryProductSection() {
     if (loading) {
         return <p className='text-center'>Loading...</p>;
     }
-
-    console.log('category : 123 : ', category);
-
-
+    
     return (
         <div className="bg-[#E9F1F799]">
             <div className="container mx-auto py-8">

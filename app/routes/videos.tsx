@@ -1,6 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
+import config from "~/config";
 
 export const meta: MetaFunction = () => {
     return [
@@ -8,17 +9,16 @@ export const meta: MetaFunction = () => {
         { name: "Video description", content: "Welcome to Remix Video!" },
     ];
 };
+export let loader: LoaderFunction = async () => {
+    const video = await fetch(config.apiBaseURL + 'video');
+    const videos = await video.json();
+
+    return json({ videos });
+};
 
 export default function Videos() {
-    // const data = useLoaderData();
-    const videos = [
-        { id: 1, name: 'Video 1', image_url: 'https://via.placeholder.com/150' },
-        { id: 2, name: 'Video 2', image_url: 'https://via.placeholder.com/150' },
-        { id: 3, name: 'Video 3', image_url: 'https://via.placeholder.com/150' },
-        { id: 4, name: 'Video 4', image_url: 'https://via.placeholder.com/150' },
-        { id: 5, name: 'Video 5', image_url: 'https://via.placeholder.com/150' },
-        { id: 6, name: 'Video 6', image_url: 'https://via.placeholder.com/150' },
-    ];
+    const { videos }: any = useLoaderData();
+
     return (
         <div className="bg-[#E9F1F799]">
             <div className="container mx-auto">
@@ -28,9 +28,22 @@ export default function Videos() {
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                            {videos.map((video: any) => (
-                                <div key={video.id}>
-                                    <iframe className="w-full h-48 shadow-md" src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe>
+                            {videos.data.data.map((video: any, index: any) => (
+                                <div key={index} >
+                                    <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
+                                        <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
+                                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+                                            <span className="relative flex h-[40px] w-[40px]">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                <span className="relative inline-flex items-center justify-center rounded-full h-[40px] w-[40px]">
+                                                    <i className="fab fa-youtube text-[30px] text-red-500 hover:text-red-600"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </Link>
+                                    <div className="mt-2">
+                                        <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="font-normal text-lg line-clamp-1">{video.title}</Link>
+                                    </div>
                                 </div>
                             ))}
                         </div>

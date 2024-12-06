@@ -1,17 +1,50 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import LeftSideTabs from "~/components/LeftTabs";
+import config from "~/config";
 
-export const meta: MetaFunction = () => {
+export let loader: LoaderFunction = async ({ request }) => {
+
+    const slug = 'about-us';
+
+    const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
+    const page_detail = await p_detail.json();
+    console.log('page_detail : ', page_detail);
+
+    const setting = await fetch(config.apiBaseURL + 'setting');
+    const settings = await setting.json();
+
+    const full_url = request.url;
+
+    return json({ slug, page_detail, settings, full_url });
+};
+
+export const meta: MetaFunction = ({ data }) => {
+    const { page_detail, full_url }: any = data;
+
     return [
-        { title: "New Remix App About" },
-        { name: "About description", content: "Welcome to Remix About!" },
+        // Seo Details
+        { title: page_detail.data.seo_title },
+        { name: "description", content: page_detail.data.seo_description },
+        { name: "keywords", content: page_detail.data.seo_keywords },
+
+        // OG Details
+        { name: "og:title", content: page_detail.data.title },
+        { name: "og:description", content: page_detail.data.seo_description },
+        { name: "og:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
+        { name: "og:url", content: full_url },
+
+        // Twitter Card Details
+        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:title", content: page_detail.data.title },
+        { name: "twitter:description", content: page_detail.data.seo_description },
+        { name: "twitter:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
     ];
 };
 
 export default function About() {
-    const data = useLoaderData();
+    const { slug, pages, page_detail, settings, full_url }: any = useLoaderData();
     return (
         <>
             <div className="bg-[#E9F1F799]">
@@ -21,7 +54,7 @@ export default function About() {
                             <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">About Us</div>
                         </div>
                         <div className="py-3">
-                            <LeftSideTabs />
+                            <LeftSideTabs settings={settings} />
                         </div>
                     </div>
                 </div>
