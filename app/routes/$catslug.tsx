@@ -6,8 +6,6 @@ import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-
-    
     const cat = await fetch(config.apiBaseURL +'category/' + params.catslug);
     const category = await cat.json();
 

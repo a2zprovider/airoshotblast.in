@@ -1,9 +1,7 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, Link, useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import config from "~/config";
 export let loader: LoaderFunction = async ({ request, params }) => {
-
-
     const page = await fetch(config.apiBaseURL + 'pages?limit=100');
     const pages = await page.json();
 
@@ -45,7 +43,7 @@ export default function Careers() {
                                                     <button
                                                         className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${slug == page.slug
                                                             ? "bg-[#4356A2] border-[#4356A2] text-white"
-                                                            : "bg-white text-gray-700 border-[#CCCCCC80]"
+                                                            : "text-gray-700 border-[#CCCCCC80]"
                                                             }`}
                                                         onClick={() => handleClick('/page/' + page.slug)}
                                                     >

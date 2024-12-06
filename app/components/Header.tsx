@@ -21,11 +21,11 @@ export default function Header({ settings }: any) {
               </Link>
             </div>
             <div className="flex justify-center">
-              <img src="/logo.webp" alt="Logo" className="md:w-[119px] w-[85px] h-auto" />
+              <img src="/logo.webp" alt="Logo" loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
             </div>
             <div className="text-right">
               <Link to={'tel:' + settings.mobile} className="bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2">
-                <i className="fa fa-phone "></i>
+                <i className="fa fa-phone rotate-90"></i>
                 <span className="md:block hidden">Call Us Now</span>
               </Link>
             </div>

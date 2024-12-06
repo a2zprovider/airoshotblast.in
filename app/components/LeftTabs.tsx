@@ -1,6 +1,7 @@
 import { useState } from "react";
+import config from "~/config";
 
-export default function LeftSideTabs() {
+export default function LeftSideTabs({ settings }: any) {
     const [activeTab, setActiveTab] = useState(0);
 
     const tabs = ["Company Profile", "Infrastructure & Facilities", "Quality & Compliance"]; // Define your tabs here
@@ -15,7 +16,7 @@ export default function LeftSideTabs() {
                             <button
                                 className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${activeTab === index
                                     ? "bg-[#4356A2] border-[#4356A2] text-white"
-                                    : "bg-white text-gray-700 border-[#CCCCCC80]"
+                                    : "text-gray-700 border-[#CCCCCC80]"
                                     }`}
                                 onClick={() => setActiveTab(index)}
                             >
@@ -25,8 +26,9 @@ export default function LeftSideTabs() {
                     ))}
                     <li>
                         <button
-                            className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-white text-gray-700 border-[#CCCCCC80]"
-                            onClick={() => console.log('Download Brochure')}
+                            className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 text-gray-700 border-[#CCCCCC80]"
+                            // onClick={() => console.log('Download Brochure')}
+                            onClick={() => window.open(config.imgBaseURL + 'setting/brochure/' + settings.data.brochure, "_blank")}
                         >
                             Download Brochure
                         </button>
@@ -56,12 +58,12 @@ export default function LeftSideTabs() {
                                     </ul>
                                 </div>
                                 <div>
-                                    <img src="/about/1.png" alt="About 1" className="rounded-lg" />
+                                    <img src="/about/1.png" alt="About 1" loading="lazy" className="rounded-lg" />
                                 </div>
                             </div>
                             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
                                 <div>
-                                    <img src="/about/2.png" alt="About 2" className="rounded-lg" />
+                                    <img src="/about/2.png" alt="About 2" loading="lazy" className="rounded-lg" />
                                 </div>
                                 <div>
                                     <div className="font-medium text-2xl text-[#4356A2]">Why Us</div>

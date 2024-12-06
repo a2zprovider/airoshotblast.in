@@ -28,7 +28,7 @@ export default function Footer({ settings }: any) {
       <div className="container mx-auto py-10">
         <div className="flex   lg:flex-row md:flex-col flex-col  items-center justify-between">
           <div className="py-2">
-            <img src="/logo.webp" alt="Logo" className="w-[119px] h-auto" />
+            <img src="/logo.webp" alt="Logo" loading="lazy" className="w-[119px] h-auto" />
           </div>
           <div className="py-2">
             <ul className="grid md:grid-flow-col sm:grid-flow-row auto-cols-max md:gap-2 lg:gap-5 xl:gap-[50px] text-center text-lg text-white font-normal">

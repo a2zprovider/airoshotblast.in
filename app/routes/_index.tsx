@@ -72,7 +72,7 @@ export default function Index() {
               category.parent == null ?
                 <Link to={'/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
                   <div className="mb-4 overflow-hidden">
-                    <img src={config.imgBaseURL + `/category/${category.image}`} alt={category.title} className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out" />
+                    <img src={config.imgBaseURL + `/category/${category.image}`} alt={category.title} loading="lazy" className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out" />
                   </div>
                   <p className="text-sm font-normal">{category.title}</p>
                 </Link>
@@ -136,12 +136,12 @@ export default function Index() {
                   The sand particles are propelled by the compressed air and impact against the surface at very high velocity. The particles wear away at the target material's surface creating cavities that can be used for subsequent chemical etching or electroplating processes. It may also be referred to as dry sanding because no water is involved in its operation, unlike wet sanding which uses liquid abrasives like grinding paste or paint remover with water added to create slurry before it's applied to the workpiece.</p>
               </div>
               <div>
-                <img src="/home1.png" alt="Home 1" className="w-full rounded-[20px]" />
+                <img src="/home1.png" loading="lazy" alt="Home 1" className="w-full rounded-[20px]" />
               </div>
             </div>
             <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-6 py-10">
               <div>
-                <img src="/home2.png" alt="Home 2" className="w-full rounded-[20px] border border-t-0 border-b-0 border-[4px] border-[#4356A2]" />
+                <img src="/home2.png" loading="lazy" alt="Home 2" className="w-full rounded-[20px] border border-t-0 border-b-0 border-[4px] border-[#4356A2]" />
               </div>
               <div>
                 <div className="text-[#4356A2] text-[22px] font-medium mb-2">Diabola Shot Blasting Machine</div>

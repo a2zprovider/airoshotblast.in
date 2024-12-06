@@ -3,6 +3,7 @@ import { json, Link, useActionData, useFetcher } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import config from "~/config";
 import { useEffect, useState } from "react";
+import { useModal } from "~/components/Modalcontext";
 
 export let loader: LoaderFunction = async ({ request }) => {
     const setting = await fetch(config.apiBaseURL + 'setting');
@@ -15,55 +16,58 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 export let action: ActionFunction = async ({ request }: { request: Request }) => {
     const formData = new URLSearchParams(await request.text());
+    console.log('formData : ', formData);
+
     const name = formData.get("name");
     const email = formData.get("email");
     const mobile = `${formData.get("code")} ${formData.get("mobile")}`;
     const message = formData.get("message");
+    const subject = formData.get("subject");
+    const captcha = formData.get("captcha");
     const captchaToken = formData.get("g-recaptcha-response");
 
-    // Ensure CAPTCHA response exists
-    if (!captchaToken) {
-        return json({ error: "Please complete the CAPTCHA.", status: 0 });
-    }
+    if (captcha == 'true') {
+        // Ensure CAPTCHA response exists
+        if (!captchaToken) {
+            return json({ error: "Please fill the CAPTCHA.", status: 0 });
+        }
 
-    // Verify CAPTCHA
-    const captchaResponse = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-        method: "POST",
-        body: new URLSearchParams({
-            secret: config.RECAPTCHA_SECRET_KEY,
-            response: captchaToken,
-        }),
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    });
+        // Verify CAPTCHA
+        const captchaResponse = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+            method: "POST",
+            body: new URLSearchParams({
+                secret: config.RECAPTCHA_SECRET_KEY,
+                response: captchaToken,
+            }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        });
 
-    const captchaResult = await captchaResponse.json();
-
-    if (!captchaResult.success) {
-        return json({ error: "CAPTCHA validation failed. Please try again.", status: 0 });
+        const captchaResult = await captchaResponse.json();
+        if (!captchaResult.success) {
+            return json({ error: "CAPTCHA validation failed. Please try again.", status: 0 });
+        }
     }
 
     // Process the form data (you could save to a database or send an email)
     try {
-        // Add your custom form processing here (like saving to DB or sending an email)
-        console.log("Form submitted:", { name, email, mobile, message });
+        // console.log("Form submitted:", { name, email, mobile, subject, message });
 
         const response = await fetch(config.apiBaseURL + 'enquiry', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, mobile, message }),
+            body: JSON.stringify({ name, email, mobile, subject, message }),
         });
 
         const data = await response.json();
-
-        if (!response.ok) {
-            return json({ error: data.message, status: response.status });
+        if (response.status) {
+            return json({ success: data.message, status: 1 });
         }
+        return json({ error: data.message, status: 0 });
 
-        return json({ success: "Your enquiry has been submitted successfully!", status: 1 });
     } catch (error) {
         return json({ error: "Failed to submit the form. Please try again later.", status: 0 });
     }
@@ -93,7 +97,10 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function Contact() {
+    const { openStatusShow } = useModal();
     const { settings }: any = useLoaderData();
+
+    const [btnLoading, setBtnLoading] = useState(false);
 
     const fetcher = useFetcher();
     const [status, setStatus] = useState();
@@ -102,6 +109,7 @@ export default function Contact() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setBtnLoading(true);
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
 
@@ -114,8 +122,12 @@ export default function Contact() {
             setStatus(status);
             setError(error);
             setSuccess(success);
+            console.log('fetcher.data : ', fetcher.data);
+            setBtnLoading(false);
 
-            if (status == '1') {
+            openStatusShow({ success: success, error: error, status: status });
+
+            if (status && status == '1') {
                 const form = document.getElementById('enquiry-form') as HTMLFormElement;
                 if (form) form.reset();
             }
@@ -133,10 +145,8 @@ export default function Contact() {
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
                             <div className="bg-[#4356A2] p-4">
                                 <div className="font-medium text-lg text-[#f6f6f6] text-center py-2">Tell us your requirement, and we'll send you quotes</div>
-                                {status == '0' && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
-                                {status == '1' && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
 
-                                <form onSubmit={handleSubmit} className="mt-4">
+                                <form onSubmit={handleSubmit} id="enquiry-form" className="mt-4">
                                     <div className="flex flex-col mb-2">
                                         <label htmlFor="name" className="text-white text-lg font-medium">Name</label>
                                         <input
@@ -147,6 +157,7 @@ export default function Contact() {
                                             className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
                                         />
                                     </div>
+                                    <input type="hidden" name="captcha" defaultValue="true" />
                                     <div className="flex flex-col mb-2">
                                         <label htmlFor="email" className="text-white text-lg font-medium">Email</label>
                                         <input
@@ -190,7 +201,14 @@ export default function Contact() {
                                     </div>
                                     <div className="flex flex-row mb-2 items-center gap-2">
                                         <div className="g-recaptcha" data-sitekey={config.RECAPTCHA_SITE_KEY}></div>
-                                        <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px]">Submit</button>
+                                        {
+                                            btnLoading ?
+                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                                                    <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
+                                                </button>
+                                                :
+                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px] text-center px-2">Submit</button>
+                                        }
                                     </div>
                                 </form>
                             </div>
@@ -204,18 +222,18 @@ export default function Contact() {
                                         <div className="text-[#131B23] text-lg text-normal">{settings.data.address}</div>
                                     </div>
                                     <div className="flex items-center justify-center gap-4 py-3">
-                                        <i className="fa fa-phone"></i>
+                                        <i className="fa fa-phone rotate-90"></i>
                                         <Link to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{settings.data.mobile}</Link>
                                     </div>
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-envelope"></i>
-                                        <Link to={'mailto:' + settings.data.email} className="text-[#131B23] text-lg text-normal">info@airoshotblast.in</Link>
+                                        <Link to={'mailto:' + settings.data.email} className="text-[#131B23] text-lg text-normal">{settings.data.email}</Link>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="py-6">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d752.0959708061051!2d73.07040902438835!3d26.274917651314368!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1731482967937!5m2!1sen!2sin" width="100%" height="450" loading="lazy"></iframe>
+                            <div dangerouslySetInnerHTML={{ __html: settings.data.map }} ></div>
                         </div>
                     </div>
                 </div>

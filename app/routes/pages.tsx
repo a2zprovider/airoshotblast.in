@@ -70,12 +70,12 @@ export default function Pages() {
                                                     </ul>
                                                 </div>
                                                 <div>
-                                                    <img src="/about/1.png" alt="About 1" className="rounded-lg" />
+                                                    <img src="/about/1.png" alt="About 1" loading="lazy" className="rounded-lg" />
                                                 </div>
                                             </div>
                                             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
                                                 <div>
-                                                    <img src="/about/2.png" alt="About 2" className="rounded-lg" />
+                                                    <img src="/about/2.png" alt="About 2" loading="lazy" className="rounded-lg" />
                                                 </div>
                                                 <div>
                                                     <div className="font-medium text-2xl text-[#4356A2]">Why Us</div>

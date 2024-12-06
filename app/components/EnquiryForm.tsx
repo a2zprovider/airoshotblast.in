@@ -1,9 +1,10 @@
 import { useFetcher } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import config from '~/config';
+import { useModal } from './Modalcontext';
 
 const EnquiryForm = () => {
-
+    const { openStatusShow } = useModal();
     const fetcher = useFetcher();
     const [status, setStatus] = useState();
     const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,9 @@ const EnquiryForm = () => {
             setError(error);
             setSuccess(success);
 
-            if (status == '1') {
+            openStatusShow({ success: success, error: error, status: status });
+
+            if (status && status == '1') {
                 const form = document.getElementById('enquiry-form') as HTMLFormElement;
                 if (form) form.reset();
             }
@@ -33,8 +36,6 @@ const EnquiryForm = () => {
 
     return (
         <>
-            {status == '0' && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
-            {status == '1' && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
             <form className="mt-4" id="enquiry-form" onSubmit={handleSubmit}>
                 <div className="flex flex-col mb-2">
                     <label htmlFor="name" className="text-white text-lg font-medium">Name</label>
@@ -75,6 +76,7 @@ const EnquiryForm = () => {
                                 </svg>
                             </span>
                         </div>
+
                         <input
                             type="mobile"
                             name="mobile"
@@ -83,6 +85,7 @@ const EnquiryForm = () => {
                         />
                     </div>
                 </div>
+                <input type="hidden" name="captcha" defaultValue="true" />
                 <div className="flex flex-col mb-4">
                     <label htmlFor="message" className="text-white text-lg font-medium">Your Requirement</label>
                     <textarea name="message" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
