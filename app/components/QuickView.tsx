@@ -14,7 +14,7 @@ const QuickView = () => {
         navigate(`${url}`);
     };
 
-    const [setting, setSetting] = useState<any[]>([]);
+    const [setting, setSetting] = useState<any>();
 
     useEffect(() => {
         const fetchSetting = async () => {
@@ -52,21 +52,21 @@ const QuickView = () => {
                     &times; {/* Close button (X) */}
                 </button>
                 <div className="flex overflow-hidden">
-                    <div className="hidden md:w-[50%] md:max-w-[60%] md:flex items-center justify-center">
+                    <div className="hidden md:w-[50%] md:max-w-[60%] md:flex items-center justify-center p-4">
                         <img
                             src={product.thumb_image ? config.imgBaseURL + `/product/thumb/${product.thumb_image}` : config.imgBaseURL + `/product/${product.image}`}
                             alt={product.title} loading="lazy"
-                            className="object-contain rounded-l-2xl"
+                            className="object-contain rounded-2xl"
                         />
                     </div>
                     <div className="py-8 md:w-[50%] max-w-[500px] min-w-[400px] overflow-hidden">
-                        <div className="px-3">
+                        <div className="px-0">
                             <div className="text-3xl text-[#131B23] font-normal line-clamp-1">{product.title}</div>
                             <div className="text-2xl text-[#BF0707] font-normal py-2">₹ {product.price}</div>
                         </div>
                         <div>
                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
-                            <div className="p-4 font-normal text-[#131B23] text-lg">
+                            <div className="py-4 font-normal text-[#131B23] text-lg">
                                 {JSON.parse(product.field).name.map((f: any, index: any) => (
                                     index < 4 ?
                                         <div className="flex gap-4 flex-wrap items-center border-b-[1px] border-[#cccccc61]" key={index}>
@@ -76,12 +76,12 @@ const QuickView = () => {
                                         : ''
                                 ))}
                             </div>
-                            <div className="flex items-center gap-2 w-full px-3">
+                            <div className="flex items-center gap-2 w-full pr-3">
                                 <button onClick={() => openEnquiry(product)} className="w-full px-3 py-2 bg-[#4356A2] text-lg text-white font-medium rounded-md h-[44px] gap-3"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Inquiry</span></button>
-                                <Link to="/" className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
-                                <Link to="/" className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
+                                <Link to={'tel:' + setting.data.mobile} className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
+                                <Link to={`https://api.whatsapp.com/send?phone=${setting.data.mobile}&text=${product.title}`} target='_blank' className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
                             </div>
-                            <div className="py-4 px-3">
+                            <div className="py-4 pr-3">
                                 <button onClick={() => handleClick(`/product/${product.slug}`)} className=" flex items-center text-[#131B23] font-medium text-xl"><div className="text-xl">View Full Details</div> <span className="text-2xl">&nbsp;</span> &#11111; <i className="fa fa-arrow-trend-up"></i></button>
                             </div>
                         </div>
