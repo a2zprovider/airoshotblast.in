@@ -1,10 +1,10 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, NavLink, useLoaderData, useNavigate, useParams } from "@remix-run/react";
+import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json, Link, NavLink, useFetcher, useLoaderData, useNavigate, useParams } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { useModal } from "~/components/Modalcontext";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-    
-
     const page = await fetch(config.apiBaseURL + 'pages?limit=100');
     const pages = await page.json();
 
@@ -21,12 +21,59 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function CareerDetail() {
+    const { slug, pages, settings, full_url, careers }: any = useLoaderData();
+    const { openStatusShow } = useModal();
+    const [fileName, setFileName] = useState('No file selected');
+    const [careerid, setCareerid] = useState<any | null>(careers.data._id);
+    const [file, setFile] = useState<File | null>(null);
+
+    const [btnLoading, setBtnLoading] = useState(false);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setFileName(file ? file.name : 'No file selected');
+        const selectedFile = event.target.files?.[0] || null;
+        setFile(selectedFile);
+        setCareerid(careers.data._id);
+    };
 
     const navigate = useNavigate();
-    const { slug, pages, settings, full_url, careers }: any = useLoaderData();
 
     const handleClick = (url: any) => {
-        navigate(`/${url}`);
+        navigate(`${url}`);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setBtnLoading(true);
+
+        const formData = new FormData();
+        if (!file) {
+            openStatusShow({ success: null, error: 'Please select a resume.', status: 0 });
+            setBtnLoading(false);
+            return;
+        }
+        formData.append('file', file);
+        formData.append('career', careerid);
+        try {
+            const response = await fetch(config.apiBaseURL + 'job', {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                const result = await response.json();
+                openStatusShow({ success: result.message, error: null, status: 1 });
+                setBtnLoading(false);
+                setFileName('No file selected');
+                setFile(null);
+            } else {
+                openStatusShow({ success: null, error: 'File upload failed.', status: 0 });
+                setBtnLoading(false);
+            }
+        } catch (error) {
+            openStatusShow({ success: null, error: 'An error occurred while uploading the file.', status: 0 });
+            setBtnLoading(false);
+        }
     };
 
     return (
@@ -48,7 +95,7 @@ export default function CareerDetail() {
                                                     <button
                                                         className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${slug == page.slug
                                                             ? "bg-[#4356A2] border-[#4356A2] text-white"
-                                                            : "bg-white text-gray-700 border-[#CCCCCC80]"
+                                                            : "text-gray-700 border-[#CCCCCC80]"
                                                             }`}
                                                         onClick={() => handleClick('/page/' + page.slug)}
                                                     >
@@ -82,18 +129,29 @@ export default function CareerDetail() {
                                             </div>
                                             <div className="pb-4">
                                                 <div className="font-medium text-2xl text-[#4356A2]">Office Address:</div>
-                                                <p className="font-normal text-[#131B23] text-lg">C-5, Block 1, Vaibhav Vihar, Shikargarh Jodhpur, Rajasthan, 342015</p>
+                                                <p className="font-normal text-[#131B23] text-lg">{careers.data.address}</p>
                                             </div>
                                             <div className="pb-4">
                                                 <div className="font-medium text-2xl text-[#4356A2]">Job Overview:</div>
-                                                <p className="font-normal text-[#131B23] text-lg">We are looking for a motivated and technically skilled Sales Engineer to join our sales team. The ideal candidate will work closely with customers to identify their needs and provide technical solutions to meet those needs. This role requires a combination of technical expertise, communication skills, and the ability to build strong relationships with clients.</p>
+                                                <p className="content-detailsfont-normal text-[#131B23] text-lg text-justify">
+                                                    <div dangerouslySetInnerHTML={{ __html: careers.data.description }} ></div>
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="py-4">
-                                            <form action="" className="flex items-center justify-between">
-                                                <input type="file" name="resume" id="resume" className="hidden" placeholder="" />
-                                                <label htmlFor="resume" className=" flex items-center bg-[#4356A2] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px] gap-2"><i className="fa fa-upload"></i><div className="text-xl">Upload Resume</div></label>
-                                                <button className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px]">Apply Now</button>
+                                            <form onSubmit={handleSubmit} className="flex items-center justify-between">
+                                                <input type="hidden" name="career" defaultValue={careers.data._id} />
+                                                <span className="flex gap-2">
+                                                    <input type="file" name="resume" id="resume" className="hidden" placeholder="" onChange={handleFileChange} />
+                                                    <label htmlFor="resume" className="flex items-center bg-[#4356A2] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px] gap-2"><i className="fa fa-upload"></i><div className="text-xl">Upload Resume</div></label>
+                                                    <span className="text-gray-700">{fileName}</span>
+                                                </span>
+                                                {
+                                                    btnLoading ?
+                                                        <button type="submit" className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px] flex items-center gap-3" disabled><i className="fa fa-spinner animate-spin"></i> <p className="text-xl">Processing...</p></button>
+                                                        :
+                                                        <button type="submit" className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px]">Apply Now</button>
+                                                }
                                             </form>
                                         </div>
                                     </div>

@@ -3,16 +3,15 @@ import { json, Link, NavLink, useLoaderData, useNavigate, useParams } from "@rem
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-    
     const { slug } = params;
 
-    const page = await fetch(config.apiBaseURL +'pages?limit=100');
+    const page = await fetch(config.apiBaseURL + 'pages?limit=100');
     const pages = await page.json();
 
-    const p_detail = await fetch(config.apiBaseURL +'page/' + params.slug);
+    const p_detail = await fetch(config.apiBaseURL + 'page/' + params.slug);
     const page_detail = await p_detail.json();
 
-    const setting = await fetch(config.apiBaseURL +'setting');
+    const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
     const full_url = request.url;
@@ -20,30 +19,28 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     return json({ slug, pages, page_detail, settings, full_url });
 };
 
-// export const meta: MetaFunction = ({ data }) => {
-//     const { settings, full_url }: any = data;
-//     const seo_details = JSON.parse(settings.data.seo_details);
+export const meta: MetaFunction = ({ data }) => {
+    const { page_detail, full_url }: any = data;
 
-//     return [
-//         // Seo Details
-//         { title: seo_details.p_seo_title },
-//         { name: "description", content: seo_details.p_seo_description },
-//         { name: "keywords", content: seo_details.p_seo_keywords },
+    return [
+        // Seo Details
+        { title: page_detail.data.seo_title },
+        { name: "description", content: page_detail.data.seo_description },
+        { name: "keywords", content: page_detail.data.seo_keywords },
 
-//         // OG Details
-//         { name: "og:title", content: seo_details.p_seo_title },
-//         { name: "og:description", content: seo_details.p_seo_description },
-//         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-//         { name: "og:url", content: full_url },
+        // OG Details
+        { name: "og:title", content: page_detail.data.title },
+        { name: "og:description", content: page_detail.data.seo_description },
+        { name: "og:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
+        { name: "og:url", content: full_url },
 
-//         // Twitter Card Details
-//         { name: "twitter:twitter", content: "summary_large_image" },
-//         { name: "twitter:title", content: seo_details.p_seo_title },
-//         { name: "twitter:description", content: seo_details.p_seo_description },
-//         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-//     ];
-// };
-
+        // Twitter Card Details
+        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:title", content: page_detail.data.title },
+        { name: "twitter:description", content: page_detail.data.seo_description },
+        { name: "twitter:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
+    ];
+};
 
 export default function Pages() {
     const navigate = useNavigate();
@@ -72,7 +69,7 @@ export default function Pages() {
                                                     <button
                                                         className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${slug == page.slug
                                                             ? "bg-[#4356A2] border-[#4356A2] text-white"
-                                                            : "bg-white text-gray-700 border-[#CCCCCC80]"
+                                                            : "text-gray-700 border-[#CCCCCC80]"
                                                             }`}
                                                         onClick={() => handleClick('/page/' + page.slug)}
                                                     >
@@ -83,7 +80,7 @@ export default function Pages() {
                                         ))}
                                         <li>
                                             <button
-                                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-white text-gray-700 border-[#CCCCCC80]"
+                                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 text-gray-700 border-[#CCCCCC80]"
                                                 onClick={() => handleClick('/careers')}
                                             >
                                                 Career

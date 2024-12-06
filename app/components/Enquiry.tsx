@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import config from '~/config';
 
 const Enquiry = () => {
-    const { isEnquiryOpen, modalEnquiryData, closeEnquiry } = useModal();
+    const { isEnquiryOpen, modalEnquiryData, closeEnquiry, openStatusShow } = useModal();
 
     const fetcher = useFetcher();
     const [status, setStatus] = useState();
@@ -26,7 +26,9 @@ const Enquiry = () => {
             setError(error);
             setSuccess(success);
 
-            if (status == '1') {
+            openStatusShow({ success: success, error: error, status: status });
+
+            if (status && status == '1') {
                 const form = document.getElementById('enquiry-form') as HTMLFormElement;
                 if (form) form.reset();
             }
@@ -52,8 +54,6 @@ const Enquiry = () => {
                     </button>
                     <div className="bg-[#4356A2] font-normal text-white text-xl px-10 py-6 rounded-t-2xl">Tell us your requirement, and we'll send you quotes</div>
                     <div className="p-6">
-                        {status == '0' && error && <p className="text-md font-bold text-[#B62C2C]">{error}</p>}
-                        {status == '1' && success && <p className="text-md font-bold text-[#2cb651]">{success}</p>}
                         <form onSubmit={handleSubmit} id="enquiry-form">
                             <div className="flex flex-col mb-2">
                                 <label htmlFor="name" className="text-[#131B23] text-lg font-medium">Name</label>
@@ -85,6 +85,7 @@ const Enquiry = () => {
                                     </span>
                                 </div>
                             </div>
+                            <input type="hidden" name="captcha" defaultValue="true" />
                             <div className="flex flex-col mb-2">
                                 <label htmlFor="mobile" className="text-[#131B23] text-lg font-medium">Mobile No.</label>
                                 <div className="flex items-center shadow-md">

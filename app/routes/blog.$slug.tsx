@@ -5,18 +5,16 @@ import { format } from "date-fns";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-    
-
-    const blog_detail = await fetch(config.apiBaseURL +'blog/' + params.slug);
+    const blog_detail = await fetch(config.apiBaseURL + 'blog/' + params.slug);
     const blog = await blog_detail.json();
 
-    const tag = await fetch(config.apiBaseURL +'tags');
+    const tag = await fetch(config.apiBaseURL + 'tags');
     const tags = await tag.json();
 
-    const recent_blog = await fetch(config.apiBaseURL +'blogs?limit=5');
+    const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
     const recent_blogs = await recent_blog.json();
 
-    const blogcategory = await fetch(config.apiBaseURL +'blogcategory');
+    const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
     const blogcategories = await blogcategory.json();
 
     const full_url = request.url;
@@ -101,17 +99,20 @@ export default function BlogSingle() {
                             </div>
                             <div className="lg:w-3/4 pb-4 blog-section">
                                 <div className="text-3xl font-medium text-[#4356A2]">{blog.data.title}</div>
-                                <div className="category flex flex-wrap text-[#969696] text-lg font-normal my-1 mb-3 gap-2  divide-x-2">
+                                <div className="category flex flex-wrap text-[#969696] text-lg font-normal my-2 mb-4">
                                     {blog.data.categories.map((cat: any, index: any) => (
-                                        <div className="text-lg">{cat.title}</div>
+                                        <div className="relative flex items-center">
+                                            <div className="leading-none text-lg pr-2 lowercase">{cat.title}</div>
+                                            <div className="absolute right-0 top-1/6 bottom-[2.5px] border-r w-1 h-[9px] border-[#ccc]"></div>
+                                        </div>
                                     ))}
                                     {blog.data.createdAt ?
-                                        <div className="text-lg">{format(new Date(blog.data.createdAt), 'MMM dd, yyyy')}</div>
+                                        <div className="leading-none text-lg lowercase">{format(new Date(blog.data.createdAt), 'MMM dd, yyyy')}</div>
                                         : <></>
                                     }
                                 </div>
                                 <div>
-                                    <img src={config.imgBaseURL + 'blog/' + blog.data.image} alt={blog.data.title} className="lg:h-[425px] w-full object-contain" />
+                                    <img src={config.imgBaseURL + 'blog/' + blog.data.image} alt={blog.data.title} loading="lazy" className="lg:h-[425px] w-full object-contain" />
                                 </div>
                                 <div className="content-details font-normal text-lg text-justify space-y-4 py-8">
                                     <div dangerouslySetInnerHTML={{ __html: blog.data.description }} ></div>

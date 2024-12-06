@@ -1,25 +1,42 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useParams } from "@remix-run/react";
+import { json, Link, useFetcher, useParams } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
-import { useState } from "react";
-import BlogSlider from "~/components/BlogSlider";
+import { useEffect, useState } from "react";
+import { useModal } from "~/components/Modalcontext";
 import ProductSlider from "~/components/ProductSlider";
 import config from "~/config";
 
-export const meta: MetaFunction = () => {
-    return [
-        { title: "New Remix App Product Single" },
-        { name: "Product Single description", content: "Welcome to Remix Product Single!" },
-    ];
-};
+export let loader: LoaderFunction = async ({ request, params }) => {
 
-export let loader: LoaderFunction = async ({ params }) => {
-    
-
-    const product_detail = await fetch(config.apiBaseURL +'product/' + params.slug);
+    const product_detail = await fetch(config.apiBaseURL + 'product/' + params.slug);
     const product = await product_detail.json();
 
-    return json({ product });
+    const full_url = request.url;
+
+    return json({ product, full_url });
+};
+
+export const meta: MetaFunction = ({ data }) => {
+    const { product, full_url }: any = data;
+
+    return [
+        // Seo Details
+        { title: product.data.seo_title },
+        { name: "description", content: product.data.seo_description },
+        { name: "keywords", content: product.data.seo_keywords },
+
+        // OG Details
+        { name: "og:title", content: product.data.title },
+        { name: "og:description", content: product.data.seo_description },
+        { name: "og:image", content: config.imgBaseURL + 'product/' + product.data.image },
+        { name: "og:url", content: full_url },
+
+        // Twitter Card Details
+        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:title", content: product.data.title },
+        { name: "twitter:description", content: product.data.seo_description },
+        { name: "twitter:image", content: config.imgBaseURL + 'product/' + product.data.image },
+    ];
 };
 
 export default function ProductSingle() {
@@ -31,18 +48,53 @@ export default function ProductSingle() {
     };
 
     const handleNext = () => {
-        setSelectedImageIndex((prev) => (prev + 1) % product.data.images.length);
+        setSelectedImageIndex((prev) => (prev + 1) % images.length);
     };
 
     const handlePrev = () => {
         setSelectedImageIndex((prev) =>
-            prev === 0 ? product.data.images.length - 1 : prev - 1
+            prev === 0 ? images.length - 1 : prev - 1
         );
     };
 
     const [activeTab, setActiveTab] = useState(0);
 
+    const [btnLoading, setBtnLoading] = useState(false);
+
     const tabs = ["Additional Information", "Applications", "Product Description"]; // Define your tabs here
+
+    const images = [];
+    images.push(`${config.imgBaseURL}product/${product.data.image}`);
+    const imgs: [string] = JSON.parse(product.data.images);
+    imgs.forEach(img => {
+        images.push(`${config.imgBaseURL}product/imgs/${img}`);
+    });
+
+    const { openStatusShow } = useModal();
+    const fetcher = useFetcher();
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setBtnLoading(true);
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+
+        fetcher.submit(formData, { method: "post", action: "/contact" });
+    };
+
+    useEffect(() => {
+        if (fetcher.data) {
+            const { status, error, success }: any = fetcher.data || {};
+
+            openStatusShow({ success: success, error: error, status: status });
+            setBtnLoading(false);
+
+            if (status && status == '1') {
+                const form = document.getElementById('enquiry-form') as HTMLFormElement;
+                if (form) form.reset();
+            }
+        }
+    }, [fetcher.data]);
 
     return (
         <>
@@ -60,8 +112,8 @@ export default function ProductSingle() {
                                             <div className="relative">
                                                 <div className="flex justify-center">
                                                     <img
-                                                        src={config.imgBaseURL + 'product/imgs/' + JSON.parse(product.data.images)[selectedImageIndex]}
-                                                        alt={`.images Image ${selectedImageIndex + 1}`}
+                                                        src={images[selectedImageIndex]}
+                                                        alt={`.images Image ${selectedImageIndex + 1}`} loading="lazy"
                                                         className="h-[425px] width-full object-contain rounded-2xl"
                                                     />
                                                 </div>
@@ -81,7 +133,7 @@ export default function ProductSingle() {
                                             </div>
 
                                             <div className="flex mt-4 space-x-2 justify-center">
-                                                {JSON.parse(product.data.images).map((image: any, index: any) => (
+                                                {images.map((image: any, index: any) => (
                                                     <div
                                                         key={index}
                                                         className={`w-[100px] h-[100px] cursor-pointer rounded-xl overflow-hidden border-2 ${selectedImageIndex === index
@@ -91,8 +143,8 @@ export default function ProductSingle() {
                                                         onClick={() => handleThumbnailClick(index)}
                                                     >
                                                         <img
-                                                            src={config.imgBaseURL + 'product/imgs/' + image}
-                                                            alt={`Thumbnail ${index + 1}`}
+                                                            src={image}
+                                                            alt={`Thumbnail ${index + 1}`} loading="lazy"
                                                             className="w-[100px] h-[100px] object-cover"
                                                         />
 
@@ -117,31 +169,49 @@ export default function ProductSingle() {
                                         </div>
                                         <div className="bg-[#00539C] p-4">
                                             <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
-                                            <form className="mt-4 flex flex-col md:flex-row  gap-4">
+                                            <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                 <div className="flex items-center">
-                                                    <select
-                                                        className="h-[44px] px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r"
-                                                        name="options"
-                                                        id="options"
-                                                    >
-                                                        <option value="option1">+91</option>
-                                                        <option value="option2">+1</option>
-                                                        <option value="option3">+001</option>
-                                                    </select>
+                                                    <div className="relative">
+                                                        <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                            name="code"
+                                                            defaultValue="+91"
+                                                            id="code">
+                                                            <option value="+91">+91</option>
+                                                            <option value="+1">+1</option>
+                                                            <option value="+001">+001</option>
+                                                        </select>
+                                                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                                            <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
                                                     <input
                                                         type="mobile"
                                                         name="mobile"
+                                                        required
                                                         placeholder="Enter Your Mobile No."
-                                                        className="flex-1 px-3 py-2 w-[100%] bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
+                                                        className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
                                                     />
                                                 </div>
+                                                <input type="hidden" name="message" defaultValue={product.data.title} />
+                                                <input type="hidden" name="captcha" defaultValue="false" />
                                                 <input
                                                     type="text"
-                                                    name="qty"
+                                                    name="subject"
                                                     placeholder="Qty"
                                                     className="px-3 py-2 md:w-[100px] w-[100%] bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
                                                 />
-                                                <button className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span></button>
+                                                {
+                                                    btnLoading ?
+                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4" disabled>
+                                                            <i className="fa fa-spinner animate-spin"></i> <span className="text-lg">Processing...</span>
+                                                        </button>
+                                                        :
+                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4">
+                                                            <i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span>
+                                                        </button>
+                                                }
                                             </form>
                                         </div>
                                     </div>

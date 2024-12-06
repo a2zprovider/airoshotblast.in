@@ -17,6 +17,7 @@ import { ModalProvider } from "./components/Modalcontext";
 import Enquiry from "./components/Enquiry";
 import QuickView from "./components/QuickView";
 import { commitSession } from "./sessions";
+import StatusShow from "./components/StatusShow";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -101,6 +102,7 @@ export default function App() {
           <Outlet />
           <Footer settings={settings.data} />
 
+          <StatusShow />
           <Enquiry />
           <QuickView />
 

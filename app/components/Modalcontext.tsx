@@ -9,6 +9,10 @@ const ModalContext = createContext<{
   modalQuickViewData: any;
   openQuickView: (data: any) => void;
   closeQuickView: () => void;
+  isStatusShowOpen: boolean;
+  modalStatusShowData: any;
+  openStatusShow: (data: any) => void;
+  closeStatusShow: () => void;
 }>({
   isEnquiryOpen: false,
   modalEnquiryData: null,
@@ -18,6 +22,10 @@ const ModalContext = createContext<{
   modalQuickViewData: null,
   openQuickView: () => { },
   closeQuickView: () => { },
+  isStatusShowOpen: false,
+  modalStatusShowData: null,
+  openStatusShow: () => { },
+  closeStatusShow: () => { },
 });
 
 // ModalProvider component to wrap your application and provide modal state
@@ -48,8 +56,21 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
     setIsQuickViewOpen(false);
   };
 
+  const [isStatusShowOpen, setIsStatusShowOpen] = useState(false);
+  const [modalStatusShowData, setModalStatusShowData] = useState<any>(null);
+
+  const openStatusShow = (data: any) => {
+    setModalStatusShowData(data);
+    setIsStatusShowOpen(true);
+  };
+
+  const closeStatusShow = () => {
+    setModalStatusShowData(null);
+    setIsStatusShowOpen(false);
+  };
+
   return (
-    <ModalContext.Provider value={{ isEnquiryOpen, modalEnquiryData, openEnquiry, closeEnquiry, isQuickViewOpen, modalQuickViewData, openQuickView, closeQuickView }}>
+    <ModalContext.Provider value={{ isEnquiryOpen, modalEnquiryData, openEnquiry, closeEnquiry, isQuickViewOpen, modalQuickViewData, openQuickView, closeQuickView, isStatusShowOpen, modalStatusShowData, openStatusShow, closeStatusShow }}>
       {children}
     </ModalContext.Provider>
   );
