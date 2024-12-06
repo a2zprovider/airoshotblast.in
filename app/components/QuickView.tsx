@@ -59,7 +59,7 @@ const QuickView = () => {
                             className="object-contain rounded-l-2xl"
                         />
                     </div>
-                    <div className="py-8 md:w-[50%] max-w-[500px] overflow-hidden">
+                    <div className="py-8 md:w-[50%] max-w-[500px] min-w-[400px] overflow-hidden">
                         <div className="px-3">
                             <div className="text-3xl text-[#131B23] font-normal line-clamp-1">{product.title}</div>
                             <div className="text-2xl text-[#BF0707] font-normal py-2">₹ {product.price}</div>
