@@ -5,7 +5,7 @@ import { useModal } from "~/components/Modalcontext";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-    const page = await fetch(config.apiBaseURL + 'pages?limit=100');
+    const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
     const pages = await page.json();
 
     const career = await fetch(config.apiBaseURL + 'career/' + params.slug);

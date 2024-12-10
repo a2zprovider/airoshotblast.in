@@ -6,9 +6,7 @@ import BlogCard from "~/components/BlogCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-
-
-    const blog = await fetch(config.apiBaseURL + 'blogcategory/' + params.slug);
+    const blog = await fetch(config.apiBaseURL + 'tag/' + params.slug);
     const blogs = await blog.json();
 
     const tag = await fetch(config.apiBaseURL + 'tags');
@@ -66,7 +64,7 @@ export default function Blog() {
                                     <div>
                                         {blogcategories.data.data.map((blogcategory: any, index: any) => (
                                             <div className="text-lg" key={index}>
-                                                <Link to={'/blog-category/' + blogcategory.slug} className={`text-lg leading-10 text-normal py-1 ${blogcategory.slug == blogs.data.slug ? 'text-[#4356A2] ' : 'text-[#131B23] '}`}>{blogcategory.title} ({blogcategory.blogCount})</Link>
+                                                <Link to={'/blog-category/' + blogcategory.slug} className="text-lg leading-10 text-normal text-[#131B23] py-1">{blogcategory.title} ({blogcategory.blogCount})</Link>
                                             </div>
                                         ))}
                                     </div>
@@ -86,7 +84,7 @@ export default function Blog() {
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Latest Tags</div>
                                     <div className="gap-4 flex flex-wrap">
                                         {tags.data.data.map((tag: any, index: any) => (
-                                            <Link to={'/tag/' + tag.slug} key={index} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{tag.title}</Link>
+                                            <Link to={'/tag/' + tag.slug} key={index} className={`text-lg text-normal py-2 px-2 border ${tag.slug == blogs.data.slug ? 'text-[#4356A2] border-[#4356A2]' : 'text-[#131B23] border-[#ccc]'}`}>{tag.title}</Link>
                                         ))}
                                     </div>
                                 </div>

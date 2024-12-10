@@ -47,6 +47,10 @@ export default function Videos() {
                                 </div>
                             ))}
                         </div>
+                        {!(videos.data.data).length ?
+                            <div className="font-normal text-[#131B23] text-lg text-center">No Videos Found.</div>
+                            : ''
+                        }
                     </div>
                 </div>
             </div>

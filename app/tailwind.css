@@ -4,12 +4,6 @@
 
 html,
 body {
-    @apply bg-white dark:bg-gray-950;
-
-    @media (prefers-color-scheme: dark) {
-        color-scheme: dark;
-    }
-
     p {
         @apply leading-10
     }
@@ -79,26 +73,40 @@ body {
         @apply pl-2
     }
 
-    /* src/styles/modal.css */
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+    .hover-button {
+        position: relative;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        background-color: #3498db; /* initial background color */
+        color: white;
+        cursor: pointer;
+        overflow: hidden;
+        transition: color 0.4s, border-color 0.4s;
+      }
+      
+      .hover-button::before {
+        content: '';
+        position: absolute;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .modal-content {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        max-width: 500px;
-        width: 100%;
-    }
+        left: 50%;
+        width: 0%;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        height: 0;
+        background-color: #e74c3c; /* hover color */
+        transition: border-top-right-radius 1s,border-top-left-radius 1s,width 1s, height 1s, bottom 1s, left 1s;
+        transform: translateX(-50%);
+      }
+      
+      .hover-button:hover::before {
+        height: 100%;  /* Expands the pseudo-element to full height */
+        width: 100%;  /* Expands the pseudo-element to full height */
+        bottom: 0;
+        border-top-left-radius: 0%;
+        border-top-right-radius: 0%;
+        transition: border-top-right-radius 1s,border-top-left-radius 1s,width 1s, height 1s, bottom 1s, left 1s;
+      }
 
 }

@@ -11,7 +11,7 @@ export default function Footer({ settings }: any) {
   useEffect(() => {
     const fetchPages = async () => {
       try {
-        const page = await fetch(config.apiBaseURL + 'pages');
+        const page = await fetch(config.apiBaseURL + 'pages?parent=null');
         const pages = await page.json();
 
         setPages(pages.data.data);

@@ -46,7 +46,8 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function BlogSingle() {
     const { blog, full_url, tags, blogcategories, recent_blogs }: any = useLoaderData();
-
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 7 }, (_, i) => currentYear - i);
     return (
         <div className="bg-[#E9F1F799]">
             <div className="container mx-auto">
@@ -82,18 +83,16 @@ export default function BlogSingle() {
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Latest Tags</div>
                                     <div className="gap-4 flex flex-wrap">
                                         {tags.data.data.map((tag: any, index: any) => (
-                                            <Link to="/" key={index} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{tag.title}</Link>
+                                            <Link to={'/tag/' + tag.slug} key={index} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{tag.title}</Link>
                                         ))}
                                     </div>
                                 </div>
                                 <div className="pb-4">
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Publishing Year</div>
                                     <div className="gap-4 flex flex-wrap">
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2024</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2023</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2022</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2021</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2020</Link>
+                                        {years.map((year: any, index: any) => (
+                                            <Link key={index} to={'/blogs?year=' + year} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{year}</Link>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
