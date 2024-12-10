@@ -6,7 +6,7 @@ import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-    const cat = await fetch(config.apiBaseURL +'category/' + params.catslug);
+    const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
     const category = await cat.json();
 
     const full_url = request.url;
@@ -69,6 +69,10 @@ export default function Category() {
                                 </div>
                             ))}
                         </div>
+                        {!(category.products).length ?
+                            <div className="font-normal text-[#131B23] text-lg text-center">No Products Found.</div>
+                            : ''
+                        }
                     </div>
                 </div>
             </div>
