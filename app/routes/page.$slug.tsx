@@ -5,7 +5,7 @@ import config from "~/config";
 export let loader: LoaderFunction = async ({ request, params }) => {
     const { slug } = params;
 
-    const page = await fetch(config.apiBaseURL + 'pages?limit=100');
+    const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
     const pages = await page.json();
 
     const p_detail = await fetch(config.apiBaseURL + 'page/' + params.slug);

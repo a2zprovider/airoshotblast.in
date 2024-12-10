@@ -8,8 +8,6 @@ const ProductSlider = ({ products }: any) => {
 
     // Adjust the number of visible items based on the window size (responsive behavior)
     useEffect(() => {
-        // console.log('window.innerWidth : ', window.innerWidth);
-
         const updateVisibleItems = () => {
             if (window.innerWidth < 640) {
                 setVisibleItems(1);
@@ -34,16 +32,18 @@ const ProductSlider = ({ products }: any) => {
 
     const totalSlides = Math.ceil(products.length / visibleItems);
 
+    // Handle previous click (with looping)
     const handlePrevClick = () => {
         setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? 0 : prevIndex - visibleItems
+            prevIndex === 0 ? (totalSlides - 1) * visibleItems : prevIndex - visibleItems
         );
     };
 
+    // Handle next click (with looping)
     const handleNextClick = () => {
         setCurrentIndex((prevIndex) =>
             prevIndex >= products.length - visibleItems
-                ? products.length - visibleItems
+                ? 0
                 : prevIndex + visibleItems
         );
     };
@@ -57,7 +57,7 @@ const ProductSlider = ({ products }: any) => {
             {/* Product Container */}
             <div className="overflow-hidden">
                 <div
-                    className="flex"
+                    className="flex transition-transform duration-500 ease-in-out"
                     style={{ transform: `translateX(-${(currentIndex / visibleItems) * 100}%)` }}
                 >
                     {products.map((product: any, index: any) => (
@@ -73,9 +73,8 @@ const ProductSlider = ({ products }: any) => {
             {/* Previous Button */}
             <button
                 onClick={handlePrevClick}
-                disabled={currentIndex === 0}
-                className={`absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px] ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                disabled={products.length <= visibleItems}
+                className={`absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
                 aria-label="Previous Slide"
             >
                 <i className="fa fa-chevron-left"></i>
@@ -84,9 +83,8 @@ const ProductSlider = ({ products }: any) => {
             {/* Next Button */}
             <button
                 onClick={handleNextClick}
-                disabled={currentIndex >= products.length - visibleItems}
-                className={`absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px] ${currentIndex >= products.length - visibleItems ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                disabled={products.length <= visibleItems}
+                className={`absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
                 aria-label="Next Slide"
             >
                 <i className="fa fa-chevron-right"></i>
@@ -98,8 +96,7 @@ const ProductSlider = ({ products }: any) => {
                     <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-blue-600' : 'bg-gray-300'
-                            }`}
+                        className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-blue-600' : 'bg-gray-300'}`}
                         aria-label={`Go to slide ${index + 1}`}
                     ></button>
                 ))}

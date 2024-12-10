@@ -1,12 +1,12 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { json, Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import Filter from "~/components/Filter";
 import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request }) => {
-    const product = await fetch(config.apiBaseURL + 'products?limit=100');
+    const product = await fetch(config.apiBaseURL + 'products?limit=1000');
     const products = await product.json();
 
     const setting = await fetch(config.apiBaseURL + 'setting');
@@ -49,7 +49,38 @@ export default function Products() {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const openFilter = () => setIsFilterOpen(true);
     const closeFilter = () => setIsFilterOpen(false);
-    // const data = useLoaderData();
+
+    // const fetcher = useFetcher();
+    // const [products, setProducts] = useState<any[]>([]);
+    // const [status, setStatus] = useState(0);
+    // const [page, setPage] = useState(1);
+    // const [loading, setLoading] = useState(false);
+    // if (status == 0) {
+    //     setProducts((prev) => [...prev, ...products1.data.data]);
+    //     setStatus(1);
+    // }
+    // useEffect(() => {
+    //     const loadMoreProducts = async () => {
+    //         const scrollPosition = window.scrollY + window.innerHeight;
+    //         const bottom = document.documentElement.scrollHeight;
+    //         try {
+    //             if (scrollPosition >= bottom - 200 && !loading) {
+    //                 setLoading(true);
+    //                 const p = await fetch(config.apiBaseURL + `products?page=${page + 1}&limit=10`);
+    //                 const newProducts = await p.json();
+    //                 setProducts((prev) => [...prev, ...newProducts.data.data]);
+    //                 setPage((prev) => prev + 1);
+    //                 setLoading(false);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching products:', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     window.addEventListener('scroll', loadMoreProducts);
+    //     return () => { window.removeEventListener('scroll', loadMoreProducts) };
+    // }, [page, loading, fetcher]);
 
     return (
         <div className="bg-[#E9F1F799]">

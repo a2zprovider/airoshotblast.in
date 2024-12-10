@@ -7,14 +7,13 @@ const BlogCard = ({ blog }: any) => {
     const [full_url, setFullUrl] = useState('');
 
     useEffect(() => {
-        // Access the full URL from the browser's window.location
         const currentUrl = window.location.href;
         setFullUrl(currentUrl);
     }, []);
     return (
         <div>
             <div className='relative'>
-                <img src={config.imgBaseURL + `/blog/${blog.image}`} alt={blog.title} loading="lazy" className="rounded-t-2xl h-[260px] w-full" />
+                <img src={blog.thumb_image ? config.imgBaseURL + `/blog/thumb/${blog.thumb_image}` : config.imgBaseURL + `/blog/${blog.image}`} alt={blog.title} loading="lazy" className="rounded-t-2xl w-full h-[260px]" />
                 {blog.createdAt ?
                     <div className='absolute bottom-2 left-2 bg-white px-2 py-1 rounded-lg text-sm font-normal text-[#131B23]'>{format(new Date(blog.createdAt), 'dd MMM yyyy')}</div>
                     : <></>}

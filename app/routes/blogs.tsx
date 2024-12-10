@@ -1,31 +1,36 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link } from "@remix-run/react";
+import { json, Link, useSearchParams } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import BlogCard from "~/components/BlogCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request }) => {
-    
+    const url_params = new URL(request.url).searchParams;
+    const year = url_params.get('year');
+    let blog_url = config.apiBaseURL + 'blogs?limit=1000';
+    if (year) {
+        blog_url = config.apiBaseURL + 'blogs?limit=1000&year=' + year;
+    }
 
-    const blog = await fetch(config.apiBaseURL +'blogs');
+    const blog = await fetch(blog_url);
     const blogs = await blog.json();
 
-    const tag = await fetch(config.apiBaseURL +'tags');
+    const tag = await fetch(config.apiBaseURL + 'tags');
     const tags = await tag.json();
 
-    const blogcategory = await fetch(config.apiBaseURL +'blogcategory');
+    const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
     const blogcategories = await blogcategory.json();
 
-    const recent_blog = await fetch(config.apiBaseURL +'blogs?limit=5');
+    const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
     const recent_blogs = await recent_blog.json();
 
-    const setting = await fetch(config.apiBaseURL +'setting');
+    const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
     const full_url = request.url;
 
-    return json({ blogs, blogcategories, tags, recent_blogs, settings, full_url });
+    return json({ blogs, blogcategories, tags, recent_blogs, settings, full_url, year });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -53,8 +58,9 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function Blog() {
-    const { blogs, blogcategories, tags, recent_blogs }: any = useLoaderData();
-
+    const { blogs, blogcategories, tags, recent_blogs, year }: any = useLoaderData();
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 7 }, (_, i) => currentYear - i);
     return (
         <div className="bg-[#E9F1F799]">
             <div className="container mx-auto">
@@ -90,18 +96,16 @@ export default function Blog() {
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Latest Tags</div>
                                     <div className="gap-4 flex flex-wrap">
                                         {tags.data.data.map((tag: any, index: any) => (
-                                            <Link to="/" key={index} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{tag.title}</Link>
+                                            <Link to={'/tag/' + tag.slug} key={index} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{tag.title}</Link>
                                         ))}
                                     </div>
                                 </div>
                                 <div className="pb-4">
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Publishing Year</div>
                                     <div className="gap-4 flex flex-wrap">
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2024</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2023</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2022</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2021</Link>
-                                        <Link to="/" className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">2020</Link>
+                                        {years.map((y: any, index: any) => (
+                                            <Link key={index} to={'/blogs?year=' + y} className={`text-lg text-normal py-2 px-2 border ${y == year ? 'text-[#4356A2] border-[#4356A2]' : 'text-[#131B23] border-[#ccc]'}`}>{y}</Link>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -113,6 +117,10 @@ export default function Blog() {
                                         </div>
                                     ))}
                                 </div>
+                                {!(blogs.data.data).length ?
+                                    <div className="font-normal text-[#131B23] text-lg text-center">No Blogs Found.</div>
+                                    : ''
+                                }
                             </div>
                         </div>
                     </div>

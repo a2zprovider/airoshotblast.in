@@ -97,7 +97,7 @@ export default function App() {
 
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
-        <body>
+        <body className="text-[#131B23]">
           <Header settings={settings.data} />
           <Outlet />
           <Footer settings={settings.data} />
