@@ -122,7 +122,7 @@ export default function Contact() {
             setStatus(status);
             setError(error);
             setSuccess(success);
-            console.log('fetcher.data : ', fetcher.data);
+            // console.log('fetcher.data : ', fetcher.data);
             setBtnLoading(false);
 
             openStatusShow({ success: success, error: error, status: status });
@@ -190,6 +190,7 @@ export default function Contact() {
                                             <input
                                                 type="mobile"
                                                 name="mobile"
+                                                pattern="^\+?\d{10,15}$"
                                                 placeholder="Enter Your Mobile No."
                                                 className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
                                             />

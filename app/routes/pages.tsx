@@ -1,7 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { useLoaderData } from "@remix-run/react";
-import LeftSideTabs from "~/components/LeftTabs";
 
 export const meta: MetaFunction = () => {
     return [

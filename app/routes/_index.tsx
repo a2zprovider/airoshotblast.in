@@ -4,8 +4,8 @@ import Accordion from "~/components/Accordion";
 import BlogSlider from "~/components/BlogSlider";
 import CategorySection from "~/components/CategoryProductSection";
 import EnquiryForm from "~/components/EnquiryForm";
-import ProductSlider from "~/components/ProductSlider";
 import Slider from "~/components/Slider";
+import VideoSlider from "~/components/VideoSlider";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -100,7 +100,8 @@ export default function Index() {
               <div className="font-bold text-3xl">Product Videos</div>
               <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
               <div className="flex justify-center py-5">
-                <iframe className="w-auto h-auto md:w-[480px] md:h-[360px]" src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe>
+                <VideoSlider />
+                {/* <iframe className="w-auto h-auto md:w-[480px] md:h-[360px]" src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe> */}
               </div>
               <button onClick={() => navigateTo('/videos')} className="bg-[#4356A2]  text-lg text-white font-medium rounded-md w-[196px] h-[46px]">
                 View all Videos
@@ -129,7 +130,7 @@ export default function Index() {
             <div className="my-5 content-details text-[#131B23] text-lg font-normal text-justify">
               <div dangerouslySetInnerHTML={{ __html: settings.data.description }} ></div>
             </div>
-            <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-6 py-10">
+            {/* <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-6 py-10">
               <div>
                 <div className="text-[#4356A2] text-[22px] font-medium mb-2">Sand Blasting Machine</div>
                 <p className="text-[#131B23] text-lg font-normal text-justify">Sand blasting machine is a type of equipment used for sandblasting. It uses high-speed centrifugal force to remove paint, coatings, and even rust from metal surfaces. Sand blasting is an environmentally friendly process that can be used on all kinds of metals. The equipment comes in different sizes and capacities to suit the needs of various users. Sand blasting involves blasting abrasive particles at a surface to abrade away paint or other coatings. Sand blasting is an effective method of cleaning rust off metal surfaces as well as removing paint and other coatings.
@@ -148,7 +149,7 @@ export default function Index() {
                 <p className="text-[#131B23] text-lg font-normal text-justify">Sand blasting machine is a type of equipment used for sandblasting. It uses high-speed centrifugal force to remove paint, coatings, and even rust from metal surfaces. Sand blasting is an environmentally friendly process that can be used on all kinds of metals. The equipment comes in different sizes and capacities to suit the needs of various users. Sand blasting involves blasting abrasive particles at a surface to abrade away paint or other coatings. Sand blasting is an effective method of cleaning rust off metal surfaces as well as removing paint and other coatings.
                   The sand particles are propelled by the compressed air and impact against the surface at very high velocity. The particles wear away at the target material's surface creating cavities that can be used for subsequent chemical etching or electroplating processes. It may also be referred to as dry sanding because no water is involved in its operation, unlike wet sanding which uses liquid abrasives like grinding paste or paint remover with water added to create slurry before it's applied to the workpiece.</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

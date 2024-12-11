@@ -10,7 +10,6 @@ export let loader: LoaderFunction = async ({ request }) => {
 
     const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
     const page_detail = await p_detail.json();
-    console.log('page_detail : ', page_detail);
 
     const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();

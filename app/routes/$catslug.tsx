@@ -63,8 +63,8 @@ export default function Category() {
                     <Filter isOpen={isFilterOpen} onClose={closeFilter} />
                     <div className="py-3">
                         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                            {category.products.map((product: any) => (
-                                <div key={product.id}>
+                            {category.products.map((product: any, index: any) => (
+                                <div key={index}>
                                     <ProductCard product={product} />
                                 </div>
                             ))}

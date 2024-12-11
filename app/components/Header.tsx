@@ -1,8 +1,11 @@
-import { json, LoaderFunction } from "@remix-run/node";
-import { Link, NavLink } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "@remix-run/react";
+import { useState } from "react";
+import config from "~/config";
 
 export default function Header({ settings }: any) {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const search = urlParams.get('s');
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -21,7 +24,7 @@ export default function Header({ settings }: any) {
               </Link>
             </div>
             <div className="flex justify-center">
-              <img src="/logo.webp" alt="Logo" loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
+              <img src={config.imgBaseURL + 'setting/logo/' + settings.logo} alt={settings.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
             </div>
             <div className="text-right">
               <Link to={'tel:' + settings.mobile} className="bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2">
@@ -38,10 +41,11 @@ export default function Header({ settings }: any) {
           <div className="container mx-auto flex justify-between items-center py-3">
             <div>
               <div className="flex justify-center items-center">
-                <form className="flex max-w-xs">
+                <form action="/products" className="flex max-w-xs">
                   <input
                     type="text"
                     name="s"
+                    defaultValue={search ? search : ''}
                     placeholder="Search Here..."
                     className="px-3 py-2 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
                   />
@@ -115,10 +119,11 @@ export default function Header({ settings }: any) {
               </nav>
             )}
             <div>
-              <form className="flex max-w-sm">
+              <form action="/products" className="flex max-w-sm">
                 <input
                   type="text"
                   name="s"
+                  defaultValue={search ? search : ''}
                   placeholder="Search Here..."
                   className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
                 />

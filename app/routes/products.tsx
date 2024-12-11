@@ -1,12 +1,18 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useFetcher, useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { json, Link, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import Filter from "~/components/Filter";
 import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request }) => {
-    const product = await fetch(config.apiBaseURL + 'products?limit=1000');
+    const url_params = new URL(request.url).searchParams;
+    const search = url_params.get('s');
+    let products_url = config.apiBaseURL + 'products?limit=1000';
+    if (search) {
+        products_url = config.apiBaseURL + 'products?limit=1000&search=' + search;
+    }
+    const product = await fetch(products_url);
     const products = await product.json();
 
     const setting = await fetch(config.apiBaseURL + 'setting');
@@ -118,6 +124,10 @@ export default function Products() {
                                 </div>
                             ))}
                         </div>
+                        {!(products.data.data).length ?
+                            <div className="font-normal text-[#131B23] text-lg text-center">No Products Found.</div>
+                            : ''
+                        }
                     </div>
                 </div>
             </div>

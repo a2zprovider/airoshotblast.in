@@ -107,6 +107,7 @@ const Enquiry = () => {
                                     <input
                                         type="mobile"
                                         name="mobile"
+                                        pattern="^\+?\d{10,15}$"
                                         required
                                         placeholder="Enter Your Mobile No."
                                         className="flex-1 px-3 py-3 bg-[#fff] text-lg font-medium text-[#D9D9D9] rounded-r-md outline-none"

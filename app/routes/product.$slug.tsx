@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useFetcher, useParams } from "@remix-run/react";
+import { json, Link, useFetcher } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { useModal } from "~/components/Modalcontext";
@@ -160,7 +160,7 @@ export default function ProductSingle() {
                                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                                             <div className="p-4">
                                                 {JSON.parse(product.data.field).name.map((f: any, index: any) => (
-                                                    <div className="grid grid-cols-2">
+                                                    <div className="grid grid-cols-2" key={index}>
                                                         <div>{f} :</div>
                                                         <div>{JSON.parse(product.data.field).value[index]}</div>
                                                     </div>
@@ -190,6 +190,7 @@ export default function ProductSingle() {
                                                         type="mobile"
                                                         name="mobile"
                                                         required
+                                                        pattern="^\+?\d{10,15}$"
                                                         placeholder="Enter Your Mobile No."
                                                         className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
                                                     />
@@ -246,7 +247,7 @@ export default function ProductSingle() {
                                                 <table className="w-full">
                                                     <tbody>
                                                         {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
-                                                            <tr className="bg-[#f1f1f1]">
+                                                            <tr className="bg-[#f1f1f1]" key={index}>
                                                                 <td className="px-4 py-2">{f1} : </td>
                                                                 <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
                                                             </tr>

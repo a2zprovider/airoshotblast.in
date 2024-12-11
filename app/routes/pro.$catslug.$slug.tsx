@@ -190,6 +190,7 @@ export default function ProductSingle() {
                                                         type="mobile"
                                                         name="mobile"
                                                         required
+                                                        pattern="^\+?\d{10,15}$"
                                                         placeholder="Enter Your Mobile No."
                                                         className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
                                                     />
