@@ -64,12 +64,12 @@ export default function Header({ settings }: any) {
           <div className="flex items-center justify-between">
             {/* Desktop Menu */}
             <nav className="hidden lg:flex lg:space-x-10">
-              <NavLink to="/" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Home</NavLink>
-              <NavLink to="/about" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>About Us</NavLink>
-              <NavLink to="/products" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Machines & Abrasives</NavLink>
-              <NavLink to="/videos" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Vidoes</NavLink>
-              <NavLink to="/blogs" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Blogs</NavLink>
-              <NavLink to="/contact" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Contact Us</NavLink>
+              <NavLink to="/" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Home</NavLink>
+              <NavLink to="/about" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>About Us</NavLink>
+              <NavLink to="/products" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Machines & Abrasives</NavLink>
+              <NavLink to="/videos" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Vidoes</NavLink>
+              <NavLink to="/blogs" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Blogs</NavLink>
+              <NavLink to="/contact" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Contact Us</NavLink>
             </nav>
 
             {/* Mobile Menu Button (Hamburger Icon) */}

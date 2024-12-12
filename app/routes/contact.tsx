@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useActionData, useFetcher } from "@remix-run/react";
+import { json, Link, useFetcher } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import config from "~/config";
 import { useEffect, useState } from "react";
@@ -16,7 +16,6 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 export let action: ActionFunction = async ({ request }: { request: Request }) => {
     const formData = new URLSearchParams(await request.text());
-    console.log('formData : ', formData);
 
     const name = formData.get("name");
     const email = formData.get("email");
@@ -31,7 +30,6 @@ export let action: ActionFunction = async ({ request }: { request: Request }) =>
         if (!captchaToken) {
             return json({ error: "Please fill the CAPTCHA.", status: 0 });
         }
-
         // Verify CAPTCHA
         const captchaResponse = await fetch("https://www.google.com/recaptcha/api/siteverify", {
             method: "POST",
@@ -43,17 +41,13 @@ export let action: ActionFunction = async ({ request }: { request: Request }) =>
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         });
-
         const captchaResult = await captchaResponse.json();
         if (!captchaResult.success) {
             return json({ error: "CAPTCHA validation failed. Please try again.", status: 0 });
         }
     }
 
-    // Process the form data (you could save to a database or send an email)
     try {
-        // console.log("Form submitted:", { name, email, mobile, subject, message });
-
         const response = await fetch(config.apiBaseURL + 'enquiry', {
             method: 'POST',
             headers: {
@@ -101,11 +95,7 @@ export default function Contact() {
     const { settings }: any = useLoaderData();
 
     const [btnLoading, setBtnLoading] = useState(false);
-
     const fetcher = useFetcher();
-    const [status, setStatus] = useState();
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -116,18 +106,43 @@ export default function Contact() {
         fetcher.submit(formData, { method: "post", action: "/contact" });
     };
 
+    const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+
+    useEffect(() => {
+        // Load reCAPTCHA script dynamically
+        const script = document.createElement("script");
+        script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+            // Once the script is loaded, set recaptchaLoaded to true
+            setRecaptchaLoaded(true);
+        };
+        document.head.appendChild(script);
+    }, []);
+
+    useEffect(() => {
+        if (recaptchaLoaded && typeof window.grecaptcha !== "undefined") {
+            // Check that grecaptcha is defined before calling render
+            const recaptchaContainer = document.getElementById("recaptcha-container");
+            if (recaptchaContainer) {
+                // Render the reCAPTCHA widget if grecaptcha is available
+                window.grecaptcha.render("recaptcha-container", {
+                    sitekey: config.RECAPTCHA_SITE_KEY, // Replace with your site key
+                });
+            }
+        }
+    }, [recaptchaLoaded]);
+
     useEffect(() => {
         if (fetcher.data) {
             const { status, error, success }: any = fetcher.data || {};
-            setStatus(status);
-            setError(error);
-            setSuccess(success);
-            // console.log('fetcher.data : ', fetcher.data);
             setBtnLoading(false);
 
             openStatusShow({ success: success, error: error, status: status });
 
             if (status && status == '1') {
+                window.grecaptcha.reset();
                 const form = document.getElementById('enquiry-form') as HTMLFormElement;
                 if (form) form.reset();
             }
@@ -201,14 +216,14 @@ export default function Contact() {
                                         <textarea name="message" id="" required rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
                                     </div>
                                     <div className="flex flex-row mb-2 items-center gap-2">
-                                        <div className="g-recaptcha" data-sitekey={config.RECAPTCHA_SITE_KEY}></div>
+                                        <div id="recaptcha-container"></div>
                                         {
                                             btnLoading ?
-                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
                                                     <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                                                 </button>
                                                 :
-                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-[196px] h-[46px] text-center px-2">Submit</button>
+                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
                                         }
                                     </div>
                                 </form>

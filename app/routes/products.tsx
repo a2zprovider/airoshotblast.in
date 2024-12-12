@@ -97,7 +97,7 @@ export default function Products() {
                             <i className="fa fa-sliders-h"></i>
                             <span className="md:block hidden text-lg">Filter</span>
                         </button>
-                        <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
+                        {/* <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Sand Blasting</div>
                             <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
                         </div>
@@ -112,7 +112,7 @@ export default function Products() {
                         <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Portable Sand Blasting Machine</div>
                             <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
-                        </div>
+                        </div> */}
                     </div>
 
                     <Filter isOpen={isFilterOpen} onClose={closeFilter} />

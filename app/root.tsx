@@ -18,6 +18,8 @@ import Enquiry from "./components/Enquiry";
 import QuickView from "./components/QuickView";
 import { commitSession } from "./sessions";
 import StatusShow from "./components/StatusShow";
+import Loader from "./components/loader";
+import Layout from "./components/Layout";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -78,6 +80,11 @@ export default function App() {
   //     ws.close();
   //   };
   // }, []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timeout = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <ModalProvider>
@@ -99,7 +106,13 @@ export default function App() {
         </head>
         <body className="text-[#131B23]">
           <Header settings={settings.data} />
-          <Outlet />
+          <Layout>
+            {loading ? (
+              <Loader />
+            ) : (
+              <Outlet />
+            )}
+          </Layout>
           <Footer settings={settings.data} />
 
           <StatusShow />
