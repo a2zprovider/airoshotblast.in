@@ -17,6 +17,7 @@ export default function Filter(data: any) {
                         <div className="">
                             <button
                                 className="absolute top-1 right-3 text-4xl text-white-500 hover:text-white-700"
+                                title="close"
                                 onClick={onClose}
                             >
                                 &times; {/* Close button (X) */}
@@ -93,8 +94,8 @@ export default function Filter(data: any) {
                                 </div>
                             </div>
                             <div className="flex items-center justify-between  py-4 px-4">
-                                <button className="bg-[#4356A2] text-lg text-white font-medium rounded-[10px] px-3 py-2">Clear All</button>
-                                <button className="bg-[#4356A2] text-lg text-white font-medium rounded-[10px] px-3 py-2">Apply Now</button>
+                                <button title="Clear All" className="bg-[#4356A2] text-lg text-white font-medium rounded-[10px] px-3 py-2">Clear All</button>
+                                <button title="Apply Now" className="bg-[#4356A2] text-lg text-white font-medium rounded-[10px] px-3 py-2">Apply Now</button>
                             </div>
                         </div>
                     </div>

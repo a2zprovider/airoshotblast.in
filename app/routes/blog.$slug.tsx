@@ -8,6 +8,13 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const blog_detail = await fetch(config.apiBaseURL + 'blog/' + params.slug);
     const blog = await blog_detail.json();
 
+    const all_blogs = await fetch(config.apiBaseURL + 'blogs?limit=1000');
+    const blogs = await all_blogs.json();
+
+    const currentIndex = blogs.data.data.findIndex((b: any) => b.slug === params.slug);
+    const previousBlog = currentIndex > 0 ? blogs.data.data[currentIndex - 1] : null;
+    const nextBlog = currentIndex < blogs.data.data.length - 1 ? blogs.data.data[currentIndex + 1] : null;
+
     const tag = await fetch(config.apiBaseURL + 'tags');
     const tags = await tag.json();
 
@@ -19,7 +26,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
     const full_url = request.url;
 
-    return json({ blog, full_url, tags, blogcategories, recent_blogs });
+    return json({ blog, full_url, tags, blogcategories, recent_blogs, previousBlog, nextBlog });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -45,7 +52,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function BlogSingle() {
-    const { blog, full_url, tags, blogcategories, recent_blogs }: any = useLoaderData();
+    const { blog, full_url, tags, blogcategories, recent_blogs, previousBlog, nextBlog }: any = useLoaderData();
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 7 }, (_, i) => currentYear - i);
     return (
@@ -100,7 +107,7 @@ export default function BlogSingle() {
                                 <div className="text-3xl font-medium text-[#4356A2]">{blog.data.title}</div>
                                 <div className="category flex flex-wrap text-[#969696] text-lg font-normal my-2 mb-4">
                                     {blog.data.categories.map((cat: any, index: any) => (
-                                        <div className="relative flex items-center">
+                                        <div className="relative flex items-center" key={index}>
                                             <div className="leading-none text-lg pr-2 lowercase">{cat.title}</div>
                                             <div className="absolute right-0 top-1/6 bottom-[2.5px] border-r w-1 h-[9px] border-[#ccc]"></div>
                                         </div>
@@ -126,20 +133,26 @@ export default function BlogSingle() {
                                 </div>
                                 <hr />
                                 <div className="flex justify-between">
-                                    <div className="flex items-center text-left py-4 gap-4">
-                                        <Link to="/"><i className="fa fa-chevron-circle-left text-black text-4xl"></i></Link>
-                                        <div>
-                                            <div className="font-normal text-sm leading-10">PREVIOUS</div>
-                                            <div className="font-normal text-lg leading-10">HVOF Gun for Tungsten Carbide Coating</div>
+                                    {previousBlog ?
+                                        <div className="flex items-center text-left py-4 gap-4">
+                                            <Link to={'/blog/' + previousBlog.slug}><i className="fa fa-chevron-circle-left text-black text-4xl"></i></Link>
+                                            <div>
+                                                <div className="font-normal text-sm leading-10">PREVIOUS</div>
+                                                <div className="font-normal text-lg leading-10">{previousBlog.title}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="flex items-center text-right py-4 gap-4">
-                                        <div>
-                                            <div className="font-normal text-sm leading-10">NEXT</div>
-                                            <div className="font-normal text-lg leading-10">Steel Shots Abrasive</div>
+                                        : <div></div>
+                                    }
+                                    {nextBlog ?
+                                        <div className="flex items-center text-right py-4 gap-4">
+                                            <div>
+                                                <div className="font-normal text-sm leading-10">NEXT</div>
+                                                <div className="font-normal text-lg leading-10">{nextBlog.title}</div>
+                                            </div>
+                                            <Link to={'/blog/' + nextBlog.slug}><i className="fa fa-chevron-circle-right text-black text-4xl"></i></Link>
                                         </div>
-                                        <Link to="/"><i className="fa fa-chevron-circle-right text-black text-4xl"></i></Link>
-                                    </div>
+                                        : <div></div>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -45,6 +45,7 @@ export default function Careers() {
                                                             ? "bg-[#4356A2] border-[#4356A2] text-white"
                                                             : "text-gray-700 border-[#CCCCCC80]"
                                                             }`}
+                                                        title={page.title}
                                                         onClick={() => handleClick('/page/' + page.slug)}
                                                     >
                                                         {page.title}
@@ -56,6 +57,7 @@ export default function Careers() {
                                             <button
                                                 className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-[#4356A2] border-[#4356A2] text-white"
                                                 onClick={() => handleClick('/careers')}
+                                                title="Career"
                                             >
                                                 Career
                                             </button>
@@ -88,7 +90,7 @@ export default function Careers() {
                                                         </div>
                                                     </div>
                                                     <div className="p-5 flex items-center justify-center">
-                                                        <button onClick={() => navigate('/career/' + career.slug)} className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px]">Apply Now</button>
+                                                        <button onClick={() => navigate('/career/' + career.slug)} title="Apply Now" className="bg-[#131B23] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px]">Apply Now</button>
                                                     </div>
                                                 </div>
                                             ))

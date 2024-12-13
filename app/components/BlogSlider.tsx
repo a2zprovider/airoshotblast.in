@@ -76,7 +76,7 @@ const BlogSlider = ({ blogs }: any) => {
                 disabled={currentIndex === 0}
                 className={`absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px] ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
-                aria-label="Previous Slide"
+                aria-label="Previous Slide" title='Previous Slide'
             >
                 <i className="fa fa-chevron-left"></i>
             </button>
@@ -87,7 +87,7 @@ const BlogSlider = ({ blogs }: any) => {
                 disabled={currentIndex >= blogs.length - visibleItems}
                 className={`absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px] ${currentIndex >= blogs.length - visibleItems ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
-                aria-label="Next Slide"
+                aria-label="Next Slide" title='Next Slide'
             >
                 <i className="fa fa-chevron-right"></i>
             </button>
@@ -101,6 +101,7 @@ const BlogSlider = ({ blogs }: any) => {
                         className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-blue-600' : 'bg-gray-300'
                             }`}
                         aria-label={`Go to slide ${index + 1}`}
+                        title={`Go to slide ${index + 1}`}
                     ></button>
                 ))}
             </div>

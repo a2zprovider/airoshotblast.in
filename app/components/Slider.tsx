@@ -64,6 +64,7 @@ export default function Slider() {
             <button
                 onClick={handlePrevClick}
                 className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white p-2  hover:bg-gray-900"
+                title='Previous Button'
             >
                 <i className='fa fa-chevron-left'></i>
             </button>
@@ -72,6 +73,7 @@ export default function Slider() {
             <button
                 onClick={handleNextClick}
                 className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white p-2  hover:bg-gray-900"
+                title='Next Button'
             >
                 <i className='fa fa-chevron-right'></i>
             </button>

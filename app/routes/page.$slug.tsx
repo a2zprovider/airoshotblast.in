@@ -71,6 +71,7 @@ export default function Pages() {
                                                             ? "bg-[#4356A2] border-[#4356A2] text-white"
                                                             : "text-gray-700 border-[#CCCCCC80]"
                                                             }`}
+                                                        title={page.title}
                                                         onClick={() => handleClick('/page/' + page.slug)}
                                                     >
                                                         {page.title}
@@ -82,6 +83,7 @@ export default function Pages() {
                                             <button
                                                 className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 text-gray-700 border-[#CCCCCC80]"
                                                 onClick={() => handleClick('/careers')}
+                                                title="Career"
                                             >
                                                 Career
                                             </button>
