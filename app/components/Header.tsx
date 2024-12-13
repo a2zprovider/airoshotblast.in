@@ -1,8 +1,11 @@
-import { json, LoaderFunction } from "@remix-run/node";
-import { Link, NavLink } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "@remix-run/react";
+import { useState } from "react";
+import config from "~/config";
 
 export default function Header({ settings }: any) {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const search = urlParams.get('s');
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -21,7 +24,7 @@ export default function Header({ settings }: any) {
               </Link>
             </div>
             <div className="flex justify-center">
-              <img src="/logo.webp" alt="Logo" loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
+              <img src={config.imgBaseURL + 'setting/logo/' + settings.logo} alt={settings.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
             </div>
             <div className="text-right">
               <Link to={'tel:' + settings.mobile} className="bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2">
@@ -38,15 +41,17 @@ export default function Header({ settings }: any) {
           <div className="container mx-auto flex justify-between items-center py-3">
             <div>
               <div className="flex justify-center items-center">
-                <form className="flex max-w-xs">
+                <form action="/products" className="flex max-w-xs">
                   <input
                     type="text"
                     name="s"
+                    defaultValue={search ? search : ''}
                     placeholder="Search Here..."
                     className="px-3 py-2 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
                   />
                   <button
                     type="submit"
+                    title="Submit"
                     className="text-base px-4 py-2 bg-[#131B23] text-white rounded-r-md"
                   >
                     <i className="fa fa-search"></i>
@@ -60,12 +65,12 @@ export default function Header({ settings }: any) {
           <div className="flex items-center justify-between">
             {/* Desktop Menu */}
             <nav className="hidden lg:flex lg:space-x-10">
-              <NavLink to="/" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Home</NavLink>
-              <NavLink to="/about" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>About Us</NavLink>
-              <NavLink to="/products" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Machines & Abrasives</NavLink>
-              <NavLink to="/videos" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Vidoes</NavLink>
-              <NavLink to="/blogs" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Blogs</NavLink>
-              <NavLink to="/contact" className={({ isActive }) => isActive ? "text-[#4356A2] underline" : "text-[#131B23]"}>Contact Us</NavLink>
+              <NavLink to="/" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Home</NavLink>
+              <NavLink to="/about" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>About Us</NavLink>
+              <NavLink to="/products" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Machines & Abrasives</NavLink>
+              <NavLink to="/videos" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Vidoes</NavLink>
+              <NavLink to="/blogs" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Blogs</NavLink>
+              <NavLink to="/contact" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Contact Us</NavLink>
             </nav>
 
             {/* Mobile Menu Button (Hamburger Icon) */}
@@ -73,6 +78,7 @@ export default function Header({ settings }: any) {
               <button
                 onClick={toggleMenu}
                 className="text-gray-800 focus:outline-none"
+                title="Menu"
               >
                 {/* Hamburger icon */}
                 <svg
@@ -115,15 +121,17 @@ export default function Header({ settings }: any) {
               </nav>
             )}
             <div>
-              <form className="flex max-w-sm">
+              <form action="/products" className="flex max-w-sm">
                 <input
                   type="text"
                   name="s"
+                  defaultValue={search ? search : ''}
                   placeholder="Search Here..."
                   className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
                 />
                 <button
                   type="submit"
+                  title="Submit"
                   className="px-4 py-2 text-base bg-[#131B23] text-white rounded-r-md"
                 >
                   <i className="fa fa-search"></i>

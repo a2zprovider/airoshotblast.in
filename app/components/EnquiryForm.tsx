@@ -6,28 +6,54 @@ import { useModal } from './Modalcontext';
 const EnquiryForm = () => {
     const { openStatusShow } = useModal();
     const fetcher = useFetcher();
-    const [status, setStatus] = useState();
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
+    const [btnLoading, setBtnLoading] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setBtnLoading(true);
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
 
         fetcher.submit(formData, { method: "post", action: "/contact" });
     };
 
+    const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+
+    useEffect(() => {
+        // Load reCAPTCHA script dynamically
+        const script = document.createElement("script");
+        script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+            // Once the script is loaded, set recaptchaLoaded to true
+            setRecaptchaLoaded(true);
+        };
+        document.head.appendChild(script);
+    }, []);
+
+    useEffect(() => {
+        if (recaptchaLoaded && typeof window.grecaptcha !== "undefined") {
+            // Check that grecaptcha is defined before calling render
+            const recaptchaContainer = document.getElementById("recaptcha-container");
+            if (recaptchaContainer) {
+                // Render the reCAPTCHA widget if grecaptcha is available
+                window.grecaptcha.render("recaptcha-container", {
+                    sitekey: config.RECAPTCHA_SITE_KEY, // Replace with your site key
+                });
+            }
+        }
+    }, [recaptchaLoaded]);
+
     useEffect(() => {
         if (fetcher.data) {
             const { status, error, success }: any = fetcher.data || {};
-            setStatus(status);
-            setError(error);
-            setSuccess(success);
-
+            setBtnLoading(false);
+            
             openStatusShow({ success: success, error: error, status: status });
 
             if (status && status == '1') {
+                window.grecaptcha.reset();
                 const form = document.getElementById('enquiry-form') as HTMLFormElement;
                 if (form) form.reset();
             }
@@ -80,6 +106,7 @@ const EnquiryForm = () => {
                         <input
                             type="mobile"
                             name="mobile"
+                            pattern="^\+?\d{10,15}$"
                             placeholder="Enter Your Mobile No."
                             className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
                         />
@@ -91,8 +118,15 @@ const EnquiryForm = () => {
                     <textarea name="message" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
                 </div>
                 <div className="flex flex-row mb-2 items-center gap-2">
-                    <div className="g-recaptcha" data-sitekey={config.RECAPTCHA_SITE_KEY}></div>
-                    <button type="submit" className="bg-white text-lg text-[#4356A2] font-medium rounded-md w-[196px] h-[46px]">Submit</button>
+                    <div id="recaptcha-container"></div>
+                    {
+                        btnLoading ?
+                            <button type="submit" title='Processing' className="bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                                <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
+                            </button>
+                            :
+                            <button type="submit" title='Submit' className="bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
+                    }
                 </div>
             </form>
         </>

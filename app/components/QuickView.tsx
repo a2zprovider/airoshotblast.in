@@ -48,6 +48,7 @@ const QuickView = () => {
                 <button
                     className="absolute top-1 right-3 text-4xl text-gray-500 hover:text-gray-700"
                     onClick={closeQuickView}
+                    title='close'
                 >
                     &times; {/* Close button (X) */}
                 </button>
@@ -77,12 +78,12 @@ const QuickView = () => {
                                 ))}
                             </div>
                             <div className="flex items-center gap-2 w-full pr-3">
-                                <button onClick={() => openEnquiry(product)} className="w-full px-3 py-2 bg-[#4356A2] text-lg text-white font-medium rounded-md h-[44px] gap-3"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Inquiry</span></button>
+                                <button onClick={() => openEnquiry(product)} title='Enquiry' className="w-full px-3 py-2 bg-[#4356A2] text-lg text-white font-medium rounded-md h-[44px] gap-3"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Inquiry</span></button>
                                 <Link to={'tel:' + setting.data.mobile} className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
                                 <Link to={`https://api.whatsapp.com/send?phone=${setting.data.mobile}&text=${product.title}`} target='_blank' className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
                             </div>
                             <div className="py-4 pr-3">
-                                <button onClick={() => handleClick(`/product/${product.slug}`)} className=" flex items-center text-[#131B23] font-medium text-xl"><div className="text-xl">View Full Details</div> <span className="text-2xl">&nbsp;</span> &#11111; <i className="fa fa-arrow-trend-up"></i></button>
+                                <button onClick={() => handleClick(`/product/${product.slug}`)} title='Product Detail' className=" flex items-center text-[#131B23] font-medium text-xl"><div className="text-xl">View Full Details</div> <span className="text-2xl">&nbsp;</span> &#11111; <i className="fa fa-arrow-trend-up"></i></button>
                             </div>
                         </div>
                     </div>

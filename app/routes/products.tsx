@@ -1,12 +1,18 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useFetcher, useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { json, Link, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import Filter from "~/components/Filter";
 import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request }) => {
-    const product = await fetch(config.apiBaseURL + 'products?limit=1000');
+    const url_params = new URL(request.url).searchParams;
+    const search = url_params.get('s');
+    let products_url = config.apiBaseURL + 'products?limit=1000';
+    if (search) {
+        products_url = config.apiBaseURL + 'products?limit=1000&search=' + search;
+    }
+    const product = await fetch(products_url);
     const products = await product.json();
 
     const setting = await fetch(config.apiBaseURL + 'setting');
@@ -87,11 +93,11 @@ export default function Products() {
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex flex-row overflow-auto items-center py-2 gap-4">
-                        <button onClick={openFilter} className="bg-[#4356A2] text-lg text-white font-medium rounded-md flex items-center gap-2 px-3 py-2">
+                        <button onClick={openFilter} title="Filter" className="bg-[#4356A2] text-lg text-white font-medium rounded-md flex items-center gap-2 px-3 py-2">
                             <i className="fa fa-sliders-h"></i>
                             <span className="md:block hidden text-lg">Filter</span>
                         </button>
-                        <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
+                        {/* <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Sand Blasting</div>
                             <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
                         </div>
@@ -106,7 +112,7 @@ export default function Products() {
                         <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Portable Sand Blasting Machine</div>
                             <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
-                        </div>
+                        </div> */}
                     </div>
 
                     <Filter isOpen={isFilterOpen} onClose={closeFilter} />
@@ -118,6 +124,10 @@ export default function Products() {
                                 </div>
                             ))}
                         </div>
+                        {!(products.data.data).length ?
+                            <div className="font-normal text-[#131B23] text-lg text-center">No Products Found.</div>
+                            : ''
+                        }
                     </div>
                 </div>
             </div>

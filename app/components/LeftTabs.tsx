@@ -32,21 +32,26 @@ export default function LeftSideTabs({ settings }: any) {
                                     ? "bg-[#4356A2] border-[#4356A2] text-white"
                                     : "text-gray-700 border-[#CCCCCC80]"
                                     }`}
+                                title={page.title}
                                 onClick={() => setActiveTab(index)}
                             >
                                 {page.title}
                             </button>
                         </li>
                     ))}
-                    <li>
-                        <button
-                            className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 text-gray-700 border-[#CCCCCC80]"
-                            // onClick={() => console.log('Download Brochure')}
-                            onClick={() => window.open(config.imgBaseURL + 'setting/brochure/' + settings.data.brochure, "_blank")}
-                        >
-                            Download Brochure
-                        </button>
-                    </li>
+                    {settings.data.brochure ?
+                        <li>
+                            <button
+                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 text-gray-700 border-[#CCCCCC80]"
+                                // onClick={() => console.log('Download Brochure')}
+                                title="Download Brochure"
+                                onClick={() => window.open(config.imgBaseURL + 'setting/brochure/' + settings.data.brochure, "_blank")}
+                            >
+                                Download Brochure
+                            </button>
+                        </li>
+                        : ''
+                    }
                 </ul>
             </div>
 
@@ -58,7 +63,7 @@ export default function LeftSideTabs({ settings }: any) {
                         <div key={index} className="content-details font-normal text-lg text-justify space-y-4">
                             <div dangerouslySetInnerHTML={{ __html: page.description }} ></div>
                             {page.field && JSON.parse(page.field).title.map((f: any, i: any) => (
-                                <div className={`grid ${JSON.parse(page.field).image[i] ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} grid-cols-1 gap-4`}>
+                                <div key={i} className={`grid ${JSON.parse(page.field).image[i] ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} grid-cols-1 gap-4`}>
                                     <>
                                         <div className={i % 2 === 0 ? 'flex-1 order-1' : 'flex-1 order-2'}>
                                             <div className="font-medium text-2xl text-[#4356A2]">{f}</div>

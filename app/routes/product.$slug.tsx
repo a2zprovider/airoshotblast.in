@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useFetcher, useParams } from "@remix-run/react";
+import { json, Link, useFetcher } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { useModal } from "~/components/Modalcontext";
@@ -120,12 +120,14 @@ export default function ProductSingle() {
                                                 {/* Prev/Next Buttons */}
                                                 <button
                                                     onClick={handlePrev}
+                                                    title="Prev Buttons"
                                                     className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0"
                                                 >
                                                     <i className="fa fa-chevron-left"></i>
                                                 </button>
                                                 <button
                                                     onClick={handleNext}
+                                                    title="Next Buttons"
                                                     className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0"
                                                 >
                                                     <i className="fa fa-chevron-right"></i>
@@ -160,7 +162,7 @@ export default function ProductSingle() {
                                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                                             <div className="p-4">
                                                 {JSON.parse(product.data.field).name.map((f: any, index: any) => (
-                                                    <div className="grid grid-cols-2">
+                                                    <div className="grid grid-cols-2" key={index}>
                                                         <div>{f} :</div>
                                                         <div>{JSON.parse(product.data.field).value[index]}</div>
                                                     </div>
@@ -190,6 +192,7 @@ export default function ProductSingle() {
                                                         type="mobile"
                                                         name="mobile"
                                                         required
+                                                        pattern="^\+?\d{10,15}$"
                                                         placeholder="Enter Your Mobile No."
                                                         className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
                                                     />
@@ -204,11 +207,11 @@ export default function ProductSingle() {
                                                 />
                                                 {
                                                     btnLoading ?
-                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4" disabled>
+                                                        <button type="submit" title="Processing" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4" disabled>
                                                             <i className="fa fa-spinner animate-spin"></i> <span className="text-lg">Processing...</span>
                                                         </button>
                                                         :
-                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4">
+                                                        <button type="submit" title="Send Now" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4">
                                                             <i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span>
                                                         </button>
                                                 }
@@ -229,6 +232,7 @@ export default function ProductSingle() {
                                                         ? "text-[#4356A2]"
                                                         : "text-[#131B23]"
                                                         }`}
+                                                        title={tab}
                                                     onClick={() => setActiveTab(index)}
                                                 >
                                                     <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>
@@ -246,7 +250,7 @@ export default function ProductSingle() {
                                                 <table className="w-full">
                                                     <tbody>
                                                         {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
-                                                            <tr className="bg-[#f1f1f1]">
+                                                            <tr className="bg-[#f1f1f1]" key={index}>
                                                                 <td className="px-4 py-2">{f1} : </td>
                                                                 <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
                                                             </tr>
