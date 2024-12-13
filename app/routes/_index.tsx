@@ -103,7 +103,7 @@ export default function Index() {
                 <VideoSlider />
                 {/* <iframe className="w-auto h-auto md:w-[480px] md:h-[360px]" src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe> */}
               </div>
-              <button onClick={() => navigateTo('/videos')} className="bg-[#4356A2]  text-lg text-white font-medium rounded-md w-[196px] h-[46px]">
+              <button onClick={() => navigateTo('/videos')} title="View all Videos" className="bg-[#4356A2]  text-lg text-white font-medium rounded-md w-[196px] h-[46px]">
                 View all Videos
               </button>
             </div>

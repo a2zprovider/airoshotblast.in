@@ -70,6 +70,7 @@ function FilterModal({ isOpen, onClose, onApplyFilter }: any) {
                     <button
                         onClick={onClose}
                         className="text-xl font-semibold text-gray-500 hover:text-gray-700"
+                        title="close"
                     >
                         &times;
                     </button>
@@ -121,12 +122,14 @@ function FilterModal({ isOpen, onClose, onApplyFilter }: any) {
                     <button
                         onClick={handleApplyFilter}
                         className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+                        title="Apply Filter"
                     >
                         Apply Filter
                     </button>
                     <button
                         onClick={onClose}
                         className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-md hover:bg-gray-400"
+                        title="Cancel"
                     >
                         Cancel
                     </button>

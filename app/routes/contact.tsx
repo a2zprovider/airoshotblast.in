@@ -219,11 +219,11 @@ export default function Contact() {
                                         <div id="recaptcha-container"></div>
                                         {
                                             btnLoading ?
-                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                                                <button type="submit" title="Processing" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
                                                     <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                                                 </button>
                                                 :
-                                                <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
+                                                <button type="submit" title="Submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
                                         }
                                     </div>
                                 </form>

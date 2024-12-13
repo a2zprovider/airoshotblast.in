@@ -101,7 +101,7 @@ const VideoSlider = () => {
                 onClick={handlePrevClick}
                 disabled={videos.length <= visibleItems}
                 className={`absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
-                aria-label="Previous Slide"
+                aria-label="Previous Slide" title="Previous Slide"
             >
                 <i className="fa fa-chevron-left"></i>
             </button>
@@ -111,7 +111,7 @@ const VideoSlider = () => {
                 onClick={handleNextClick}
                 disabled={videos.length <= visibleItems}
                 className={`absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
-                aria-label="Next Slide"
+                aria-label="Next Slide" title="Next Slide"
             >
                 <i className="fa fa-chevron-right"></i>
             </button>
@@ -123,7 +123,7 @@ const VideoSlider = () => {
                         key={index}
                         onClick={() => goToSlide(index)}
                         className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-blue-600' : 'bg-gray-300'}`}
-                        aria-label={`Go to slide ${index + 1}`}
+                        aria-label={`Go to slide ${index + 1}`} title={`Go to slide ${index + 1}`}
                     ></button>
                 ))}
             </div>

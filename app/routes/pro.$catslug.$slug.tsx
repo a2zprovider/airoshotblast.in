@@ -120,12 +120,14 @@ export default function ProductSingle() {
                                                 {/* Prev/Next Buttons */}
                                                 <button
                                                     onClick={handlePrev}
+                                                    title="Prev Buttons"
                                                     className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0"
                                                 >
                                                     <i className="fa fa-chevron-left"></i>
                                                 </button>
                                                 <button
                                                     onClick={handleNext}
+                                                    title="Next Buttons"
                                                     className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0"
                                                 >
                                                     <i className="fa fa-chevron-right"></i>
@@ -205,11 +207,11 @@ export default function ProductSingle() {
                                                 />
                                                 {
                                                     btnLoading ?
-                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4" disabled>
+                                                        <button type="submit" title="Processing" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4" disabled>
                                                             <i className="fa fa-spinner animate-spin"></i> <span className="text-lg">Processing...</span>
                                                         </button>
                                                         :
-                                                        <button type="submit" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4">
+                                                        <button type="submit" title="Send Now" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4">
                                                             <i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span>
                                                         </button>
                                                 }
@@ -230,6 +232,7 @@ export default function ProductSingle() {
                                                         ? "text-[#4356A2]"
                                                         : "text-[#131B23]"
                                                         }`}
+                                                    title={tab}
                                                     onClick={() => setActiveTab(index)}
                                                 >
                                                     <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>

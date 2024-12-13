@@ -51,6 +51,7 @@ export default function Header({ settings }: any) {
                   />
                   <button
                     type="submit"
+                    title="Submit"
                     className="text-base px-4 py-2 bg-[#131B23] text-white rounded-r-md"
                   >
                     <i className="fa fa-search"></i>
@@ -77,6 +78,7 @@ export default function Header({ settings }: any) {
               <button
                 onClick={toggleMenu}
                 className="text-gray-800 focus:outline-none"
+                title="Menu"
               >
                 {/* Hamburger icon */}
                 <svg
@@ -129,6 +131,7 @@ export default function Header({ settings }: any) {
                 />
                 <button
                   type="submit"
+                  title="Submit"
                   className="px-4 py-2 text-base bg-[#131B23] text-white rounded-r-md"
                 >
                   <i className="fa fa-search"></i>

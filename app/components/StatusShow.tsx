@@ -18,6 +18,7 @@ const StatusShow = () => {
                     <button
                         className="absolute top-1 right-3 text-2xl text-gray-500 hover:text-gray-700"
                         onClick={closeStatusShow}
+                        title='close'
                     >
                         &times;
                     </button>

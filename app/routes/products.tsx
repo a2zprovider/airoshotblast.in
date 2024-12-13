@@ -93,7 +93,7 @@ export default function Products() {
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex flex-row overflow-auto items-center py-2 gap-4">
-                        <button onClick={openFilter} className="bg-[#4356A2] text-lg text-white font-medium rounded-md flex items-center gap-2 px-3 py-2">
+                        <button onClick={openFilter} title="Filter" className="bg-[#4356A2] text-lg text-white font-medium rounded-md flex items-center gap-2 px-3 py-2">
                             <i className="fa fa-sliders-h"></i>
                             <span className="md:block hidden text-lg">Filter</span>
                         </button>

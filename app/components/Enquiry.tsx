@@ -115,6 +115,7 @@ const Enquiry = () => {
                     <button
                         className="absolute top-1 right-3 text-4xl text-white-500 hover:text-white-700"
                         onClick={closeEnquiry}
+                        title='close'
                     >
                         &times; {/* Close button (X) */}
                     </button>
@@ -194,11 +195,11 @@ const Enquiry = () => {
                                 <div className="g-recaptcha" data-sitekey={config.RECAPTCHA_SITE_KEY}></div>
                                 {
                                     btnLoading ?
-                                        <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                                        <button type="submit" title='Processing' className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
                                             <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                                         </button>
                                         :
-                                        <button type="submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
+                                        <button type="submit" title='submit' className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
                                 }
                             </div>
                         </form>

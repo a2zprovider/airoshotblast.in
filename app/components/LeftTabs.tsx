@@ -32,6 +32,7 @@ export default function LeftSideTabs({ settings }: any) {
                                     ? "bg-[#4356A2] border-[#4356A2] text-white"
                                     : "text-gray-700 border-[#CCCCCC80]"
                                     }`}
+                                title={page.title}
                                 onClick={() => setActiveTab(index)}
                             >
                                 {page.title}
@@ -43,6 +44,7 @@ export default function LeftSideTabs({ settings }: any) {
                             <button
                                 className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 text-gray-700 border-[#CCCCCC80]"
                                 // onClick={() => console.log('Download Brochure')}
+                                title="Download Brochure"
                                 onClick={() => window.open(config.imgBaseURL + 'setting/brochure/' + settings.data.brochure, "_blank")}
                             >
                                 Download Brochure
