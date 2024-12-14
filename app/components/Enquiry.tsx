@@ -7,62 +7,62 @@ const Enquiry = () => {
     const { isEnquiryOpen, modalEnquiryData, closeEnquiry, openStatusShow } = useModal();
 
     const [btnLoading, setBtnLoading] = useState(false);
-    const [isReCaptchaReady, setIsReCaptchaReady] = useState(false);
-    const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
-    const recaptchaContainerRef = useRef(null); // Ref to track the reCAPTCHA container
-    const [recaptchaInitialized, setRecaptchaInitialized] = useState(false); // To track if reCAPTCHA has been initialized
+    // const [isReCaptchaReady, setIsReCaptchaReady] = useState(false);
+    // const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+    // const recaptchaContainerRef = useRef(null); // Ref to track the reCAPTCHA container
+    // const [recaptchaInitialized, setRecaptchaInitialized] = useState(false); // To track if reCAPTCHA has been initialized
 
-    useEffect(() => {
-        // Dynamically load reCAPTCHA script only once
-        const loadRecaptchaScript = () => {
-            if (typeof window !== 'undefined' && !recaptchaLoaded) {
-                const script = document.createElement('script');
-                script.src = `https://www.google.com/recaptcha/api.js?render=explicit`;
-                script.async = true;
-                script.defer = true;
+    // useEffect(() => {
+    //     // Dynamically load reCAPTCHA script only once
+    //     const loadRecaptchaScript = () => {
+    //         if (typeof window !== 'undefined' && !recaptchaLoaded) {
+    //             const script = document.createElement('script');
+    //             script.src = `https://www.google.com/recaptcha/api.js?render=explicit`;
+    //             script.async = true;
+    //             script.defer = true;
 
-                script.onload = () => {
-                    setRecaptchaLoaded(true);  // Mark reCAPTCHA script as loaded
-                };
+    //             script.onload = () => {
+    //                 setRecaptchaLoaded(true);  // Mark reCAPTCHA script as loaded
+    //             };
 
-                document.head.appendChild(script);
-            }
-        };
+    //             document.head.appendChild(script);
+    //         }
+    //     };
 
-        loadRecaptchaScript();
+    //     loadRecaptchaScript();
 
-        return () => {
-            // Cleanup the script if the component is unmounted or modal is closed
-            setRecaptchaLoaded(false);
-        };
-    }, [recaptchaLoaded]);
+    //     return () => {
+    //         // Cleanup the script if the component is unmounted or modal is closed
+    //         setRecaptchaLoaded(false);
+    //     };
+    // }, [recaptchaLoaded]);
 
-    useEffect(() => {
-        if (recaptchaLoaded && !recaptchaInitialized && recaptchaContainerRef.current) {
-            // Check if the reCAPTCHA has already been initialized
-            window.grecaptcha.render(recaptchaContainerRef.current, {
-                sitekey: config.RECAPTCHA_SITE_KEY,
-                callback: handleReCaptchaChange,
-            });
-            setRecaptchaInitialized(true); // Mark reCAPTCHA as initialized
-        }
-    }, [recaptchaLoaded, recaptchaInitialized]);
+    // useEffect(() => {
+    //     if (recaptchaLoaded && !recaptchaInitialized && recaptchaContainerRef.current) {
+    //         // Check if the reCAPTCHA has already been initialized
+    //         window.grecaptcha.render(recaptchaContainerRef.current, {
+    //             sitekey: config.RECAPTCHA_SITE_KEY,
+    //             callback: handleReCaptchaChange,
+    //         });
+    //         setRecaptchaInitialized(true); // Mark reCAPTCHA as initialized
+    //     }
+    // }, [recaptchaLoaded, recaptchaInitialized]);
 
-    const handleReCaptchaChange = (value: string) => {
-        console.log("Captcha value:", value); // You can use this value to verify with your backend
-    };
+    // const handleReCaptchaChange = (value: string) => {
+    //     console.log("Captcha value:", value); // You can use this value to verify with your backend
+    // };
 
-    useEffect(() => {
-        if (recaptchaLoaded) {
-            setIsReCaptchaReady(true);  // Mark reCAPTCHA ready to be used
-        }
-    }, [recaptchaLoaded]);
+    // useEffect(() => {
+    //     if (recaptchaLoaded) {
+    //         setIsReCaptchaReady(true);  // Mark reCAPTCHA ready to be used
+    //     }
+    // }, [recaptchaLoaded]);
 
     const fetcher = useFetcher();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setBtnLoading(true);
+        // setBtnLoading(true);
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
 
@@ -70,30 +70,16 @@ const Enquiry = () => {
     };
 
     const [products, setProducts] = useState<any[]>([]);
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const product = await fetch(config.apiBaseURL + 'products?limit=10000');
-                const products = await product.json();
-
-                setProducts(products.data.data);
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
-
-        fetchProducts();
-    }, []);
 
     useEffect(() => {
         if (fetcher.data) {
             const { status, error, success }: any = fetcher.data || {};
-            setBtnLoading(false);
+            // setBtnLoading(false);
 
             openStatusShow({ success: success, error: error, status: status });
 
             if (status && status == '1') {
-                window.grecaptcha.reset();
+                // window.grecaptcha.reset();
                 const form = document.getElementById('enquiry-form') as HTMLFormElement;
                 if (form) form.reset();
             }
@@ -187,11 +173,11 @@ const Enquiry = () => {
                                 <textarea name="message" required id="" autoComplete="off" rows={5} placeholder="Additional Details About Your Requirement...." className="px-3 py-3 bg-[#fff] text-lg font-medium text-[#D9D9D9] rounded-md outline-none shadow-md"></textarea>
                             </div>
                             <div className="flex flex-row mb-2 items-center gap-2">
-                                {isReCaptchaReady ? (
+                                {/* {isReCaptchaReady ? (
                                     <div ref={recaptchaContainerRef}></div> // reCAPTCHA will be rendered here
                                 ) : (
                                     <p>Loading reCAPTCHA...</p>
-                                )}
+                                )} */}
                                 <div className="g-recaptcha" data-sitekey={config.RECAPTCHA_SITE_KEY}></div>
                                 {
                                     btnLoading ?
