@@ -46,8 +46,8 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const [modalQuickViewData, setModalQuickViewData] = useState<any>(null);
 
-  const openQuickView = (data: any) => {
-    setModalQuickViewData(data);
+  const openQuickView = (data = null) => {
+    setModalQuickViewData(data = null);
     setIsQuickViewOpen(true);
   };
 
