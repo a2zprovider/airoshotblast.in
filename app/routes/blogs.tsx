@@ -66,7 +66,7 @@ export default function Blog() {
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
-                        <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-[#4356A2] underline">Blogs</div>
+                        <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-[#4356A2] underline">Blogs</div>
                     </div>
                     <div className="py-3">
                         <div className="flex lg:flex-row flex-col gap-4">
@@ -76,7 +76,7 @@ export default function Blog() {
                                     <div>
                                         {blogcategories.data.data.map((blogcategory: any, index: any) => (
                                             <div className="text-lg" key={index}>
-                                                <Link to={'/blog-category/' + blogcategory.slug} className="text-lg leading-10 text-normal text-[#131B23] py-1">{blogcategory.title} ({blogcategory.blogCount})</Link>
+                                                <Link title={blogcategory.title} to={'/blog-category/' + blogcategory.slug} className="text-lg leading-10 text-normal text-[#131B23] py-1">{blogcategory.title} ({blogcategory.blogCount})</Link>
                                             </div>
                                         ))}
                                     </div>
@@ -86,7 +86,7 @@ export default function Blog() {
                                     <div>
                                         {recent_blogs.data.data.map((r_blog: any, index: any) => (
                                             <div className="text-lg text-normal text-[#131B23] py-1" key={index}>
-                                                <Link to={'/blog/' + r_blog.slug} className="text-lg p-0">{r_blog.title}</Link>
+                                                <Link title={r_blog.title} to={'/blog/' + r_blog.slug} className="text-lg p-0">{r_blog.title}</Link>
                                                 <div className="text-md text-normal text-[#969696]">{format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
                                             </div>
                                         ))}
@@ -96,7 +96,7 @@ export default function Blog() {
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Latest Tags</div>
                                     <div className="gap-4 flex flex-wrap">
                                         {tags.data.data.map((tag: any, index: any) => (
-                                            <Link to={'/tag/' + tag.slug} key={index} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{tag.title}</Link>
+                                            <Link title={tag.title} to={'/tag/' + tag.slug} key={index} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{tag.title}</Link>
                                         ))}
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@ export default function Blog() {
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Publishing Year</div>
                                     <div className="gap-4 flex flex-wrap">
                                         {years.map((y: any, index: any) => (
-                                            <Link key={index} to={'/blogs?year=' + y} className={`text-lg text-normal py-2 px-2 border ${y == year ? 'text-[#4356A2] border-[#4356A2]' : 'text-[#131B23] border-[#ccc]'}`}>{y}</Link>
+                                            <Link title={y} key={index} to={'/blogs?year=' + y} className={`text-lg text-normal py-2 px-2 border ${y == year ? 'text-[#4356A2] border-[#4356A2]' : 'text-[#131B23] border-[#ccc]'}`}>{y}</Link>
                                         ))}
                                     </div>
                                 </div>

@@ -6,33 +6,49 @@ import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
-    const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
-    const category = await cat.json();
+    try {
+        const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
+        const category = await cat.json();
 
-    const full_url = request.url;
+        const full_url = request.url;
 
-    return json({ category, full_url });
+        return json({ category, full_url });
+
+    } catch (error) {
+        throw error;
+    }
 };
+
+export function ErrorBoundary({ error }: { error: Error }) {
+
+    return (
+        <div>
+            <h1>Error gfg</h1>
+            <p>There was an error: {error ? error.message : ''}</p>
+            <Link to="/">Go back to Homepage</Link>
+        </div>
+    );
+}
 
 export const meta: MetaFunction = ({ data }) => {
     const { category, full_url }: any = data;
     return [
         // Seo Details
-        { title: category.data.seo_title },
-        { name: "description", content: category.data.seo_description },
-        { name: "keywords", content: category.data.seo_keywords },
+        { title: category?.data?.seo_title },
+        { name: "description", content: category?.data?.seo_description },
+        { name: "keywords", content: category?.data?.seo_keywords },
 
         // OG Details
-        { name: "og:title", content: category.data.title },
-        { name: "og:description", content: category.data.seo_description },
-        { name: "og:image", content: config.imgBaseURL + 'category/' + category.data.image },
+        { name: "og:title", content: category?.data?.title },
+        { name: "og:description", content: category?.data?.seo_description },
+        { name: "og:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:twitter", content: "summary_large_image" },
-        { name: "twitter:title", content: category.data.title },
-        { name: "twitter:description", content: category.data.seo_description },
-        { name: "twitter:image", content: config.imgBaseURL + 'category/' + category.data.image },
+        { name: "twitter:title", content: category?.data?.title },
+        { name: "twitter:description", content: category?.data?.seo_description },
+        { name: "twitter:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
     ];
 };
 
@@ -55,8 +71,8 @@ export default function Category() {
                             <span className="md:block hidden text-lg">Filter</span>
                         </button>
                         <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
-                            <div className="text-lg">{category.data.title}</div>
-                            <Link to="/products" className=""><i className="fa fa-times-circle"></i></Link>
+                            <div className="text-lg">{category?.data?.title}</div>
+                            <Link title="Products" to="/products" className=""><i className="fa fa-times-circle"></i></Link>
                         </div>
                     </div>
 

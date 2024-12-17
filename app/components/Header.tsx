@@ -18,16 +18,18 @@ export default function Header({ settings }: any) {
         <div className="container mx-auto md:py-3">
           <div className="flex items-center justify-between">
             <div className="text-left">
-              <Link to={'mailto:' + settings.email} className="bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2">
+              <Link title="Send Inquiry" to={'mailto:' + settings.email} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-envelope "></i>
                 <span className="md:block hidden">Send Inquiry</span>
               </Link>
             </div>
             <div className="flex justify-center">
-              <img src={config.imgBaseURL + 'setting/logo/' + settings.logo} alt={settings.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
+              <Link title={settings.title} to="/">
+                <img src={config.imgBaseURL + 'setting/logo/' + settings.logo} alt={settings.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
+              </Link>
             </div>
             <div className="text-right">
-              <Link to={'tel:' + settings.mobile} className="bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2">
+              <Link title="Call Us Now" to={'tel:' + settings.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-phone rotate-90"></i>
                 <span className="md:block hidden">Call Us Now</span>
               </Link>
@@ -37,30 +39,6 @@ export default function Header({ settings }: any) {
 
       </header>
       <div className="bg-[#dee5fd] sticky top-0 z-50 border-y border-[#D9D9D999]">
-        <div className="flex items-center hidden">
-          <div className="container mx-auto flex justify-between items-center py-3">
-            <div>
-              <div className="flex justify-center items-center">
-                <form action="/products" className="flex max-w-xs">
-                  <input
-                    type="text"
-                    name="s"
-                    defaultValue={search ? search : ''}
-                    placeholder="Search Here..."
-                    className="px-3 py-2 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
-                  />
-                  <button
-                    type="submit"
-                    title="Submit"
-                    className="text-base px-4 py-2 bg-[#131B23] text-white rounded-r-md"
-                  >
-                    <i className="fa fa-search"></i>
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
         <div className="container mx-auto py-3">
           <div className="flex items-center justify-between">
             {/* Desktop Menu */}
@@ -74,7 +52,7 @@ export default function Header({ settings }: any) {
             </nav>
 
             {/* Mobile Menu Button (Hamburger Icon) */}
-            <div className="lg:hidden">
+            <div className="lg:hidden flex items-center">
               <button
                 onClick={toggleMenu}
                 className="text-gray-800 focus:outline-none"
@@ -106,20 +84,6 @@ export default function Header({ settings }: any) {
                 </svg>
               </button>
             </div>
-
-            {/* Mobile Menu */}
-            {isOpen && (
-              <nav className="lg:hidden bg-white shadow-md absolute top-[70px] left-0">
-                <div className="space-y-2 p-4">
-                  <NavLink to="/" className={({ isActive }) => isActive ? "block text-[#4356A2] underline" : "block text-[#131B23]"}>Home</NavLink>
-                  <NavLink to="/about" className={({ isActive }) => isActive ? "block text-[#4356A2] underline" : "block text-[#131B23]"}>About Us</NavLink>
-                  <NavLink to="/products" className={({ isActive }) => isActive ? "block text-[#4356A2] underline" : "block text-[#131B23]"}>Machines & Abrasives</NavLink>
-                  <NavLink to="/about" className={({ isActive }) => isActive ? "block text-[#4356A2] underline" : "block text-[#131B23]"}>Vidoes</NavLink>
-                  <NavLink to="/blog" className={({ isActive }) => isActive ? "block text-[#4356A2] underline" : "block text-[#131B23]"}>Blog</NavLink>
-                  <NavLink to="/contact" className={({ isActive }) => isActive ? "block text-[#4356A2] underline" : "block text-[#131B23]"}>Contact Us</NavLink>
-                </div>
-              </nav>
-            )}
             <div>
               <form action="/products" className="flex max-w-sm">
                 <input
@@ -127,7 +91,7 @@ export default function Header({ settings }: any) {
                   name="s"
                   defaultValue={search ? search : ''}
                   placeholder="Search Here..."
-                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none"
+                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23]"
                 />
                 <button
                   type="submit"
@@ -141,6 +105,63 @@ export default function Header({ settings }: any) {
           </div>
         </div>
 
+      </div>
+      <div>
+        {/* Mobile Menu */}
+        {/* {isOpen && ( */}
+        <>
+          <div className={`bg-[#131B23] lg:hidden shadow-md fixed z-[100] top-0 bottom-0 ${!isOpen ? '-left-[110%] right-[110%]' : 'left-0 right-0'} transition-all duration-500 ease-in-out`}>
+            <div className="lg:hidden flex items-center justify-center mt-3 mb-3">
+              <Link title={settings.title} to="/">
+                <img src={config.imgBaseURL + 'setting/logo2/' + settings.logo2} alt={settings.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
+              </Link>
+            </div>
+            <hr />
+            <nav>
+              <div className="space-y-2 p-4">
+                <NavLink to="/" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-home mr-3"></i> <span>Home</span></NavLink>
+                <NavLink to="/about" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-info-circle mr-3"></i> <span>About Us</span></NavLink>
+                <NavLink to="/products" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-th-large mr-3"></i> <span>Machines & Abrasives</span></NavLink>
+                <NavLink to="/videos" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fab fa-youtube mr-3"></i> <span>Vidoes</span></NavLink>
+                <NavLink to="/blogs" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-blog mr-3"></i> <span>Blogs</span></NavLink>
+                <NavLink to="/contact" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-phone rotate-90 mr-3"></i> <span>Contact Us</span></NavLink>
+              </div>
+            </nav>
+            <div className="lg:hidden absolute left-[50%] bottom-[20px]">
+              <button
+                onClick={toggleMenu}
+                className="text-[#fff] focus:outline-none mt-3 mb-3"
+                title="Menu"
+              >
+                {/* Hamburger icon */}
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {isOpen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16m-7 6h7"
+                    />
+                  )}
+                </svg>
+              </button>
+            </div>
+          </div>
+        </>
+        {/* )} */}
       </div>
     </>
   );

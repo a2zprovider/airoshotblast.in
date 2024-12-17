@@ -23,8 +23,8 @@ const ProductCard = ({ product }: any) => {
                     </div>
                 </div>
             </div>
-            <Link to={`/product/${product.slug}`} className="text-sm font-normal text-[#131B23]">
-                <div className='text-sm font-normal text-[#131B23] truncate mt-4'>{product.title}</div>
+            <Link title={product.title} to={`/product/${product.slug}`} className="text-sm font-normal text-[#131B23]">
+                <div className='text-sm font-normal text-[#131B23] line-clamp-1 mt-4'>{product.title}</div>
             </Link>
             <div className="my-2 text-sm font-bold text-[#B62C2C]">₹ {product.price}</div>
         </div>

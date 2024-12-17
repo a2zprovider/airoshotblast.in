@@ -1,10 +1,13 @@
 import type { LoaderFunction } from '@remix-run/node';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
+
     // const robotsContent = `
     // User-agent: *
-    // Disallow: /
-    // Sitemap: ${process.env.SITE_URL || 'https://example.com'}/sitemap.xml`;
+    // Allow: /
+    // Sitemap: ${baseUrl}/sitemap.xml`;
     const robotsContent = `
     User-agent: *
     Disallow: /`;
