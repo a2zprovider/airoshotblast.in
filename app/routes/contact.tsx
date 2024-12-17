@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useFetcher } from "@remix-run/react";
+import { json, Link, NavLink, useFetcher } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import config from "~/config";
 import { useEffect, useState } from "react";
@@ -149,12 +149,38 @@ export default function Contact() {
         }
     }, [fetcher.data]);
 
+    const [c_loading, setLoading] = useState<boolean>(true);
+    const [countryCodes, setCountryCodes] = useState<{ dial_code: string, name: string }[]>([]);
+    // Fetch country codes from the API
+    useEffect(() => {
+        const fetchCountryCodes = async () => {
+            try {
+                // Fetch data from the proxy endpoint in your Remix app
+                const response = await fetch('/country-codes');
+                const result = await response.json();
+
+                if (result.error) {
+                    console.error(result.error);
+                    return;
+                }
+
+                setCountryCodes(result);
+            } catch (error) {
+                console.error('Error fetching country codes:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCountryCodes();
+    }, []);
+
     return (
         <div className="bg-[#E9F1F799]">
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
-                        <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-[#4356A2] underline">Contact Us</div>
+                        <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-[#4356A2] underline">Contact Us</div>
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
@@ -190,11 +216,17 @@ export default function Contact() {
                                             <div className="relative">
                                                 <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                                     name="code"
-                                                    defaultValue="+91"
                                                     id="code">
-                                                    <option value="+91">+91</option>
-                                                    <option value="+1">+1</option>
-                                                    <option value="+001">+001</option>
+                                                    {c_loading ? (
+                                                        <option>Loading...</option>
+                                                    ) : (
+                                                        countryCodes.map((country, index) => (
+                                                            country.dial_code == '+91' ?
+                                                                <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
+                                                                :
+                                                                <option key={index} value={country.dial_code}>{country.dial_code}</option>
+                                                        ))
+                                                    )}
                                                 </select>
                                                 <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                                                     <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,11 +251,11 @@ export default function Contact() {
                                         <div id="recaptcha-container"></div>
                                         {
                                             btnLoading ?
-                                                <button type="submit" title="Processing" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                                                <button type="submit" title="Processing" className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2] flex items-center justify-center gap-3" disabled>
                                                     <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                                                 </button>
                                                 :
-                                                <button type="submit" title="Submit" className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
+                                                <button type="submit" title="Submit" className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2]">Submit</button>
                                         }
                                     </div>
                                 </form>
@@ -239,11 +271,11 @@ export default function Contact() {
                                     </div>
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-phone rotate-90"></i>
-                                        <Link to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{settings.data.mobile}</Link>
+                                        <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{settings.data.mobile}</Link>
                                     </div>
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-envelope"></i>
-                                        <Link to={'mailto:' + settings.data.email} className="text-[#131B23] text-lg text-normal">{settings.data.email}</Link>
+                                        <Link title="Mail Us" to={'mailto:' + settings.data.email} className="text-[#131B23] text-lg text-normal">{settings.data.email}</Link>
                                     </div>
                                 </div>
                             </div>

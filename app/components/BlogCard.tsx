@@ -19,14 +19,12 @@ const BlogCard = ({ blog }: any) => {
                     : <></>}
                 <div className='absolute bottom-2 right-2 bg-white px-2 py-1 rounded-lg text-sm font-normal text-[#131B23] flex items-center gap-2'>
                     <div className='text-sm'>Share:</div>
-                    <Link to={'https://api.whatsapp.com/send?text=' + blog.title + ' ' + full_url}><i className='fab fa-whatsapp'></i></Link>
-                    <Link to={'https://www.facebook.com/sharer/sharer.php?u=' + full_url}><i className='fab fa-facebook-f'></i></Link>
+                    <Link title='whatsapp' to={'https://api.whatsapp.com/send?text=' + blog.title + ' ' + full_url}><i className='fab fa-whatsapp'></i></Link>
+                    <Link title='facebook' to={'https://www.facebook.com/sharer/sharer.php?u=' + full_url}><i className='fab fa-facebook-f'></i></Link>
                 </div>
             </div>
             <div className="bg-[#f4f4f4] p-3 rounded-b-2xl shadow-md">
-                <Link to={'/blog/' + blog.slug}>
-                    <div className="text-sm font-medium text-[#131B23] pb-1 truncate">{blog.title}</div>
-                </Link>
+                <Link title={blog.title} to={'/blog/' + blog.slug} className="text-sm font-medium text-[#131B23] pb-1 line-clamp-1">{blog.title}</Link>
                 <p className="text-sm font-normal text-[#131B23] line-clamp-4 leading-5">{blog.except}</p>
             </div>
         </div>

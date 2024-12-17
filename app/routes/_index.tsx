@@ -11,11 +11,8 @@ import config from "~/config";
 export let loader: LoaderFunction = async ({ request }) => {
 
   // Fetching data from an external API
-  const category = await fetch(config.apiBaseURL + 'category?limit=9');
+  const category = await fetch(config.apiBaseURL + 'category?parent=null&limit=7');
   const categories = await category.json();
-
-  const product = await fetch(config.apiBaseURL + 'products');
-  const products = await product.json();
 
   const blog = await fetch(config.apiBaseURL + 'blogs');
   const blogs = await blog.json();
@@ -28,7 +25,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 
   const full_url = request.url;
 
-  return json({ categories, products, blogs, faqs, settings, full_url });
+  return json({ categories, blogs, faqs, settings, full_url });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -56,7 +53,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function Index() {
-  const { categories, products, blogs, faqs, settings }: any = useLoaderData();
+  const { categories, blogs, faqs, settings }: any = useLoaderData();
 
   const navigate = useNavigate();
   const navigateTo = (url: any) => {
@@ -70,7 +67,7 @@ export default function Index() {
           <div className="flex lg:justify-center items-start w-full lg:gap-8 md:gap-4 overflow-x-auto">
             {categories.data.data.map((category: any, index: any) => (
               category.parent == null ?
-                <Link to={'/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
+                <Link title={category.title} to={'/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
                   <div className="mb-4 overflow-hidden">
                     <img src={config.imgBaseURL + `/category/${category.image}`} alt={category.title} loading="lazy" className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out" />
                   </div>
@@ -78,7 +75,7 @@ export default function Index() {
                 </Link>
                 : ''
             ))}
-            <Link to="/products" className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
+            <Link title="View All" to="/products" className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
               <div className="mb-4 overflow-hidden text-[40px] text-[#4356A2]">
                 <div className="flex justify-center items-center w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out">
                   <i className="fa fa-th-large"></i>
@@ -103,7 +100,7 @@ export default function Index() {
                 <VideoSlider />
                 {/* <iframe className="w-auto h-auto md:w-[480px] md:h-[360px]" src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe> */}
               </div>
-              <button onClick={() => navigateTo('/videos')} title="View all Videos" className="bg-[#4356A2]  text-lg text-white font-medium rounded-md w-[196px] h-[46px]">
+              <button onClick={() => navigateTo('/videos')} title="View all Videos" className="n_btn2 bg-[#4356A2] text-lg text-white font-medium rounded-md w-[196px] h-[46px] relative overflow-hidden z-0 transition duration-[800ms]">
                 View all Videos
               </button>
             </div>

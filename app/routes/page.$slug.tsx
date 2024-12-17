@@ -56,7 +56,7 @@ export default function Pages() {
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
-                            <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
+                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
                         </div>
                         <div className="py-3">
                             <div className="flex md:flex-row flex-col gap-2 min-h-screen">

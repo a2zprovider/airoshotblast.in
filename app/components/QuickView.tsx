@@ -5,7 +5,12 @@ import { useEffect, useState } from 'react';
 
 const QuickView = () => {
     const { isQuickViewOpen, modalQuickViewData, closeQuickView, openEnquiry } = useModal();
+    if (!isQuickViewOpen) {
+        return null;
+    }
     const product = modalQuickViewData;
+    console.log('product : ', product);
+
 
     const navigate = useNavigate();
 
@@ -60,7 +65,7 @@ const QuickView = () => {
                             className="object-contain rounded-2xl"
                         />
                     </div>
-                    <div className="py-8 md:w-[50%] max-w-[500px] min-w-[400px] overflow-hidden">
+                    <div className="py-8 md:w-[50%] max-w-[500px] w-[500px] overflow-hidden">
                         <div className="px-0">
                             <div className="text-3xl text-[#131B23] font-normal line-clamp-1">{product.title}</div>
                             <div className="text-2xl text-[#BF0707] font-normal py-2">₹ {product.price}</div>
@@ -79,8 +84,8 @@ const QuickView = () => {
                             </div>
                             <div className="flex items-center gap-2 w-full pr-3">
                                 <button onClick={() => openEnquiry(product)} title='Enquiry' className="w-full px-3 py-2 bg-[#4356A2] text-lg text-white font-medium rounded-md h-[44px] gap-3"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Inquiry</span></button>
-                                <Link to={'tel:' + setting.data.mobile} className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
-                                <Link to={`https://api.whatsapp.com/send?phone=${setting.data.mobile}&text=${product.title}`} target='_blank' className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
+                                <Link title='Call Us' to={'tel:' + setting?.data?.mobile} className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
+                                <Link title='Whatsapp' to={`https://api.whatsapp.com/send?phone=${setting?.data?.mobile}&text=${product.title}`} target='_blank' className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
                             </div>
                             <div className="py-4 pr-3">
                                 <button onClick={() => handleClick(`/product/${product.slug}`)} title='Product Detail' className=" flex items-center text-[#131B23] font-medium text-xl"><div className="text-xl">View Full Details</div> <span className="text-2xl">&nbsp;</span> &#11111; <i className="fa fa-arrow-trend-up"></i></button>
