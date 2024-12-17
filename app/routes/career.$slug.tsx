@@ -20,6 +20,28 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     return json({ pages, settings, full_url, slug, careers });
 };
 
+export const meta: MetaFunction = ({ data }) => {
+    const { careers, settings, full_url }: any = data;
+    return [
+        // Seo Details
+        { title: careers.data.seo_title },
+        { name: "description", content: careers.data.seo_description },
+        { name: "keywords", content: careers.data.seo_keywords },
+
+        // OG Details
+        { name: "og:title", content: careers.data.title },
+        { name: "og:description", content: careers.data.seo_description },
+        { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
+        { name: "og:url", content: full_url },
+
+        // Twitter Card Details
+        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:title", content: careers.data.title },
+        { name: "twitter:description", content: careers.data.seo_description },
+        { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
+    ];
+};
+
 export default function CareerDetail() {
     const { slug, pages, settings, full_url, careers }: any = useLoaderData();
     const { openStatusShow } = useModal();
@@ -82,7 +104,7 @@ export default function CareerDetail() {
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
-                            <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
+                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
                         </div>
                         <div className="py-3">
                             <div className="flex md:flex-row flex-col gap-2 min-h-screen">

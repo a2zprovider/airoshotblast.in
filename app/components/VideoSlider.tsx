@@ -79,7 +79,7 @@ const VideoSlider = () => {
                     {videos.map((video: any, index: any) => (
                         <div key={index} className={cardClass + ` p-2 flex-shrink-0`}>
                             <div className='flex justify-center'>
-                                <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
+                                <Link title={video.title} to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
                                     <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
                                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
                                         <span className="relative flex h-[40px] w-[40px]">

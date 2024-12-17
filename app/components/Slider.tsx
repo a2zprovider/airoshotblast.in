@@ -54,7 +54,7 @@ export default function Slider() {
                             key={index}
                             src={config.imgBaseURL + `/slider/${slider.image}`}
                             alt={slider.title} loading="lazy"
-                            className="w-full flex-shrink-0"
+                            className="w-full flex-shrink-0 h-[240px] object-cover md:object-contain md:h-[100%]"
                         />
                     ))}
                 </div>

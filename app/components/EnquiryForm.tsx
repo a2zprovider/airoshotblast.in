@@ -49,7 +49,7 @@ const EnquiryForm = () => {
         if (fetcher.data) {
             const { status, error, success }: any = fetcher.data || {};
             setBtnLoading(false);
-            
+
             openStatusShow({ success: success, error: error, status: status });
 
             if (status && status == '1') {
@@ -59,6 +59,32 @@ const EnquiryForm = () => {
             }
         }
     }, [fetcher.data]);
+
+    const [c_loading, setLoading] = useState<boolean>(true);
+    const [countryCodes, setCountryCodes] = useState<{ dial_code: string, name: string }[]>([]);
+    // Fetch country codes from the API
+    useEffect(() => {
+        const fetchCountryCodes = async () => {
+            try {
+                // Fetch data from the proxy endpoint in your Remix app
+                const response = await fetch('/country-codes');
+                const result = await response.json();
+
+                if (result.error) {
+                    console.error(result.error);
+                    return;
+                }
+
+                setCountryCodes(result);
+            } catch (error) {
+                console.error('Error fetching country codes:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCountryCodes();
+    }, []);
 
     return (
         <>
@@ -90,11 +116,17 @@ const EnquiryForm = () => {
                         <div className="relative">
                             <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                 name="code"
-                                defaultValue="+91"
                                 id="code">
-                                <option value="+91">+91</option>
-                                <option value="+1">+1</option>
-                                <option value="+001">+001</option>
+                                {c_loading ? (
+                                    <option>Loading...</option>
+                                ) : (
+                                    countryCodes.map((country, index) => (
+                                        country.dial_code == '+91' ?
+                                            <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
+                                            :
+                                            <option key={index} value={country.dial_code}>{country.dial_code}</option>
+                                    ))
+                                )}
                             </select>
                             <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,15 +149,15 @@ const EnquiryForm = () => {
                     <label htmlFor="message" className="text-white text-lg font-medium">Your Requirement</label>
                     <textarea name="message" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
                 </div>
-                <div className="flex flex-row mb-2 items-center gap-2">
+                <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2">
                     <div id="recaptcha-container"></div>
                     {
                         btnLoading ?
-                            <button type="submit" title='Processing' className="bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                            <button type="submit" title='Processing' className="n_btn2 bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#fff] flex items-center justify-center gap-3" disabled>
                                 <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                             </button>
                             :
-                            <button type="submit" title='Submit' className="bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
+                            <button type="submit" title='Submit' className="n_btn2 bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#fff]">Submit</button>
                     }
                 </div>
             </form>

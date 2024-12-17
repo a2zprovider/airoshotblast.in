@@ -9,7 +9,6 @@ const EnquiryDetail = (data: any) => {
     const { openStatusShow } = useModal();
     const fetcher = useFetcher();
     const [btnLoading, setBtnLoading] = useState(false);
-    const [loading, setLoading] = useState<boolean>(true);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -64,7 +63,8 @@ const EnquiryDetail = (data: any) => {
         fetchProducts();
     }, []); // This effect runs only once on mount
 
-    const [countryCodes, setCountryCodes] = useState<{ code: string, name: string }[]>([]);
+    const [c_loading, setLoading] = useState<boolean>(true);
+    const [countryCodes, setCountryCodes] = useState<{ dial_code: string, name: string }[]>([]);
     // Fetch country codes from the API
     useEffect(() => {
         const fetchCountryCodes = async () => {
@@ -78,13 +78,7 @@ const EnquiryDetail = (data: any) => {
                     return;
                 }
 
-                // Map countries to an array of { code, name }
-                const codes = result.map((country: any) => ({
-                    code: `${country?.idd?.root}${country ? country.idd ? country.idd.suffixes &&country.idd.suffixes.length ? country.idd.suffixes[0] : '' : '' : ''}`,  // Combine root and suffix to get the country code
-                    name: country.name.common,
-                }));
-
-                setCountryCodes(codes);
+                setCountryCodes(result);
             } catch (error) {
                 console.error('Error fetching country codes:', error);
             } finally {
@@ -94,7 +88,6 @@ const EnquiryDetail = (data: any) => {
 
         fetchCountryCodes();
     }, []);
-
 
     useEffect(() => {
         if (fetcher.data) {
@@ -156,22 +149,17 @@ const EnquiryDetail = (data: any) => {
                             <div className="relative">
                                 <select className="h-[52px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                     name="code"
-                                    defaultValue="+91"
                                     id="code">
-                                    {/* Loading State */}
-                                    {/* {loading ? (
-                                        <option>Loading country codes...</option>
+                                    {c_loading ? (
+                                        <option>Loading...</option>
                                     ) : (
-                                        // Display country codes in the select dropdown
                                         countryCodes.map((country, index) => (
-                                            <option key={index} value={country.code}>
-                                                {country.code}
-                                            </option>
+                                            country.dial_code == '+91' ?
+                                                <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
+                                                :
+                                                <option key={index} value={country.dial_code}>{country.dial_code}</option>
                                         ))
-                                    )} */}
-                                    <option value="+91">+91</option>
-                                    <option value="+1">+1</option>
-                                    <option value="+001">+001</option>
+                                    )}
                                 </select>
                                 <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                                     <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -198,11 +186,11 @@ const EnquiryDetail = (data: any) => {
                         <div id="recaptcha-container1"></div>
                         {
                             btnLoading ?
-                                <button type="submit" title='Processing' className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 flex items-center justify-center gap-3" disabled>
+                                <button type="submit" title='Processing' className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2] flex items-center justify-center gap-3" disabled>
                                     <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                                 </button>
                                 :
-                                <button type="submit" title='submit' className="bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2">Submit</button>
+                                <button type="submit" title='submit' className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2]">Submit</button>
                         }
                     </div>
                 </form>

@@ -99,19 +99,19 @@ export default function Products() {
                         </button>
                         {/* <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Sand Blasting</div>
-                            <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
+                            <Link title="Sand Blasting" to="/" className=""><i className="fa fa-times-circle"></i></Link>
                         </div>
                         <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Portable Sand Blasting Machine</div>
-                            <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
+                            <Link title="Sand Blasting" to="/" className=""><i className="fa fa-times-circle"></i></Link>
                         </div>
                         <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Sand Blasting</div>
-                            <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
+                            <Link title="Sand Blasting" to="/" className=""><i className="fa fa-times-circle"></i></Link>
                         </div>
                         <div className="text-nowrap flex items-center gap-2 text-lg font-medium text-[#131B23] bg-[#ccc] px-2 py-2 rounded-md">
                             <div className="text-lg">Portable Sand Blasting Machine</div>
-                            <Link to="/" className=""><i className="fa fa-times-circle"></i></Link>
+                            <Link title="Sand Blasting" to="/" className=""><i className="fa fa-times-circle"></i></Link>
                         </div> */}
                     </div>
 

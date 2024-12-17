@@ -7,7 +7,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { createCookie, type LinksFunction, type LoaderFunction, type MetaFunction } from "@remix-run/node";
+import { type LinksFunction, type LoaderFunction, type MetaFunction } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import "./tailwind.css";
 import Header from "./components/Header";
@@ -20,6 +20,7 @@ import { commitSession } from "./sessions";
 import StatusShow from "./components/StatusShow";
 import Loader from "./components/loader";
 import Layout from "./components/Layout";
+// import { ErrorBoundary } from "./components/_error";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -39,17 +40,38 @@ export const links: LinksFunction = () => [
 ];
 
 export let loader: LoaderFunction = async ({ request }) => {
+  try {
+    const setting = await fetch(config.apiBaseURL + 'setting');
+    const settings = await setting.json();
 
-  const setting = await fetch(config.apiBaseURL + 'setting');
-  const settings = await setting.json();
-
-  const newSettings: any = {
-    title: settings.data.title
+    if (!setting.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    const newSettings: any = {
+      title: settings.data.title
+    }
+    const commit = await commitSession(newSettings);
+    return json({ settings }, { headers: { 'Set-Cookie': commit } });
+  } catch (error) {
+    throw new Error('Network error or API issue');
   }
-  const commit = await commitSession(newSettings);
-  return json({ settings }, { headers: { 'Set-Cookie': commit } });
 };
 
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.log('error : ', error);
+
+  return (
+    <html>
+      <head>
+        <title>Error!</title>
+      </head>
+      <body>
+        <h1>Application Error</h1>
+        <p>{error ? error.message : ''}</p>
+      </body>
+    </html>
+  );
+}
 
 export default function App() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -102,6 +124,17 @@ export default function App() {
           <Meta />
           <Links />
 
+          {/* Google Analytics Script */}
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+          <script>
+            {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXXXX');  // Replace with your GA4 Tracking ID
+          `}
+          </script>
+
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
         <body className="text-[#131B23]">
@@ -127,19 +160,5 @@ export default function App() {
         </body>
       </html>
     </ModalProvider>
-  );
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <html>
-      <head>
-        <title>Error!</title>
-      </head>
-      <body>
-        <h1>Application Error</h1>
-        <p>{error ? error.message : ''}</p>
-      </body>
-    </html>
   );
 }

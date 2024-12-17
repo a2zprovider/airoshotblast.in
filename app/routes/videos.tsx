@@ -3,17 +3,40 @@ import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import config from "~/config";
 
-export const meta: MetaFunction = () => {
-    return [
-        { title: "New Remix App Video" },
-        { name: "Video description", content: "Welcome to Remix Video!" },
-    ];
-};
-export let loader: LoaderFunction = async () => {
+export let loader: LoaderFunction = async ({ request }) => {
     const video = await fetch(config.apiBaseURL + 'video');
     const videos = await video.json();
 
-    return json({ videos });
+    const setting = await fetch(config.apiBaseURL + 'setting');
+    const settings = await setting.json();
+
+    const full_url = request.url;
+
+    return json({ videos, settings, full_url });
+};
+
+export const meta: MetaFunction = ({ data }) => {
+    const { settings, full_url }: any = data;
+    const seo_details = JSON.parse(settings.data.seo_details);
+
+    return [
+        // Seo Details
+        { title: seo_details.v_seo_title },
+        { name: "description", content: seo_details.v_seo_description },
+        { name: "keywords", content: seo_details.v_seo_keywords },
+
+        // OG Details
+        { name: "og:title", content: seo_details.v_seo_title },
+        { name: "og:description", content: seo_details.v_seo_description },
+        { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
+        { name: "og:url", content: full_url },
+
+        // Twitter Card Details
+        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:title", content: seo_details.v_seo_title },
+        { name: "twitter:description", content: seo_details.v_seo_description },
+        { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
+    ];
 };
 
 export default function Videos() {
