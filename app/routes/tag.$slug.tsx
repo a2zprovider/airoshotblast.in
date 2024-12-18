@@ -32,16 +32,20 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "keywords", content: blogs.data.seo_keywords },
 
         // OG Details
+        { name: "og:type", content: "article" },
         { name: "og:title", content: blogs.data.title },
         { name: "og:description", content: blogs.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
-        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: blogs.data.title },
         { name: "twitter:description", content: blogs.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
+        
+        // Canonical URL
+        { rel: 'canonical', href: full_url },
     ];
 };
 
