@@ -1,5 +1,6 @@
 import { useModal } from './Modalcontext'; // Assuming you have a Modal context
 import EnquiryDetail from './EnquiryDetail';
+import { useEffect } from 'react';
 
 const Enquiry = () => {
     const { isEnquiryOpen, modalEnquiryData, closeEnquiry } = useModal();

@@ -9,8 +9,6 @@ const QuickView = () => {
         return null;
     }
     const product = modalQuickViewData;
-    console.log('product : ', product);
-
 
     const navigate = useNavigate();
 
@@ -30,8 +28,6 @@ const QuickView = () => {
                 setSetting(setting);
             } catch (error) {
                 console.error('Error fetching setting:', error);
-            } finally {
-                // setLoading(false);
             }
         };
 
@@ -65,7 +61,7 @@ const QuickView = () => {
                             className="object-contain rounded-2xl"
                         />
                     </div>
-                    <div className="py-8 md:w-[50%] max-w-[500px] w-[500px] overflow-hidden">
+                    <div className="py-8 w-[100%] md:max-w-[400px] md:w-[400px] overflow-hidden">
                         <div className="px-0">
                             <div className="text-3xl text-[#131B23] font-normal line-clamp-1">{product.title}</div>
                             <div className="text-2xl text-[#BF0707] font-normal py-2">₹ {product.price}</div>

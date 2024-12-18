@@ -47,6 +47,7 @@ body {
     .content-details table {
         width: 100% !important;
     }
+
     .content-details table {
         @apply leading-10 w-full mb-4
     }
@@ -162,6 +163,19 @@ body {
         height: 180%;
         left: -50%;
         width: 180%;
+    }
+
+    .catModalContent {
+        @apply overflow-auto;
+        max-height: calc(100vh - 300px);
+    }
+
+    .catModalContent::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    .catModalContent::-webkit-scrollbar-thumb {
+        background: #4356A2;
     }
 
 }

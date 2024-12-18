@@ -18,7 +18,7 @@ export default function Header({ settings }: any) {
         <div className="container mx-auto md:py-3">
           <div className="flex items-center justify-between">
             <div className="text-left">
-              <Link title="Send Inquiry" to={'mailto:' + settings.email} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+              <Link title={settings.email} to={'mailto:' + settings.email} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-envelope "></i>
                 <span className="md:block hidden">Send Inquiry</span>
               </Link>
@@ -29,7 +29,7 @@ export default function Header({ settings }: any) {
               </Link>
             </div>
             <div className="text-right">
-              <Link title="Call Us Now" to={'tel:' + settings.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+              <Link title={settings.mobile} to={'tel:' + settings.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-phone rotate-90"></i>
                 <span className="md:block hidden">Call Us Now</span>
               </Link>
@@ -91,7 +91,7 @@ export default function Header({ settings }: any) {
                   name="s"
                   defaultValue={search ? search : ''}
                   placeholder="Search Here..."
-                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23]"
+                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23] hover:border-[#131B23] transition-all duration-500 ease-out"
                 />
                 <button
                   type="submit"

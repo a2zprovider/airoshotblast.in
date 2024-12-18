@@ -58,8 +58,6 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  console.log('error : ', error);
-
   return (
     <html>
       <head>
@@ -104,7 +102,7 @@ export default function App() {
   // }, []);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const timeout = setTimeout(() => setLoading(false), 1000);
+    const timeout = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -122,6 +120,7 @@ export default function App() {
           <link rel="apple-touch-icon" sizes="180x180" href={config.imgBaseURL + 'setting/favicon/' + settings.data.favicon} />
 
           <Meta />
+          <meta name="og:site_name" content={settings.data.title} />
           <Links />
 
           {/* Google Analytics Script */}

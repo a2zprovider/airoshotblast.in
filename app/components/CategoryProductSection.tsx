@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import config from '~/config';
 import ProductSlider from './ProductSlider';
-import { AnyNode } from 'postcss';
 
 export default function CategoryProductSection() {
     const [category, setCategory] = useState<any[]>([]);
