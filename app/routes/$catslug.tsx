@@ -39,16 +39,20 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "keywords", content: category?.data?.seo_keywords },
 
         // OG Details
+        { name: "og:type", content: "article" },
         { name: "og:title", content: category?.data?.title },
         { name: "og:description", content: category?.data?.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
-        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: category?.data?.title },
         { name: "twitter:description", content: category?.data?.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
+        
+        // Canonical URL
+        { rel: 'canonical', href: full_url },
     ];
 };
 

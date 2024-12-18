@@ -2,6 +2,7 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
+import { useEffect, useState } from "react";
 import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request, params }) => {
@@ -34,7 +35,6 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }) => {
     const { blog, full_url }: any = data;
 
-
     return [
         // Seo Details
         { title: blog.data.seo_title },
@@ -43,7 +43,6 @@ export const meta: MetaFunction = ({ data }) => {
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:site", content: "Site Name" },
         { name: "twitter:title", content: blog.data.title },
         { name: "twitter:description", content: blog.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'blog/' + blog.data.image },
@@ -57,7 +56,6 @@ export const meta: MetaFunction = ({ data }) => {
 
         // Canonical URL
         { rel: 'canonical', href: full_url },
-
     ];
 };
 

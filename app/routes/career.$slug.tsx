@@ -29,16 +29,20 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "keywords", content: careers.data.seo_keywords },
 
         // OG Details
+        { name: "og:type", content: "article" },
         { name: "og:title", content: careers.data.title },
         { name: "og:description", content: careers.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
         { name: "og:url", content: full_url },
 
         // Twitter Card Details
-        { name: "twitter:twitter", content: "summary_large_image" },
+        { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: careers.data.title },
         { name: "twitter:description", content: careers.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
+        
+        // Canonical URL
+        { rel: 'canonical', href: full_url },
     ];
 };
 
