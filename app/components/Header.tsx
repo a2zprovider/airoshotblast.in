@@ -112,11 +112,11 @@ export default function Header({ settings }: any) {
         <>
           <div className={`bg-[#131B23] lg:hidden shadow-md fixed z-[100] top-0 bottom-0 ${!isOpen ? '-left-[110%] right-[110%]' : 'left-0 right-0'} transition-all duration-500 ease-in-out`}>
             <div className="lg:hidden flex items-center justify-center mt-3 mb-3">
-              <Link title={settings.title} to="/">
-                <img src={config.imgBaseURL + 'setting/logo2/' + settings.logo2} alt={settings.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
+              <Link title={settings.title} to="/" className="flex justify-center">
+                <img src={config.imgBaseURL + 'setting/logo2/' + settings.logo2} alt={settings.title} loading="lazy" className="w-[50%] h-auto" />
               </Link>
             </div>
-            <hr />
+            <hr className="border-[#ffffff45]" />
             <nav>
               <div className="space-y-2 p-4">
                 <NavLink to="/" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-home mr-3"></i> <span>Home</span></NavLink>
