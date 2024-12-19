@@ -40,7 +40,7 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:title", content: careers.data.title },
         { name: "twitter:description", content: careers.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-        
+
         // Canonical URL
         { rel: 'canonical', href: full_url },
     ];
@@ -106,7 +106,7 @@ export default function CareerDetail() {
         <>
             <div className="bg-[#E9F1F799]">
                 <div className="container mx-auto">
-                    <div className="bg-[#f6f6f6] px-6 py-3">
+                    <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
                             <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
                         </div>
@@ -166,10 +166,10 @@ export default function CareerDetail() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="py-4">
-                                            <form onSubmit={handleSubmit} className="flex items-center justify-between">
+                                        <div className="p-4 border rounded-md">
+                                            <form onSubmit={handleSubmit} className="flex items-center justify-between flex-col md:flex-row">
                                                 <input type="hidden" name="career" defaultValue={careers.data._id} />
-                                                <span className="flex gap-2">
+                                                <span className="flex flex-col md:flex-row items-center gap-2">
                                                     <input type="file" name="resume" id="resume" className="hidden" placeholder="" onChange={handleFileChange} />
                                                     <label htmlFor="resume" className="flex items-center bg-[#4356A2] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px] gap-2"><i className="fa fa-upload"></i><div className="text-xl">Upload Resume</div></label>
                                                     <span className="text-gray-700">{fileName}</span>

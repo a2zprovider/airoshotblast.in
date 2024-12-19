@@ -43,7 +43,7 @@ const QuickView = () => {
         >
             {/* Modal Content */}
             <div
-                className={`bg-[#E9F1F7] rounded-2xl animate-modalIn transform transition-all duration-500 ease-out translate-y-0 opacity-100 max-w-[90%] md:max-w-auto overflow-auto my-10`}
+                className={`bg-[#E9F1F7] rounded-2xl animate-modalIn transform transition-all duration-500 ease-out translate-y-0 opacity-100 max-w-[95%] md:max-w-auto overflow-auto my-10`}
                 onClick={(e) => e.stopPropagation()} // Prevent closing on content click
             >
                 <button
@@ -61,29 +61,29 @@ const QuickView = () => {
                             className="object-contain rounded-2xl"
                         />
                     </div>
-                    <div className="py-8 w-[100%] md:max-w-[400px] md:w-[400px] overflow-hidden">
-                        <div className="px-0">
+                    <div className="py-8 pb-3 md:pb-8 w-[100%] md:max-w-[400px] md:w-[400px] overflow-hidden">
+                        <div className="px-3 md:px-0">
                             <div className="text-3xl text-[#131B23] font-normal line-clamp-1">{product.title}</div>
                             <div className="text-2xl text-[#BF0707] font-normal py-2">₹ {product.price}</div>
                         </div>
                         <div>
                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
-                            <div className="py-4 font-normal text-[#131B23] text-lg">
+                            <div className="py-2 px-3 md:px-0 font-normal text-[#131B23] text-lg">
                                 {JSON.parse(product.field).name.map((f: any, index: any) => (
                                     index < 4 ?
-                                        <div className="flex gap-4 flex-wrap items-center border-b-[1px] border-[#cccccc61]" key={index}>
-                                            <div className='w-[40%]'>{f}</div>
-                                            <div className='w-[55%]'>{JSON.parse(product.field).value[index]}</div>
+                                        <div className="py-2 flex gap-4 flex-wrap items-center border-b-[1px] last:border-b-[0px] border-[#cccccc61]" key={index}>
+                                            <div className='w-[40%] text-lg'>{f}</div>
+                                            <div className='w-[55%] text-lg'>{JSON.parse(product.field).value[index]}</div>
                                         </div>
                                         : ''
                                 ))}
                             </div>
-                            <div className="flex items-center gap-2 w-full pr-3">
+                            <div className="flex items-center gap-2 w-full px-3 md:mx-0 md:pr-3">
                                 <button onClick={() => openEnquiry(product)} title='Enquiry' className="w-full px-3 py-2 bg-[#4356A2] text-lg text-white font-medium rounded-md h-[44px] gap-3"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Inquiry</span></button>
                                 <Link title='Call Us' to={'tel:' + setting?.data?.mobile} className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
                                 <Link title='Whatsapp' to={`https://api.whatsapp.com/send?phone=${setting?.data?.mobile}&text=${product.title}`} target='_blank' className="bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
                             </div>
-                            <div className="py-4 pr-3">
+                            <div className="py-4 px-3 md:px-0">
                                 <button onClick={() => handleClick(`/product/${product.slug}`)} title='Product Detail' className=" flex items-center text-[#131B23] font-medium text-xl"><div className="text-xl">View Full Details</div> <span className="text-2xl">&nbsp;</span> &#11111; <i className="fa fa-arrow-trend-up"></i></button>
                             </div>
                         </div>

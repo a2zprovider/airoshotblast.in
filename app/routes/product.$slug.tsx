@@ -37,7 +37,7 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:title", content: product.data.title },
         { name: "twitter:description", content: product.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'product/' + product.data.image },
-        
+
         // Canonical URL
         { rel: 'canonical', href: full_url },
     ];
@@ -104,7 +104,7 @@ export default function ProductSingle() {
         <>
             <div className="bg-[#E9F1F799]">
                 <div className="container mx-auto">
-                    <div className="bg-[#f6f6f6] px-6 py-3">
+                    <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
                             <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Products" to="/products" className="text-sm font-normal text-[#131B23]">Machines & Abrasives</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">{product.data.title}</div>
                         </div>
@@ -118,7 +118,7 @@ export default function ProductSingle() {
                                                     <img
                                                         src={images[selectedImageIndex]}
                                                         alt={`.images Image ${selectedImageIndex + 1}`} loading="lazy"
-                                                        className="h-[425px] width-full object-contain rounded-2xl"
+                                                        className="h-auto md:h-[425px] width-full object-contain rounded-2xl"
                                                     />
                                                 </div>
                                                 {/* Prev/Next Buttons */}
@@ -153,7 +153,6 @@ export default function ProductSingle() {
                                                             alt={`Thumbnail ${index + 1}`} loading="lazy"
                                                             className="w-[100px] h-[100px] object-cover"
                                                         />
-
                                                     </div>
                                                 ))}
                                             </div>
@@ -178,7 +177,7 @@ export default function ProductSingle() {
                                             <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                 <div className="flex items-center">
                                                     <div className="relative">
-                                                        <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                        <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                                             name="code"
                                                             defaultValue="+91"
                                                             id="code">
@@ -186,7 +185,7 @@ export default function ProductSingle() {
                                                             <option value="+1">+1</option>
                                                             <option value="+001">+001</option>
                                                         </select>
-                                                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                                        <span className="absolute right-[5px] top-1/2 transform -translate-y-1/2 pointer-events-none">
                                                             <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                                             </svg>
@@ -228,15 +227,15 @@ export default function ProductSingle() {
                             <div className="py-10">
                                 {/* Topbar (Tabs) */}
                                 <div>
-                                    <ul className="flex items-center justify-between w-full">
+                                    <ul className="flex flex-col md:flex-row items-center justify-between w-full">
                                         {tabs.map((tab, index) => (
                                             <li key={index} className="w-full">
                                                 <button
-                                                    className={`w-full font-normal text-2xl py-4 px-4 border-t-[3px] border-[#131B23] outline-0  bg-[#DEE5FD] ${activeTab === index
+                                                    className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0  bg-[#DEE5FD] ${activeTab === index
                                                         ? "text-[#4356A2]"
                                                         : "text-[#131B23]"
                                                         }`}
-                                                        title={tab}
+                                                    title={tab}
                                                     onClick={() => setActiveTab(index)}
                                                 >
                                                     <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>
@@ -250,7 +249,7 @@ export default function ProductSingle() {
                                 <div className="">
                                     <div className="px-2">
                                         {activeTab === 0 &&
-                                            <div className="content-details font-normal text-lg text-justify space-y-4 px-3 py-8">
+                                            <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
                                                 <table className="w-full">
                                                     <tbody>
                                                         {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
@@ -264,14 +263,14 @@ export default function ProductSingle() {
                                             </div>
                                         }
                                         {activeTab === 1 &&
-                                            <div className="content-details applications font-normal text-lg text-justify space-y-4 px-3 py-8">
+                                            <div className="content-details applications font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
                                                 <p>
                                                     <div dangerouslySetInnerHTML={{ __html: product.data.application }} ></div>
                                                 </p>
                                             </div>
                                         }
                                         {activeTab === 2 &&
-                                            <div className="content-details font-normal text-lg text-justify space-y-4 px-3 py-8">
+                                            <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
                                                 <p>
                                                     <div dangerouslySetInnerHTML={{ __html: product.data.description }} ></div>
                                                 </p>
