@@ -57,7 +57,7 @@ export default function Careers() {
         <>
             <div className="bg-[#E9F1F799]">
                 <div className="container mx-auto">
-                    <div className="bg-[#f6f6f6] px-6 py-3">
+                    <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
                             <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
                         </div>
@@ -100,7 +100,7 @@ export default function Careers() {
                                         <div className="font-medium text-2xl text-[#4356A2] pb-4">Open Job Positions</div>
                                         {(careers.data.data).length ?
                                             careers.data.data.map((career: any, index: any) => (
-                                                <div key={index} className="grid grid-cols-3 gap-2 bg-[#F1F1F1] shadow-md divide-x divide-[#ccc] mb-4 p-3">
+                                                <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-2 bg-[#F1F1F1] shadow-md md:divide-x divide-[#ccc] mb-4 p-3">
                                                     <div className="px-4 py-2">
                                                         <div className="text-[#4356A2] text-xl font-medium py-1">{career.title}</div>
                                                         <div className="flex items-center gap-2 py-1">

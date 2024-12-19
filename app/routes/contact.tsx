@@ -88,7 +88,7 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:title", content: seo_details.c_seo_title },
         { name: "twitter:description", content: seo_details.c_seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-        
+
         // Canonical URL
         { rel: 'canonical', href: full_url },
     ];
@@ -218,7 +218,7 @@ export default function Contact() {
                                         <label htmlFor="mobile" className="text-white text-lg font-medium">Mobile No.</label>
                                         <div className="flex items-center">
                                             <div className="relative">
-                                                <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                                     name="code"
                                                     id="code">
                                                     {c_loading ? (
@@ -232,7 +232,7 @@ export default function Contact() {
                                                         ))
                                                     )}
                                                 </select>
-                                                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                                <span className="absolute right-[5px] top-1/2 transform -translate-y-1/2 pointer-events-none">
                                                     <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                                     </svg>
@@ -251,8 +251,8 @@ export default function Contact() {
                                         <label htmlFor="requirement" className="text-white text-lg font-medium">Your Requirement</label>
                                         <textarea name="message" id="" required rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
                                     </div>
-                                    <div className="flex flex-row mb-2 items-center gap-2">
-                                        <div id="recaptcha-container"></div>
+                                    <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2">
+                                        <div id="recaptcha-container" className="mb-1 md:mb-0"></div>
                                         {
                                             btnLoading ?
                                                 <button type="submit" title="Processing" className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2] flex items-center justify-center gap-3" disabled>
