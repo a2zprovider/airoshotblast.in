@@ -53,6 +53,8 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "og:description", content: blog.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'blog/' + blog.data.image },
         { name: "og:url", content: full_url },
+        { name: "og:image:width", content: "500" },
+        { name: "og:image:height", content: "500" },
 
         // Canonical URL
         { rel: 'canonical', href: full_url },
@@ -88,7 +90,7 @@ export default function BlogSingle() {
                 <script type="application/ld+json">{JSON.stringify(schema)}</script>
             </head>
             <div className="container mx-auto">
-                <div className="bg-[#f6f6f6] px-6 py-3">
+                <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
                         <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Blogs" to="/blogs" className="text-sm font-normal text-[#131B23]">Blogs</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">{blog.data.title}</div>
                     </div>
@@ -168,7 +170,7 @@ export default function BlogSingle() {
                                             <Link title={previousBlog.title} to={'/blog/' + previousBlog.slug}><i className="fa fa-chevron-circle-left text-black text-4xl"></i></Link>
                                             <div>
                                                 <div className="font-normal text-sm leading-10">PREVIOUS</div>
-                                                <div className="font-normal text-lg leading-10">{previousBlog.title}</div>
+                                                <div className="font-normal text-lg leading-10 line-clamp-1">{previousBlog.title}</div>
                                             </div>
                                         </div>
                                         : <div></div>
@@ -177,7 +179,7 @@ export default function BlogSingle() {
                                         <div className="flex items-center text-right py-4 gap-4">
                                             <div>
                                                 <div className="font-normal text-sm leading-10">NEXT</div>
-                                                <div className="font-normal text-lg leading-10">{nextBlog.title}</div>
+                                                <div className="font-normal text-lg leading-10 line-clamp-1">{nextBlog.title}</div>
                                             </div>
                                             <Link title={nextBlog.title} to={'/blog/' + nextBlog.slug}><i className="fa fa-chevron-circle-right text-black text-4xl"></i></Link>
                                         </div>

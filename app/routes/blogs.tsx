@@ -55,7 +55,7 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:title", content: seo_details.b_seo_title },
         { name: "twitter:description", content: seo_details.b_seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-        
+
         // Canonical URL
         { rel: 'canonical', href: full_url },
     ];
@@ -73,7 +73,7 @@ export default function Blog() {
                         <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-[#4356A2] underline">Blogs</div>
                     </div>
                     <div className="py-3">
-                        <div className="flex lg:flex-row flex-col gap-4">
+                        <div className="flex lg:flex-row flex-col-reverse gap-4">
                             <div className="lg:w-1/4 pb-4 lg:border-r lg:border-[#dbdada] pr-2">
                                 <div className="pb-4">
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-3">Blog Categories</div>
