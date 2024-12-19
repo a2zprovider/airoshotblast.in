@@ -177,7 +177,7 @@ export default function ProductSingle() {
                                             <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                 <div className="flex items-center">
                                                     <div className="relative">
-                                                        <select className="h-[44px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                        <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                                             name="code"
                                                             defaultValue="+91"
                                                             id="code">
@@ -185,7 +185,7 @@ export default function ProductSingle() {
                                                             <option value="+1">+1</option>
                                                             <option value="+001">+001</option>
                                                         </select>
-                                                        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                                        <span className="absolute right-[5px] top-1/2 transform -translate-y-1/2 pointer-events-none">
                                                             <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                                             </svg>

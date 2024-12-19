@@ -43,7 +43,7 @@ const QuickView = () => {
         >
             {/* Modal Content */}
             <div
-                className={`bg-[#E9F1F7] rounded-2xl animate-modalIn transform transition-all duration-500 ease-out translate-y-0 opacity-100 max-w-[90%] md:max-w-auto overflow-auto my-10`}
+                className={`bg-[#E9F1F7] rounded-2xl animate-modalIn transform transition-all duration-500 ease-out translate-y-0 opacity-100 max-w-[95%] md:max-w-auto overflow-auto my-10`}
                 onClick={(e) => e.stopPropagation()} // Prevent closing on content click
             >
                 <button
