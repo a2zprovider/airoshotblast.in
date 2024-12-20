@@ -59,7 +59,7 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
                 >
                     {/* Modal Content */}
                     <div
-                        className={`bg-[#E9F1F7] rounded-2xl animate-modalIn w-full max-w-xl transform transition-all duration-500 ease-out max-w-[90%] md:max-w-auto  ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}
+                        className={`bg-[#E9F1F7] rounded-2xl animate-modalIn transform transition-all duration-500 ease-out w-full max-w-[90%] md:max-w-xl  ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}
                         onClick={(e) => e.stopPropagation()} // Prevent closing on content click
                     >
                         <div className="relative">
@@ -76,7 +76,7 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
                                 {categories.map((category: any, index: any) => (
                                     <div className="" key={index}>
                                         <div className="flex justify-between items-center py-2 px-4 bg-[#DEE5FD] border-b">
-                                            <label htmlFor={'cat' + index}>{category.title}</label>
+                                            <label htmlFor={'cat' + index} className="line-clamp-1">{category.title}</label>
 
                                             <label className="inline-flex items-center space-x-2">
                                                 <input type="checkbox" name="category"
@@ -92,7 +92,7 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
                                         {category.subcategory.map((scat: any, i: any) => (
                                             <div className="" key={i}>
                                                 <div className="flex justify-between items-center py-2 px-4 bg-[#F6F6F6] border-b">
-                                                    <label htmlFor={'cat' + index + i}>{scat.title}</label>
+                                                    <label htmlFor={'cat' + index + i} className="line-clamp-1">{scat.title}</label>
                                                     <label className="inline-flex items-center space-x-2">
                                                         <input type="checkbox" name="category"
                                                             onChange={() => changeCategory(scat)}

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
 import config from '~/config';
 import { Link } from '@remix-run/react';
 
