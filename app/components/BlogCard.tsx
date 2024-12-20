@@ -11,7 +11,7 @@ const BlogCard = ({ blog }: any) => {
         setFullUrl(currentUrl);
     }, []);
     return (
-        <div>
+        <div className='border rounded-2xl border-transparent hover:border-[#4356A2] transition-all duration-[800ms] ease-in-out'>
             <div className='relative'>
                 <img src={blog.thumb_image ? config.imgBaseURL + `/blog/thumb/${blog.thumb_image}` : config.imgBaseURL + `/blog/${blog.image}`} alt={blog.title} loading="lazy" className="rounded-t-2xl w-full h-[260px]" />
                 {blog.createdAt ?
@@ -25,7 +25,7 @@ const BlogCard = ({ blog }: any) => {
             </div>
             <div className="bg-[#f4f4f4] p-3 rounded-b-2xl shadow-md">
                 <Link title={blog.title} to={'/blog/' + blog.slug} className="text-sm font-medium text-[#131B23] pb-1 line-clamp-1">{blog.title}</Link>
-                <p className="text-sm font-normal text-[#131B23] line-clamp-4 leading-5">{blog.except}</p>
+                <p className="text-sm font-normal text-[#131B23] line-clamp-4 leading-5 h-[80px]">{blog.except}</p>
             </div>
         </div>
     );
