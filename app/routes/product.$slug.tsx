@@ -11,9 +11,12 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const product_detail = await fetch(config.apiBaseURL + 'product/' + params.slug);
     const product = await product_detail.json();
 
+    const setting = await fetch(config.apiBaseURL + 'setting');
+    const settings = await setting.json();
+
     const full_url = request.url;
 
-    return json({ product, full_url });
+    return json({ product, settings, full_url });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -44,7 +47,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function ProductSingle() {
-    const { product }: any = useLoaderData();
+    const { product, settings }: any = useLoaderData();
 
     const [selectedImageIndex, setSelectedImageIndex] = useState(0); // Track the selected image
     const handleThumbnailClick = (index: any) => {
@@ -99,6 +102,58 @@ export default function ProductSingle() {
             }
         }
     }, [fetcher.data]);
+
+    const [c_loading, setLoading] = useState<boolean>(true);
+    const [countryCodes, setCountryCodes] = useState<{ dial_code: string, name: string }[]>([]);
+    // Fetch country codes from the API
+    useEffect(() => {
+        const fetchCountryCodes = async () => {
+            try {
+                // Fetch data from the proxy endpoint in your Remix app
+                const response = await fetch('/country-codes');
+                const result = await response.json();
+
+                if (result.error) {
+                    console.error(result.error);
+                    return;
+                }
+
+                setCountryCodes(result);
+            } catch (error) {
+                console.error('Error fetching country codes:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCountryCodes();
+    }, []);
+
+
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Function to check scroll position
+    const checkScrollPosition = () => {
+        const mainDiv = document.getElementById('mainDiv');
+        const rect = mainDiv.getBoundingClientRect();
+
+        // Check if the main div is at the top (top is 0) or at the bottom (bottom is 0)
+        if (rect.top <= 72 && rect.bottom >= window.innerHeight) {
+            setIsVisible(true); // Show the target div
+        } else {
+            setIsVisible(false); // Hide the target div
+        }
+    };
+
+    useEffect(() => {
+        // Listen for scroll events
+        window.addEventListener('scroll', checkScrollPosition);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            window.removeEventListener('scroll', checkScrollPosition);
+        };
+    }, []); // Empty dependency array ensures this effect runs once on mount and unmount
 
     return (
         <>
@@ -160,7 +215,7 @@ export default function ProductSingle() {
                                     </div>
                                     <div className="lg:w-[50%] py-1">
                                         <div className="text-3xl text-[#131B23] font-normal">{product.data.title}</div>
-                                        <div className="text-2xl text-[#BF0707] font-normal py-2">₹ {product.data.price}</div>
+                                        <div className="text-2xl text-[#BF0707] font-normal py-2">{product.data.price}</div>
                                         <div>
                                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                                             <div className="p-4">
@@ -173,17 +228,26 @@ export default function ProductSingle() {
                                             </div>
                                         </div>
                                         <div className="bg-[#00539C] p-4">
-                                            <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
+                                            <div className="flex flex-col md:flex-row justify-between items-center">
+                                                <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
+                                                <Link title={settings.data.mobile} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {settings.data.mobile}</span></Link>
+                                            </div>
                                             <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
-                                                <div className="flex items-center">
+                                                <div className="flex items-center shadow-md">
                                                     <div className="relative">
-                                                        <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                        <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                                             name="code"
-                                                            defaultValue="+91"
                                                             id="code">
-                                                            <option value="+91">+91</option>
-                                                            <option value="+1">+1</option>
-                                                            <option value="+001">+001</option>
+                                                            {c_loading ? (
+                                                                <option>Loading...</option>
+                                                            ) : (
+                                                                countryCodes.map((country, index) => (
+                                                                    country.dial_code == '+91' ?
+                                                                        <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
+                                                                        :
+                                                                        <option key={index} value={country.dial_code}>{country.dial_code}</option>
+                                                                ))
+                                                            )}
                                                         </select>
                                                         <span className="absolute right-[5px] top-1/2 transform -translate-y-1/2 pointer-events-none">
                                                             <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -194,10 +258,11 @@ export default function ProductSingle() {
                                                     <input
                                                         type="mobile"
                                                         name="mobile"
-                                                        required
                                                         pattern="^\+?\d{10,15}$"
+                                                        required
+                                                        autoComplete="off"
                                                         placeholder="Enter Your Mobile No."
-                                                        className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
+                                                        className="flex-1 px-3 py-3 bg-[#fff] text-lg font-medium text-[#D9D9D9] rounded-r-md outline-none"
                                                     />
                                                 </div>
                                                 <input type="hidden" name="message" defaultValue={product.data.title} />
@@ -210,11 +275,11 @@ export default function ProductSingle() {
                                                 />
                                                 {
                                                     btnLoading ?
-                                                        <button type="submit" title="Processing" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4" disabled>
+                                                        <button type="submit" title="Processing" className="n_btn1 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#131B23] px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[52px] gap-4" disabled>
                                                             <i className="fa fa-spinner animate-spin"></i> <span className="text-lg">Processing...</span>
                                                         </button>
                                                         :
-                                                        <button type="submit" title="Send Now" className="px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md h-[44px] gap-4">
+                                                        <button type="submit" title="Send Now" className="n_btn1 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#131B23] px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[52px] gap-4">
                                                             <i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span>
                                                         </button>
                                                 }
@@ -223,74 +288,153 @@ export default function ProductSingle() {
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="py-10">
-                                {/* Topbar (Tabs) */}
-                                <div>
-                                    <ul className="flex flex-col md:flex-row items-center justify-between w-full">
-                                        {tabs.map((tab, index) => (
-                                            <li key={index} className="w-full">
-                                                <button
-                                                    className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0  bg-[#DEE5FD] ${activeTab === index
-                                                        ? "text-[#4356A2]"
-                                                        : "text-[#131B23]"
-                                                        }`}
-                                                    title={tab}
-                                                    onClick={() => setActiveTab(index)}
-                                                >
-                                                    <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                {/* Content Area */}
-                                <div className="">
-                                    <div className="px-2">
-                                        {activeTab === 0 &&
-                                            <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
-                                                <table className="w-full">
-                                                    <tbody>
-                                                        {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
-                                                            <tr className="bg-[#f1f1f1]" key={index}>
-                                                                <td className="px-4 py-2">{f1} : </td>
-                                                                <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        }
-                                        {activeTab === 1 &&
-                                            <div className="content-details applications font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
-                                                <p>
-                                                    <div dangerouslySetInnerHTML={{ __html: product.data.application }} ></div>
-                                                </p>
-                                            </div>
-                                        }
-                                        {activeTab === 2 &&
-                                            <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
-                                                <p>
-                                                    <div dangerouslySetInnerHTML={{ __html: product.data.description }} ></div>
-                                                </p>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-                            {product.relatedProducts.length ?
-                                <div className="py-4">
-                                    <div className="text-2xl font-normal text-[#131B23]">Related Products</div>
+                            <div className="relative" id="mainDiv">
+                                <div className="py-10">
+                                    {/* Topbar (Tabs) */}
                                     <div>
-                                        <ProductSlider products={product.relatedProducts} />
+                                        <ul className="flex flex-col md:flex-row items-center justify-between w-full">
+                                            {tabs.map((tab, index) => (
+                                                <li key={index} className="w-full">
+                                                    <button
+                                                        className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0 bg-[#DEE5FD] ${activeTab === index
+                                                            ? "text-[#4356A2]"
+                                                            : "text-[#131B23]"
+                                                            }`}
+                                                        title={tab}
+                                                        onClick={() => setActiveTab(index)}
+                                                    >
+                                                        <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    {/* Content Area */}
+                                    <div className="">
+                                        <div className="px-2">
+                                            {activeTab === 0 &&
+                                                <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
+                                                    <table className="w-full">
+                                                        <tbody>
+                                                            {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
+                                                                <tr className="bg-[#f1f1f1]" key={index}>
+                                                                    <td className="px-4 py-2">{f1} : </td>
+                                                                    <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            }
+                                            {activeTab === 1 &&
+                                                <div className="content-details applications font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
+                                                    <p>
+                                                        <div dangerouslySetInnerHTML={{ __html: product.data.application }} ></div>
+                                                    </p>
+                                                </div>
+                                            }
+                                            {activeTab === 2 &&
+                                                <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
+                                                    <p>
+                                                        <div dangerouslySetInnerHTML={{ __html: product.data.description }} ></div>
+                                                    </p>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className={`fixed hidden md:block left-0 right-0 bg-white z-[10] shadow-[0_-4px_10px_0_rgba(0,0,0,0.15)] transition-all duration-[800ms] ${isVisible ? 'bottom-0' : '-bottom-[200px]'}`}>
+                                        <div className="container py-2">
+                                            <div className="flex items-center">
+                                                <div className="w-[50%] hidden md:block">
+                                                    <div className="flex items-center gap-4">
+                                                        {/* <div>
+                                                <img
+                                                    src={product.data.thumb_image ? config.imgBaseURL + `/product/thumb/${product.data.thumb_image}` : config.imgBaseURL + `/product/${product.data.image}`}
+                                                    alt={product.data.title} loading="lazy"
+                                                    className="object-contain rounded-xl h-[100px]"
+                                                />
+                                            </div> */}
+                                                        <div>
+                                                            <div className="text-xl text-[#131B23] font-normal line-clamp-1">{product.data.title}</div>
+                                                            <div className="text-md text-[#BF0707] font-normal ">{product.data.price}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="w-[100%] md:w-[50%] bg-[#00539C] p-4">
+                                                    <div className="flex flex-col md:flex-row justify-between items-center">
+                                                        <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
+                                                        <Link title={settings.data.mobile} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {settings.data.mobile}</span></Link>
+                                                    </div>
+                                                    <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
+                                                        <div className="flex items-center shadow-md">
+                                                            <div className="relative">
+                                                                <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                                    name="code"
+                                                                    id="code">
+                                                                    {c_loading ? (
+                                                                        <option>Loading...</option>
+                                                                    ) : (
+                                                                        countryCodes.map((country, index) => (
+                                                                            country.dial_code == '+91' ?
+                                                                                <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
+                                                                                :
+                                                                                <option key={index} value={country.dial_code}>{country.dial_code}</option>
+                                                                        ))
+                                                                    )}
+                                                                </select>
+                                                                <span className="absolute right-[5px] top-1/2 transform -translate-y-1/2 pointer-events-none">
+                                                                    <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                                                                    </svg>
+                                                                </span>
+                                                            </div>
+                                                            <input
+                                                                type="mobile"
+                                                                name="mobile"
+                                                                pattern="^\+?\d{10,15}$"
+                                                                required
+                                                                autoComplete="off"
+                                                                placeholder="Enter Your Mobile No."
+                                                                className="flex-1 px-3 py-3 bg-[#fff] text-lg font-medium text-[#D9D9D9] rounded-r-md outline-none"
+                                                            />
+                                                        </div>
+                                                        <input type="hidden" name="message" defaultValue={product.data.title} />
+                                                        <input type="hidden" name="captcha" defaultValue="false" />
+                                                        <input
+                                                            type="text"
+                                                            name="subject"
+                                                            placeholder="Qty"
+                                                            className="px-3 py-2 md:w-[100px] w-[100%] bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
+                                                        />
+                                                        {
+                                                            btnLoading ?
+                                                                <button type="submit" title="Processing" className="n_btn1 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#131B23] px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[52px] gap-4" disabled>
+                                                                    <i className="fa fa-spinner animate-spin"></i> <span className="text-lg">Processing...</span>
+                                                                </button>
+                                                                :
+                                                                <button type="submit" title="Send Now" className="n_btn1 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#131B23] px-3 py-2 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[52px] gap-4">
+                                                                    <i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Now</span>
+                                                                </button>
+                                                        }
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                :
-                                <></>}
+                                <hr />
+                                {product.relatedProducts.length ?
+                                    <div className="py-4">
+                                        <div className="text-2xl font-normal text-[#131B23]">Related Products</div>
+                                        <div>
+                                            <ProductSlider products={product.relatedProducts} />
+                                        </div>
+                                    </div>
+                                    :
+                                    <></>}
 
-                            {/* {product.relatedProducts.length ?
+                                {/* {product.relatedProducts.length ?
                                 <div className="py-4">
                                     <div className="text-2xl font-normal text-[#131B23]">Related Blogs</div>
                                     <div>
@@ -299,6 +443,8 @@ export default function ProductSingle() {
                                 </div>
                                 :
                                 <></>} */}
+
+                            </div>
                         </div>
                     </div>
                 </div>

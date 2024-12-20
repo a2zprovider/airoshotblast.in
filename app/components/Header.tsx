@@ -46,7 +46,7 @@ export default function Header({ settings }: any) {
               <NavLink to="/" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Home</NavLink>
               <NavLink to="/about" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>About Us</NavLink>
               <NavLink to="/products" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Machines & Abrasives</NavLink>
-              <NavLink to="/videos" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Vidoes</NavLink>
+              <NavLink to="/videos" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Videos</NavLink>
               <NavLink to="/blogs" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Blogs</NavLink>
               <NavLink to="/contact" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Contact Us</NavLink>
             </nav>
@@ -91,15 +91,9 @@ export default function Header({ settings }: any) {
                   name="s"
                   defaultValue={search ? search : ''}
                   placeholder="Search Here..."
-                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23] hover:border-[#131B23] transition-all duration-500 ease-out"
+                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23] hover:border-[#131B23] transition-all duration-[800ms] ease-out"
                 />
-                <button
-                  type="submit"
-                  title="Submit"
-                  className="px-4 py-2 text-base bg-[#131B23] text-white rounded-r-md"
-                >
-                  <i className="fa fa-search"></i>
-                </button>
+                <button type="submit" title="Submit" className="n_btn1 px-4 py-2 bg-[#131B23] text-base text-white font-medium rounded-r-md w-full text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2] border-[1px] border-[#131B23]"><i className="fa fa-search"></i></button>
               </form>
             </div>
           </div>
@@ -122,7 +116,7 @@ export default function Header({ settings }: any) {
                 <NavLink to="/" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-home mr-3"></i> <span>Home</span></NavLink>
                 <NavLink to="/about" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-info-circle mr-3"></i> <span>About Us</span></NavLink>
                 <NavLink to="/products" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-th-large mr-3"></i> <span>Machines & Abrasives</span></NavLink>
-                <NavLink to="/videos" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fab fa-youtube mr-3"></i> <span>Vidoes</span></NavLink>
+                <NavLink to="/videos" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fab fa-youtube mr-3"></i> <span>Videos</span></NavLink>
                 <NavLink to="/blogs" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-blog mr-3"></i> <span>Blogs</span></NavLink>
                 <NavLink to="/contact" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-phone rotate-90 mr-3"></i> <span>Contact Us</span></NavLink>
               </div>
