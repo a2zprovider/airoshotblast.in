@@ -52,20 +52,49 @@ export const meta: MetaFunction = ({ data }) => {
     { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
 
     // Canonical URL
-    { rel: 'canonical', href: full_url },
+    { tag: 'link', rel: 'canonical', href: full_url },
   ];
 };
 
 export default function Index() {
-  const { categories, blogs, faqs, settings }: any = useLoaderData();
+  const { categories, blogs, faqs, settings, full_url }: any = useLoaderData();
 
   const navigate = useNavigate();
   const navigateTo = (url: any) => {
     navigate(url);
   };
 
+  const social_links = JSON.parse(settings.data.social_links);
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": settings.data.title,
+    "url": full_url,
+    "logo": config.imgBaseURL + 'setting/logo/' + settings.data.logo,
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": settings.data.mobile,
+      "contactType": "sales",
+      "areaServed": "IN",
+      "availableLanguage": "en"
+    },
+    "sameAs": [
+      social_links.facebook,
+      social_links.instagram,
+      social_links.instagram,
+      social_links.linkedin,
+      social_links.pinterest,
+      social_links.whatsapp,
+      social_links.youtube,
+      full_url
+    ]
+  }
+
   return (
     <div>
+      <head>
+        <script type="application/ld+json">{JSON.stringify(schema)}</script>
+      </head>
       <div className="bg-[#E9F1F799]">
         <div className="container mx-auto py-8">
           <div className="flex lg:justify-center items-start w-full lg:gap-8 md:gap-4 overflow-x-auto">
@@ -102,7 +131,6 @@ export default function Index() {
               <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
               <div className="flex justify-center py-5">
                 <VideoSlider />
-                {/* <iframe className="w-auto h-auto md:w-[480px] md:h-[360px]" src="https://www.youtube.com/embed/LDWDr4uCk8I?si=qzGW-lSpZrhpkXDE" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ></iframe> */}
               </div>
               <button onClick={() => navigateTo('/videos')} title="View all Videos" className="n_btn2 bg-[#4356A2] text-lg text-white font-medium rounded-md w-[196px] h-[46px] relative overflow-hidden z-0 transition duration-[800ms]">
                 View all Videos
@@ -130,6 +158,26 @@ export default function Index() {
             </div>
             <div className="my-5 content-details text-[#131B23] text-lg font-normal text-justify">
               <div dangerouslySetInnerHTML={{ __html: settings.data.description }} ></div>
+            </div>
+
+            <div className="content-details font-normal text-lg text-justify space-y-4">
+              {settings.data.field && JSON.parse(settings.data.field).title.map((f: any, i: any) => (
+                <div key={i} className={`grid ${JSON.parse(settings.data.field).image[i] ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} grid-cols-1 gap-4`}>
+                  <>
+                    <div className={i % 2 === 0 ? 'flex-1 order-1' : 'flex-1 order-2'}>
+                      <div className="font-medium text-2xl text-[#4356A2]">{f}</div>
+                      <div dangerouslySetInnerHTML={{ __html: JSON.parse(settings.data.field).description[i] }} ></div>
+                    </div>
+                    <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-1'}>
+                      {
+                        JSON.parse(settings.data.field).image[i] ?
+                          <img src={config.imgBaseURL + `/setting/other/${JSON.parse(settings.data.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg" />
+                          : ''
+                      }
+                    </div>
+                  </>
+                </div>
+              ))}
             </div>
             {/* <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-6 py-10">
               <div>

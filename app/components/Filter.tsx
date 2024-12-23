@@ -11,7 +11,7 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
     useEffect(() => {
         const fetchCategory = async () => {
             try {
-                const category = await fetch(config.apiBaseURL + 'category?parent=null');
+                const category = await fetch(config.apiBaseURL + 'category?parent=null&sortOrder=asc');
                 const categories = await category.json();
                 setCategory(categories.data.data);
             } catch (error) {

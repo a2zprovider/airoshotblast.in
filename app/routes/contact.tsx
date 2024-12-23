@@ -220,9 +220,10 @@ export default function Contact() {
                                             <div className="relative">
                                                 <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                                     name="code"
+                                                    defaultValue=""
                                                     id="code">
                                                     {c_loading ? (
-                                                        <option>Loading...</option>
+                                                        <option value="">Loading...</option>
                                                     ) : (
                                                         countryCodes.map((country, index) => (
                                                             country.dial_code == '+91' ?
