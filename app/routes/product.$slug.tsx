@@ -236,10 +236,10 @@ export default function ProductSingle() {
                                                 <div className="flex items-center shadow-md">
                                                     <div className="relative">
                                                         <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
-                                                            name="code"
+                                                            name="code" defaultValue=""
                                                             id="code">
                                                             {c_loading ? (
-                                                                <option>Loading...</option>
+                                                                <option value="">Loading...</option>
                                                             ) : (
                                                                 countryCodes.map((country, index) => (
                                                                     country.dial_code == '+91' ?
@@ -348,13 +348,6 @@ export default function ProductSingle() {
                                             <div className="flex items-center">
                                                 <div className="w-[50%] hidden md:block">
                                                     <div className="flex items-center gap-4">
-                                                        {/* <div>
-                                                <img
-                                                    src={product.data.thumb_image ? config.imgBaseURL + `/product/thumb/${product.data.thumb_image}` : config.imgBaseURL + `/product/${product.data.image}`}
-                                                    alt={product.data.title} loading="lazy"
-                                                    className="object-contain rounded-xl h-[100px]"
-                                                />
-                                            </div> */}
                                                         <div>
                                                             <div className="text-xl text-[#131B23] font-normal line-clamp-1">{product.data.title}</div>
                                                             <div className="text-md text-[#BF0707] font-normal ">{product.data.price}</div>
@@ -370,10 +363,10 @@ export default function ProductSingle() {
                                                         <div className="flex items-center shadow-md">
                                                             <div className="relative">
                                                                 <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
-                                                                    name="code"
+                                                                    name="code" defaultValue=""
                                                                     id="code">
                                                                     {c_loading ? (
-                                                                        <option>Loading...</option>
+                                                                        <option value="">Loading...</option>
                                                                     ) : (
                                                                         countryCodes.map((country, index) => (
                                                                             country.dial_code == '+91' ?

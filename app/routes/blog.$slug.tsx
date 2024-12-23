@@ -25,11 +25,14 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
     const blogcategories = await blogcategory.json();
 
+    const setting = await fetch(config.apiBaseURL + 'setting');
+    const settings = await setting.json();
+
     const full_url = request.url;
     const url = new URL(request.url);
     const baseUrl = `${url.protocol}//${url.host}`;
 
-    return json({ blog, full_url, baseUrl, tags, blogcategories, recent_blogs, previousBlog, nextBlog });
+    return json({ blog, full_url, baseUrl, tags, blogcategories, recent_blogs, previousBlog, nextBlog, settings });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -62,7 +65,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function BlogSingle() {
-    const { blog, full_url, baseUrl, tags, blogcategories, recent_blogs, previousBlog, nextBlog }: any = useLoaderData();
+    const { blog, full_url, baseUrl, tags, blogcategories, recent_blogs, previousBlog, nextBlog, settings }: any = useLoaderData();
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 7 }, (_, i) => currentYear - i);
 
@@ -77,10 +80,10 @@ export default function BlogSingle() {
         "image": config.imgBaseURL + 'blog/' + blog.data.image,
         "publisher": {
             "@type": "Organization",
-            "name": "Your Website Name",
+            "name": settings.data.title,
             "logo": {
                 "@type": "ImageObject",
-                "url": "https://www.example.com/logo.png"
+                "url": config.imgBaseURL + 'setting/logo/' + settings.data.logo
             }
         }
     };
@@ -145,7 +148,7 @@ export default function BlogSingle() {
                                         </div>
                                     ))}
                                     {blog.data.createdAt ?
-                                        <div className="leading-none text-lg lowercase">{format(new Date(blog.data.createdAt), 'MMM dd, yyyy')}</div>
+                                        <div className="leading-none text-lg lowercase">Published On : {format(new Date(blog.data.createdAt), 'MMM dd, yyyy')}</div>
                                         : <></>
                                     }
                                 </div>
