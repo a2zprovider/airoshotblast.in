@@ -106,7 +106,7 @@ const EnquiryDetail = (data: any) => {
 
     return (
         <>
-            <div className="bg-[#4356A2] font-normal text-white text-xl px-10 py-6 rounded-t-2xl">Tell us your requirement, and we'll send you quotes</div>
+            <div className="bg-[#4356A2] font-normal text-white text-xl px-10 py-6 rounded-t-2xl text-center">Tell us your requirement, and we'll send you quotes</div>
             <div className="p-6">
                 <form onSubmit={handleSubmit} id="enquiry-form1">
                     <div className="flex flex-col mb-2">
@@ -125,9 +125,9 @@ const EnquiryDetail = (data: any) => {
                             <select className="h-[52px] block w-full py-2 pl-4 pr-10 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                 name="subject"
                                 required
-                                defaultValue="0"
+                                defaultValue=""
                                 id="subject">
-                                <option value="0">Select Product/Service Name</option>
+                                <option value="">Select Product/Service Name</option>
                                 {products.map((product: any, index: any) => (
                                     product_detail?.slug == product.slug ?
                                         <option key={index} selected value={product.title}>{product.title}</option>
@@ -149,9 +149,10 @@ const EnquiryDetail = (data: any) => {
                             <div className="relative">
                                 <select className="h-[52px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                     name="code"
+                                    defaultValue=""
                                     id="code">
                                     {c_loading ? (
-                                        <option>Loading...</option>
+                                        <option value="">Loading...</option>
                                     ) : (
                                         countryCodes.map((country, index) => (
                                             country.dial_code == '+91' ?
