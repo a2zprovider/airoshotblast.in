@@ -5,13 +5,13 @@ import Filter from "~/components/Filter";
 import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     try {
         const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
         const category = await cat.json();
 
         const url = new URL(request.url);
-        const baseUrl = `${url.protocol}//${url.host}`;
         const full_url = `${url.origin}${url.pathname}`;
 
         return json({ category, full_url });
@@ -42,19 +42,17 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "article" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: category?.data?.title },
         { name: "og:description", content: category?.data?.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
-        { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: category?.data?.title },
         { name: "twitter:description", content: category?.data?.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 

@@ -4,19 +4,31 @@ import { useEffect, useState } from "react";
 import { useModal } from "~/components/Modalcontext";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
+    const url = new URL(request.url);
+    const full_url = `${url.origin}${url.pathname}`;
+
+    const settingsCacheKey = `settings`;
+    const cachedSettings = cache[settingsCacheKey];
+    let settings;
+    if (!cachedSettings) {
+        const setting = await fetch(config.apiBaseURL + 'setting');
+        if (!setting.ok) {
+            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        }
+        settings = await setting.json();
+        cache[settingsCacheKey] = settings;
+    } else {
+        settings = cachedSettings;
+    }
+    
     const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
     const pages = await page.json();
 
     const career = await fetch(config.apiBaseURL + 'career/' + params.slug);
     const careers = await career.json();
 
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    const settings = await setting.json();
-
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
     const slug = "careers";
 
     return json({ pages, settings, full_url, slug, careers });
@@ -32,19 +44,17 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "article" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: careers.data.title },
         { name: "og:description", content: careers.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-        { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: careers.data.title },
         { name: "twitter:description", content: careers.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 

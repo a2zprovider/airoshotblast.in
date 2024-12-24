@@ -6,16 +6,27 @@ import Loader from "~/components/loader";
 import ProductCard from "~/components/ProductCard";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
     const url_params = new URL(request.url).searchParams;
     const search = url_params.get('s');
 
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    const settings = await setting.json();
-
     const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
+
+    const settingsCacheKey = `settings`;
+    const cachedSettings = cache[settingsCacheKey];
+    let settings;
+    if (!cachedSettings) {
+        const setting = await fetch(config.apiBaseURL + 'setting');
+        if (!setting.ok) {
+            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        }
+        settings = await setting.json();
+        cache[settingsCacheKey] = settings;
+    } else {
+        settings = cachedSettings;
+    }
 
     return json({ settings, full_url, search });
 };
@@ -32,19 +43,17 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "website" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: seo_details.p_seo_title },
         { name: "og:description", content: seo_details.p_seo_description },
         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-        { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: seo_details.p_seo_title },
         { name: "twitter:description", content: seo_details.p_seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 

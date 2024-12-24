@@ -25,7 +25,7 @@ const BlogCard = ({ blog }: any) => {
             </div>
             <div className="bg-[#f4f4f4] p-3 rounded-b-2xl shadow-md">
                 <Link title={blog.title} to={'/blog/' + blog.slug} className="text-base font-medium text-[#131B23] pb-1 line-clamp-1">{blog.title}</Link>
-                <p className="text-base font-normal text-[#131B23] line-clamp-3 leading-6 h-[72px]">{blog.except}</p>
+                <p className="text-base font-normal text-[#131B23] line-clamp-3 leading-6 h-[72px] text-justify">{blog.except}</p>
             </div>
         </div>
     );

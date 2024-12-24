@@ -4,21 +4,49 @@ import { useLoaderData } from "@remix-run/react";
 import LeftSideTabs from "~/components/LeftTabs";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
-
     const slug = 'about-us';
 
-    const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
-    const page_detail = await p_detail.json();
+    const pageCacheKey = `page-${slug}`;
+    const settingsCacheKey = `settings`;
 
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    const settings = await setting.json();
+    const cachedPageDetail = cache[pageCacheKey];
+    const cachedSettings = cache[settingsCacheKey];
 
     const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
-    return json({ slug, page_detail, settings, full_url });
+    if (cachedPageDetail && cachedSettings) {
+        return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url });
+    }
+
+    try {
+        let page_detail;
+        if (!cachedPageDetail) {
+            const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
+            if (!p_detail.ok) {
+                throw new Error(`Failed to fetch page details: ${p_detail.statusText}`);
+            }
+            page_detail = await p_detail.json();
+            cache[pageCacheKey] = page_detail;
+        }
+
+        let settings;
+        if (!cachedSettings) {
+            const setting = await fetch(config.apiBaseURL + 'setting');
+            if (!setting.ok) {
+                throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+            }
+            settings = await setting.json();
+            cache[settingsCacheKey] = settings;
+        }
+
+        return json({ slug, page_detail, settings, full_url });
+    } catch (error) {
+        console.error('Error during loader execution:', error);
+        return json({ error: 'An error occurred while fetching data.' }, { status: 500 });
+    }
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -32,19 +60,17 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "article" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: page_detail.data.title },
         { name: "og:description", content: page_detail.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
-        { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: page_detail.data.title },
         { name: "twitter:description", content: page_detail.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 
