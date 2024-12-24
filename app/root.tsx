@@ -44,6 +44,10 @@ export let loader: LoaderFunction = async ({ request }) => {
     const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const full_url = `${url.origin}${url.pathname}`;
+
     if (!setting.ok) {
       throw new Error('Failed to fetch data');
     }
@@ -51,7 +55,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       title: settings.data.title
     }
     const commit = await commitSession(newSettings);
-    return json({ settings }, { headers: { 'Set-Cookie': commit } });
+    return json({ settings, full_url }, { headers: { 'Set-Cookie': commit } });
   } catch (error) {
     throw new Error('Network error or API issue');
   }
@@ -74,7 +78,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 export default function App() {
   const [messages, setMessages] = useState<string[]>([]);
 
-  const { settings }: any = useLoaderData();
+  const { settings, full_url }: any = useLoaderData();
   // console.log('settings : ', settings);
 
   // useEffect(() => {
@@ -102,7 +106,7 @@ export default function App() {
   // }, []);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const timeout = setTimeout(() => setLoading(false), 300);
+    const timeout = setTimeout(() => setLoading(false), 100);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -121,6 +125,7 @@ export default function App() {
 
           <Meta />
           <meta name="og:site_name" content={settings.data.title} />
+          <link rel="canonical" href={full_url} />
           <Links />
 
           {/* Google Analytics Script */}
