@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import BlogCard from "~/components/BlogCard";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
     const url_params = new URL(request.url).searchParams;
     const year = url_params.get('year');
@@ -16,6 +17,23 @@ export let loader: LoaderFunction = async ({ request }) => {
     const blog = await fetch(blog_url);
     const blogs = await blog.json();
 
+    const url = new URL(request.url);
+    const full_url = `${url.origin}${url.pathname}`;
+
+    const settingsCacheKey = `settings`;
+    const cachedSettings = cache[settingsCacheKey];
+    let settings;
+    if (!cachedSettings) {
+        const setting = await fetch(config.apiBaseURL + 'setting');
+        if (!setting.ok) {
+            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        }
+        settings = await setting.json();
+        cache[settingsCacheKey] = settings;
+    } else {
+        settings = cachedSettings;
+    }
+
     const tag = await fetch(config.apiBaseURL + 'tags');
     const tags = await tag.json();
 
@@ -24,13 +42,6 @@ export let loader: LoaderFunction = async ({ request }) => {
 
     const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
     const recent_blogs = await recent_blog.json();
-
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    const settings = await setting.json();
-
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
 
     return json({ blogs, blogcategories, tags, recent_blogs, settings, full_url, year });
 };
@@ -47,19 +58,17 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "website" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: seo_details.b_seo_title },
         { name: "og:description", content: seo_details.b_seo_description },
         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-        { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: seo_details.b_seo_title },
         { name: "twitter:description", content: seo_details.b_seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 

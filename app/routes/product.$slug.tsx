@@ -6,17 +6,27 @@ import { useModal } from "~/components/Modalcontext";
 import ProductSlider from "~/components/ProductSlider";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
+    const url = new URL(request.url);
+    const full_url = `${url.origin}${url.pathname}`;
+
+    const settingsCacheKey = `settings`;
+    const cachedSettings = cache[settingsCacheKey];
+    let settings;
+    if (!cachedSettings) {
+        const setting = await fetch(config.apiBaseURL + 'setting');
+        if (!setting.ok) {
+            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        }
+        settings = await setting.json();
+        cache[settingsCacheKey] = settings;
+    } else {
+        settings = cachedSettings;
+    }
 
     const product_detail = await fetch(config.apiBaseURL + 'product/' + params.slug);
     const product = await product_detail.json();
-
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    const settings = await setting.json();
-
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
 
     return json({ product, settings, full_url });
 };
@@ -32,19 +42,17 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "article" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: product.data.title },
         { name: "og:description", content: product.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'product/' + product.data.image },
-        { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: product.data.title },
         { name: "twitter:description", content: product.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'product/' + product.data.image },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 
@@ -74,7 +82,7 @@ export default function ProductSingle() {
 
     const images = [];
     images.push(`${config.imgBaseURL}product/${product.data.image}`);
-    const imgs: [string] = JSON.parse(product.data.images);
+    const imgs: [string] = product?.data?.images ? JSON.parse(product?.data?.images) : [];
     imgs.forEach(img => {
         images.push(`${config.imgBaseURL}product/imgs/${img}`);
     });
@@ -136,7 +144,7 @@ export default function ProductSingle() {
 
     // Function to check scroll position
     const checkScrollPosition = () => {
-        const mainDiv = document.getElementById('mainDiv');
+        const mainDiv = document.getElementById('mainDiv') as HTMLElement;
         const rect = mainDiv.getBoundingClientRect();
 
         // Check if the main div is at the top (top is 0) or at the bottom (bottom is 0)

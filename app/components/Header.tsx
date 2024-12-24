@@ -18,18 +18,18 @@ export default function Header({ settings }: any) {
         <div className="container mx-auto md:py-3">
           <div className="flex items-center justify-between">
             <div className="text-left">
-              <Link title={settings.email} to={'mailto:' + settings.email} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+              <Link title={settings?.email} to={'mailto:' + settings?.email} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-envelope "></i>
                 <span className="md:block hidden">Send Inquiry</span>
               </Link>
             </div>
             <div className="flex justify-center">
-              <Link title={settings.title} to="/">
-                <img src={config.imgBaseURL + 'setting/logo/' + settings.logo} alt={settings.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
+              <Link title={settings?.title} to="/">
+                <img src={config.imgBaseURL + 'setting/logo/' + settings?.logo} alt={settings?.title} loading="lazy" className="md:w-[119px] w-[85px] h-auto" />
               </Link>
             </div>
             <div className="text-right">
-              <Link title={settings.mobile} to={'tel:' + settings.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+              <Link title={settings?.mobile} to={'tel:' + settings?.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-phone rotate-90"></i>
                 <span className="md:block hidden">Call Us Now</span>
               </Link>
@@ -106,8 +106,8 @@ export default function Header({ settings }: any) {
         <>
           <div className={`bg-[#131B23] lg:hidden shadow-md fixed z-[100] top-0 bottom-0 ${!isOpen ? '-left-[110%] right-[110%]' : 'left-0 right-0'} transition-all duration-500 ease-in-out`}>
             <div className="lg:hidden flex items-center justify-center mt-3 mb-3">
-              <Link title={settings.title} to="/" className="flex justify-center">
-                <img src={config.imgBaseURL + 'setting/logo2/' + settings.logo2} alt={settings.title} loading="lazy" className="w-[50%] h-auto" />
+              <Link title={settings?.title} to="/" className="flex justify-center">
+                <img src={config.imgBaseURL + 'setting/logo2/' + settings?.logo2} alt={settings?.title} loading="lazy" className="w-[50%] h-auto" />
               </Link>
             </div>
             <hr className="border-[#ffffff45]" />

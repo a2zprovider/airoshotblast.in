@@ -16,11 +16,9 @@ import config from "./config";
 import { ModalProvider } from "./components/Modalcontext";
 import Enquiry from "./components/Enquiry";
 import QuickView from "./components/QuickView";
-import { commitSession } from "./sessions";
 import StatusShow from "./components/StatusShow";
 import Loader from "./components/loader";
 import Layout from "./components/Layout";
-// import { ErrorBoundary } from "./components/_error";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -39,25 +37,34 @@ export const links: LinksFunction = () => [
   }
 ];
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
+  const settingsCacheKey = `settings`;
+
+  const cachedSettings = cache[settingsCacheKey];
+
+  const url = new URL(request.url);
+  const full_url = `${url.origin}${url.pathname}`;
+
+  if (cachedSettings) {
+    return json({ settings: cachedSettings, full_url, });
+  }
+
   try {
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    const settings = await setting.json();
-
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
-
-    if (!setting.ok) {
-      throw new Error('Failed to fetch data');
+    let settings;
+    if (!cachedSettings) {
+      const setting = await fetch(config.apiBaseURL + 'setting');
+      if (!setting.ok) {
+        throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+      }
+      settings = await setting.json();
+      cache[settingsCacheKey] = settings;
     }
-    const newSettings: any = {
-      title: settings.data.title
-    }
-    const commit = await commitSession(newSettings);
-    return json({ settings, full_url }, { headers: { 'Set-Cookie': commit } });
+
+    return json({ settings, full_url, });
   } catch (error) {
-    throw new Error('Network error or API issue');
+    console.error('Error during loader execution:', error);
+    return json({ error: 'An error occurred while fetching data.' }, { status: 500 });
   }
 };
 
@@ -76,34 +83,8 @@ export function ErrorBoundary({ error }: { error: Error }) {
 }
 
 export default function App() {
-  const [messages, setMessages] = useState<string[]>([]);
-
   const { settings, full_url }: any = useLoaderData();
-  // console.log('settings : ', settings);
 
-  // useEffect(() => {
-  //   const ws = new WebSocket("ws://localhost:5173"); // Make sure this URL matches the server
-
-  //   ws.onopen = () => {
-  //     console.log("WebSocket connection established");
-  //   };
-
-  //   ws.onmessage = (event) => {
-  //     setMessages((prevMessages) => [...prevMessages, event.data]);
-  //   };
-
-  //   ws.onclose = () => {
-  //     console.log("WebSocket connection closed");
-  //   };
-
-  //   ws.onerror = (error) => {
-  //     console.error("WebSocket error:", error);
-  //   };
-
-  //   return () => {
-  //     ws.close();
-  //   };
-  // }, []);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 100);
@@ -118,13 +99,16 @@ export default function App() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
 
           {/* <!-- Favicon --> */}
-          <link rel="icon" href={config.imgBaseURL + 'setting/favicon/' + settings.data.favicon} type="image/x-icon" />
+          <link rel="icon" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} type="image/x-icon" />
           {/* <!-- Apple Touch Icon --> */}
-          <link rel="apple-touch-icon" href={config.imgBaseURL + 'setting/favicon/' + settings.data.favicon} />
-          <link rel="apple-touch-icon" sizes="180x180" href={config.imgBaseURL + 'setting/favicon/' + settings.data.favicon} />
+          <link rel="apple-touch-icon" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} />
+          <link rel="apple-touch-icon" sizes="180x180" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} />
 
           <Meta />
-          <meta name="og:site_name" content={settings.data.title} />
+          <meta name="og:site_name" content={settings?.data?.title} />
+          <meta name="twitter:site" content={settings?.data?.title} />
+
+          {/* // Canonical URL */}
           <link rel="canonical" href={full_url} />
           <Links />
 
@@ -142,7 +126,7 @@ export default function App() {
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
         <body className="text-[#131B23]">
-          <Header settings={settings.data} />
+          <Header settings={settings?.data} />
           <Layout>
             {loading ? (
               <Loader />
@@ -150,7 +134,7 @@ export default function App() {
               <Outlet />
             )}
           </Layout>
-          <Footer settings={settings.data} />
+          <Footer settings={settings?.data} />
 
           <StatusShow />
           <Enquiry />

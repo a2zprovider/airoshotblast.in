@@ -5,7 +5,26 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const full_url = `${url.origin}${url.pathname}`;
+
+    const settingsCacheKey = `settings`;
+    const cachedSettings = cache[settingsCacheKey];
+    let settings;
+    if (!cachedSettings) {
+        const setting = await fetch(config.apiBaseURL + 'setting');
+        if (!setting.ok) {
+            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        }
+        settings = await setting.json();
+        cache[settingsCacheKey] = settings;
+    } else {
+        settings = cachedSettings;
+    }
+
     const blog_detail = await fetch(config.apiBaseURL + 'blog/' + params.slug);
     const blog = await blog_detail.json();
 
@@ -24,13 +43,6 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
     const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
     const blogcategories = await blogcategory.json();
-
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    const settings = await setting.json();
-
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
 
     return json({ blog, full_url, baseUrl, tags, blogcategories, recent_blogs, previousBlog, nextBlog, settings });
 };
@@ -52,15 +64,13 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "article" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: blog.data.title },
         { name: "og:description", content: blog.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'blog/' + blog.data.image },
-        { name: "og:url", content: full_url },
         { name: "og:image:width", content: "500" },
         { name: "og:image:height", content: "500" },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 
