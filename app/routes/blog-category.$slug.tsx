@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import BlogCard from "~/components/BlogCard";
 import config from "~/config";
 
+let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
 
     const blog = await fetch(config.apiBaseURL + 'blogcategory/' + params.slug);
@@ -20,7 +21,6 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const recent_blogs = await recent_blog.json();
 
     const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     return json({ blogs, full_url, blogcategories, tags, recent_blogs });
@@ -36,19 +36,17 @@ export const meta: MetaFunction = ({ data }) => {
 
         // OG Details
         { name: "og:type", content: "article" },
+        { name: "og:locale", content: "en_US" },
+        { name: "og:url", content: full_url },
         { name: "og:title", content: blogs.data.title },
         { name: "og:description", content: blogs.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
-        { name: "og:url", content: full_url },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: blogs.data.title },
         { name: "twitter:description", content: blogs.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
-
-        // Canonical URL
-        { rel: 'canonical', href: full_url },
     ];
 };
 
