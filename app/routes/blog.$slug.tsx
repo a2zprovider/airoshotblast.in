@@ -28,9 +28,9 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
-    const full_url = request.url;
     const url = new URL(request.url);
     const baseUrl = `${url.protocol}//${url.host}`;
+    const full_url = `${url.origin}${url.pathname}`;
 
     return json({ blog, full_url, baseUrl, tags, blogcategories, recent_blogs, previousBlog, nextBlog, settings });
 };
@@ -116,7 +116,7 @@ export default function BlogSingle() {
                                         {recent_blogs.data.data.map((r_blog: any, index: any) => (
                                             <div className="text-lg text-normal text-[#131B23] py-1" key={index}>
                                                 <Link title={r_blog.title} to={'/blog/' + r_blog.slug} className="text-lg p-0">{r_blog.title}</Link>
-                                                <div className="text-md text-normal text-[#969696]">{format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
+                                                <div className="text-md text-normal text-[#969696]">Published on: {format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
                                             </div>
                                         ))}
                                     </div>
@@ -155,7 +155,7 @@ export default function BlogSingle() {
                                 <div>
                                     <img src={config.imgBaseURL + 'blog/' + blog.data.image} alt={blog.data.title} loading="lazy" className="lg:h-[425px] w-full object-contain" />
                                 </div>
-                                <div className="content-details font-normal text-lg text-justify space-y-4 py-8">
+                                <div className="content-details font-normal text-lg text-justify space-y-4 py-4">
                                     <div dangerouslySetInnerHTML={{ __html: blog.data.description }} ></div>
                                 </div>
                                 <div className="flex flex-wrap justify-end gap-4 pb-4">

@@ -28,7 +28,9 @@ export let loader: LoaderFunction = async ({ request }) => {
     const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
-    const full_url = request.url;
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const full_url = `${url.origin}${url.pathname}`;
 
     return json({ blogs, blogcategories, tags, recent_blogs, settings, full_url, year });
 };
@@ -91,7 +93,7 @@ export default function Blog() {
                                         {recent_blogs.data.data.map((r_blog: any, index: any) => (
                                             <div className="text-lg text-normal text-[#131B23] py-1" key={index}>
                                                 <Link title={r_blog.title} to={'/blog/' + r_blog.slug} className="text-lg p-0">{r_blog.title}</Link>
-                                                <div className="text-md text-normal text-[#969696]">{format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
+                                                <div className="text-md text-normal text-[#969696]">Published on: {format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
                                             </div>
                                         ))}
                                     </div>

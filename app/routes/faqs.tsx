@@ -11,7 +11,9 @@ export let loader: LoaderFunction = async ({ request }) => {
     const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
-    const full_url = request.url;
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const full_url = `${url.origin}${url.pathname}`;
 
     return json({ faqs, settings, full_url });
 };
@@ -38,7 +40,7 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:title", content: seo_details.f_seo_title },
         { name: "twitter:description", content: seo_details.f_seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
-        
+
         // Canonical URL
         { rel: 'canonical', href: full_url },
     ];
