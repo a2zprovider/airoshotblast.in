@@ -10,7 +10,9 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
         const category = await cat.json();
 
-        const full_url = request.url;
+        const url = new URL(request.url);
+        const baseUrl = `${url.protocol}//${url.host}`;
+        const full_url = `${url.origin}${url.pathname}`;
 
         return json({ category, full_url });
 
@@ -50,7 +52,7 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:title", content: category?.data?.title },
         { name: "twitter:description", content: category?.data?.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
-        
+
         // Canonical URL
         { rel: 'canonical', href: full_url },
     ];

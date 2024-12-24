@@ -18,7 +18,9 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
     const recent_blogs = await recent_blog.json();
 
-    const full_url = request.url;
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const full_url = `${url.origin}${url.pathname}`;
 
     return json({ blogs, full_url, blogcategories, tags, recent_blogs });
 };
@@ -43,7 +45,7 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:title", content: blogs.data.title },
         { name: "twitter:description", content: blogs.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
-        
+
         // Canonical URL
         { rel: 'canonical', href: full_url },
     ];
@@ -79,7 +81,7 @@ export default function Blog() {
                                         {recent_blogs.data.data.map((r_blog: any, index: any) => (
                                             <div className="text-lg text-normal text-[#131B23] py-1" key={index}>
                                                 <Link title={r_blog.title} to={'/blog/' + r_blog.slug} className="text-lg p-0">{r_blog.title}</Link>
-                                                <div className="text-md text-normal text-[#969696]">{format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
+                                                <div className="text-md text-normal text-[#969696]">Published on: {format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
                                             </div>
                                         ))}
                                     </div>

@@ -14,7 +14,9 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const setting = await fetch(config.apiBaseURL + 'setting');
     const settings = await setting.json();
 
-    const full_url = request.url;
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const full_url = `${url.origin}${url.pathname}`;
     const slug = "careers";
 
     return json({ pages, settings, full_url, slug, careers });
