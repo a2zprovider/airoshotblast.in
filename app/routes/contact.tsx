@@ -13,7 +13,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     const settingsCacheKey = `settings`;
     const cachedSettings = cache[settingsCacheKey];
 
-    const CACHE_EXPIRATION_TIME = 60 * 60 * 1000;
+    const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
       delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
