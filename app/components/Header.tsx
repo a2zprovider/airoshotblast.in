@@ -1,16 +1,36 @@
 import { Link, NavLink, useLocation } from "@remix-run/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import config from "~/config";
+import { useModal } from "./Modalcontext";
 
 export default function Header({ settings }: any) {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const search = urlParams.get('s');
   const [isOpen, setIsOpen] = useState(false);
+  const { openEnquiry } = useModal();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const mes2 = 'your products';
+  const message = "Hi, I've visited on " + "" + ". And I'm interested in " + mes2 + " & need more information regarding " + mes2 + ".\nThank You.";
+  const encodedMessage = encodeURIComponent(message);
+
+  const [displayText, setDisplayText] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (settings?.mobile) {
+        setDisplayText((prevText) =>
+          prevText === true ? false : true
+        );
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [settings?.mobile]);
 
   return (
     <>
@@ -36,7 +56,6 @@ export default function Header({ settings }: any) {
             </div>
           </div>
         </div>
-
       </header>
       <div className="bg-[#dee5fd] sticky top-0 z-50 border-y border-[#D9D9D999]">
         <div className="container mx-auto py-3">
@@ -156,6 +175,21 @@ export default function Header({ settings }: any) {
           </div>
         </>
         {/* )} */}
+      </div>
+      <div className="fixed top-[50%] left-[5px] z-[9]">
+        <Link to={`tel:${settings?.mobile}`} title={`Talk With Us ${settings?.mobile}`} className="mb-3 bg-[#131B23] rounded-md border-b-[#4356A2] border-b-[3px] p-3 space-x-3 w-full flex items-center justify-center">
+          <i className="fa fa-phone text-white text-lg rotate-90"></i>
+          <span className="text-white text-lg hidden md:block transition-all duration-[800ms] ease-in-out">{displayText ? 'Talk With Us' : settings?.mobile}</span>
+        </Link>
+        <div onClick={() => openEnquiry('')} className="cursor-pointer bg-[#131B23] rounded-md border-b-[#4356A2] border-b-[3px] p-3 space-x-3 w-full flex items-center justify-center">
+          <i className="fa fa-file-alt text-white text-lg"></i>
+          <span className="text-white text-lg hidden md:block">{displayText ? 'Get Quotation' : 'Bulk Order'}</span>
+        </div>
+      </div>
+      <div>
+        <Link to={`https://wa.me/${settings?.mobile}?text=${encodedMessage}`} title="Whatsapp" target="_blank" className="fixed bottom-[20px] right-[20px] z-[9] bg-[#25d366] h-[50px] w-[50px] rounded-full flex items-center justify-center shadow-xl">
+          <i className="fab fa-whatsapp text-white text-2xl"></i>
+        </Link>
       </div>
     </>
   );

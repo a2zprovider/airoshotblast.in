@@ -177,7 +177,7 @@ export default function ProductSingle() {
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
-                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Products" to="/products" className="text-sm font-normal text-[#131B23]">Machines & Abrasives</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">{product.data.title}</div>
+                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Products" to="/products" className="text-sm font-normal text-[#131B23] line-clamp-1">Machines & Abrasives</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline line-clamp-1">{product.data.title}</div>
                         </div>
                         <div className="py-2">
                             <div>
@@ -236,7 +236,7 @@ export default function ProductSingle() {
                                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                                             <div className="p-4">
                                                 {JSON.parse(product.data.field).name.map((f: any, index: any) => (
-                                                    <div className="grid grid-cols-2" key={index}>
+                                                    <div className="grid grid-cols-2 gap-5" key={index}>
                                                         <div>{f} :</div>
                                                         <div>{JSON.parse(product.data.field).value[index]}</div>
                                                     </div>
@@ -318,7 +318,7 @@ export default function ProductSingle() {
                                                             }`}
                                                         title={tab}
                                                         onClick={() => setActiveTab(index)}
-                                                    >
+                                                    >   
                                                         <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>
                                                     </button>
                                                 </li>
