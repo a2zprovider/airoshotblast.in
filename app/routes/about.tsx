@@ -14,6 +14,12 @@ export let loader: LoaderFunction = async ({ request }) => {
     const cachedPageDetail = cache[pageCacheKey];
     const cachedSettings = cache[settingsCacheKey];
 
+    const CACHE_EXPIRATION_TIME = 60 * 60 * 1000;
+    setTimeout(() => {
+        delete cache[settingsCacheKey];
+        delete cache[pageCacheKey];
+    }, CACHE_EXPIRATION_TIME);
+
     const url = new URL(request.url);
     const full_url = `${url.origin}${url.pathname}`;
 
