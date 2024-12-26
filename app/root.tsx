@@ -113,12 +113,6 @@ export default function App() {
           <link rel="apple-touch-icon" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} />
           <link rel="apple-touch-icon" sizes="180x180" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} />
 
-          <meta property="og:type" content="article" />
-          <meta property='og:locale' content='en_US' />
-          <meta property="og:url" content="http://localhost:5173/product/manipulator-plcs-and-vfds" />
-          <meta property="og:title" content="Manipulator ( PLCs and VFDs )" />
-          <meta property="og:description" content="An X-Y manipulator is an automated system designed for precise movement along two dimensions—X (horizontal) and Y (vertical)—and is widely used in applications like CNC machining, assembly lines, and material handling." />
-
           <Meta />
           <meta name="og:site_name" content={settings?.data?.title} />
           <meta name="twitter:site" content={settings?.data?.title} />
