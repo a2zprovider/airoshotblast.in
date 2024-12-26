@@ -16,13 +16,14 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
     const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
-      delete cache[pageCacheKey];
-      delete cache[pagesCacheKey];
-      delete cache[settingsCacheKey];
+        delete cache[pageCacheKey];
+        delete cache[pagesCacheKey];
+        delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
-  
+
 
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     if (cachedPageDetail && cachedPages && cachedSettings) {
@@ -60,7 +61,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
             cache[settingsCacheKey] = settings;
         }
 
-        return json({ slug, pages, page_detail, settings, full_url });
+        return json({ slug, pages, page_detail, settings, full_url, baseUrl });
     } catch (error) {
         console.error('Error during loader execution:', error);
         return json({ error: 'An error occurred while fetching data.' }, { status: 500 });
@@ -94,15 +95,34 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Pages() {
     const navigate = useNavigate();
-    const { slug, pages, page_detail, settings, full_url }: any = useLoaderData();
+    const { slug, pages, page_detail, settings, full_url, baseUrl }: any = useLoaderData();
 
     const handleClick = (url: any) => {
         navigate(`${url}`);
     };
 
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": page_detail.data.title,
+            "item": full_url
+        }]
+    }
+
     return (
         <>
             <div className="bg-[#E9F1F799]">
+                <head>
+                    <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+                </head>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">

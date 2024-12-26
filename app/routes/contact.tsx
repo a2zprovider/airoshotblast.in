@@ -4,10 +4,12 @@ import { useLoaderData } from "@remix-run/react";
 import config from "~/config";
 import { useEffect, useState } from "react";
 import { useModal } from "~/components/Modalcontext";
+import { formatPhoneNumber } from "~/utils/format-mobile-number";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     const settingsCacheKey = `settings`;
@@ -15,9 +17,9 @@ export let loader: LoaderFunction = async ({ request }) => {
 
     const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
-      delete cache[settingsCacheKey];
+        delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
-  
+
     let settings;
     if (!cachedSettings) {
         const setting = await fetch(config.apiBaseURL + 'setting');
@@ -31,7 +33,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         settings = cachedSettings;
     }
 
-    return json({ settings, full_url });
+    return json({ settings, full_url, baseUrl });
 };
 
 export let action: ActionFunction = async ({ request }: { request: Request }) => {
@@ -114,7 +116,7 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Contact() {
     const { openStatusShow } = useModal();
-    const { settings }: any = useLoaderData();
+    const { settings, full_url, baseUrl }: any = useLoaderData();
 
     const [btnLoading, setBtnLoading] = useState(false);
     const fetcher = useFetcher();
@@ -197,8 +199,27 @@ export default function Contact() {
         fetchCountryCodes();
     }, []);
 
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": 'Contact Us',
+            "item": full_url
+        }]
+    }
+
     return (
         <div className="bg-[#E9F1F799]">
+            <head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+            </head>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
@@ -294,7 +315,7 @@ export default function Contact() {
                                     </div>
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-phone rotate-90"></i>
-                                        <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{settings.data.mobile}</Link>
+                                        <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{formatPhoneNumber(settings.data.mobile)}</Link>
                                     </div>
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-envelope"></i>

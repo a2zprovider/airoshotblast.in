@@ -15,9 +15,12 @@ const BlogSlider = ({ blogs }: any) => {
                 setVisibleItems(1);
                 setCardClass('w-[100%]');
             } else if (window.innerWidth < 768) {
+                setVisibleItems(1);
+                setCardClass('w-[100%]');
+            } else if (window.innerWidth < 1024) {
                 setVisibleItems(2);
                 setCardClass('w-[50%]');
-            } else if (window.innerWidth < 1024) {
+            } else if (window.innerWidth < 1440) {
                 setVisibleItems(3);
                 setCardClass('w-[33.33%]');
             } else {

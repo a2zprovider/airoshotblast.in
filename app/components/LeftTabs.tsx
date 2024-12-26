@@ -21,9 +21,9 @@ export default function LeftSideTabs({ settings }: any) {
     }, []);
 
     return (
-        <div className="flex md:flex-row flex-col gap-2 min-h-screen">
+        <div className="flex lg:flex-row flex-col gap-2 min-h-screen">
             {/* Sidebar (Tabs) */}
-            <div className="md:flex md:w-1/4 ">
+            <div className="lg:flex lg:w-1/4 ">
                 <ul className="space-y-2 w-full">
                     {pages.map((page, index) => (
                         <li key={index}>
@@ -56,7 +56,7 @@ export default function LeftSideTabs({ settings }: any) {
             </div>
 
             {/* Content Area */}
-            <div className="md:w-3/4">
+            <div className="lg:w-3/4">
                 <div className="px-2">
                     {pages.map((page, index) => (
                         activeTab === index &&
@@ -65,11 +65,11 @@ export default function LeftSideTabs({ settings }: any) {
                             {page.field && JSON.parse(page.field).title.map((f: any, i: any) => (
                                 <div key={i} className={`grid ${JSON.parse(page.field).image[i] ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} grid-cols-1 gap-4`}>
                                     <>
-                                        <div className={i % 2 === 0 ? 'flex-1 order-1' : 'flex-1 order-2'}>
+                                        <div className={i % 2 === 0 ? 'flex-1 order-1' : 'flex-1 order-1 lg:order-2'}>
                                             <div className="font-medium text-2xl text-[#4356A2]">{f}</div>
                                             <div dangerouslySetInnerHTML={{ __html: JSON.parse(page.field).description[i] }} ></div>
                                         </div>
-                                        <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-1'}>
+                                        <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-2 lg:order-1'}>
                                             {
                                                 JSON.parse(page.field).image[i] ?
                                                     <img src={config.imgBaseURL + `/page/other/${JSON.parse(page.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-[#4356A2] w-full" />
