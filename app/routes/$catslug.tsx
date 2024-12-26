@@ -12,9 +12,10 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         const category = await cat.json();
 
         const url = new URL(request.url);
+        const baseUrl = `${url.protocol}//${url.host}`;
         const full_url = `${url.origin}${url.pathname}`;
 
-        return json({ category, full_url });
+        return json({ category, full_url, baseUrl });
 
     } catch (error) {
         throw error;
@@ -58,15 +59,33 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Category() {
 
-    const { category, full_url }: any = useLoaderData();
-    // console.log(category.products);
+    const { category, full_url, baseUrl }: any = useLoaderData();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const openFilter = () => setIsFilterOpen(true);
     const closeFilter = () => setIsFilterOpen(false);
 
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": category.data.title,
+            "item": full_url
+        }]
+    }
+
     return (
         <div className="bg-[#E9F1F799]">
+            <head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+            </head>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex flex-row overflow-auto items-center py-2 gap-4">

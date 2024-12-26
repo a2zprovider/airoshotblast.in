@@ -18,6 +18,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     const blogs = await blog.json();
 
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     const settingsCacheKey = `settings`;
@@ -25,9 +26,9 @@ export let loader: LoaderFunction = async ({ request }) => {
 
     const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
-      delete cache[settingsCacheKey];
+        delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
-  
+
     let settings;
     if (!cachedSettings) {
         const setting = await fetch(config.apiBaseURL + 'setting');
@@ -49,7 +50,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
     const recent_blogs = await recent_blog.json();
 
-    return json({ blogs, blogcategories, tags, recent_blogs, settings, full_url, year });
+    return json({ blogs, blogcategories, tags, recent_blogs, settings, full_url, baseUrl, year });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -79,11 +80,30 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function Blog() {
-    const { blogs, blogcategories, tags, recent_blogs, year }: any = useLoaderData();
+    const { blogs, blogcategories, tags, recent_blogs, year, full_url, baseUrl }: any = useLoaderData();
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 7 }, (_, i) => currentYear - i);
+
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": 'Blogs',
+            "item": full_url
+        }]
+    }
     return (
         <div className="bg-[#E9F1F799]">
+            <head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+            </head>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">

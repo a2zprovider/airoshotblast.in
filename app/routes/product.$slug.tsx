@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { useModal } from "~/components/Modalcontext";
 import ProductSlider from "~/components/ProductSlider";
 import config from "~/config";
+import { formatPhoneNumber } from "~/utils/format-mobile-number";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     const settingsCacheKey = `settings`;
@@ -16,9 +18,9 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
     const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
-      delete cache[settingsCacheKey];
+        delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
-  
+
     let settings;
     if (!cachedSettings) {
         const setting = await fetch(config.apiBaseURL + 'setting');
@@ -34,7 +36,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const product_detail = await fetch(config.apiBaseURL + 'product/' + params.slug);
     const product = await product_detail.json();
 
-    return json({ product, settings, full_url });
+    return json({ product, settings, full_url, baseUrl });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -63,7 +65,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function ProductSingle() {
-    const { product, settings }: any = useLoaderData();
+    const { product, settings, full_url, baseUrl }: any = useLoaderData();
 
     const [selectedImageIndex, setSelectedImageIndex] = useState(0); // Track the selected image
     const handleThumbnailClick = (index: any) => {
@@ -145,7 +147,6 @@ export default function ProductSingle() {
         fetchCountryCodes();
     }, []);
 
-
     const [isVisible, setIsVisible] = useState(false);
 
     // Function to check scroll position
@@ -171,9 +172,39 @@ export default function ProductSingle() {
         };
     }, []); // Empty dependency array ensures this effect runs once on mount and unmount
 
+    const product_schema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.data.title,
+        "image": config.imgBaseURL + 'product/' + product.data.image,
+        "description": product.data.seo_description,
+        "brand": {
+            "@type": "Brand",
+            "name": settings.data.title
+        }
+    }
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": product.data.title,
+            "item": full_url
+        }]
+    }
     return (
         <>
             <div className="bg-[#E9F1F799]">
+                <head>
+                    <script type="application/ld+json">{JSON.stringify(product_schema)}</script>
+                    <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+                </head>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
@@ -246,7 +277,7 @@ export default function ProductSingle() {
                                         <div className="bg-[#00539C] p-4">
                                             <div className="flex flex-col md:flex-row justify-between items-center">
                                                 <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
-                                                <Link title={settings.data.mobile} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {settings.data.mobile}</span></Link>
+                                                <Link title={formatPhoneNumber(settings.data.mobile)} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {formatPhoneNumber(settings.data.mobile)}</span></Link>
                                             </div>
                                             <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                 <div className="flex items-center shadow-md">
@@ -318,7 +349,7 @@ export default function ProductSingle() {
                                                             }`}
                                                         title={tab}
                                                         onClick={() => setActiveTab(index)}
-                                                    >   
+                                                    >
                                                         <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>
                                                     </button>
                                                 </li>
@@ -373,7 +404,7 @@ export default function ProductSingle() {
                                                 <div className="w-[100%] md:w-[50%] bg-[#00539C] p-4">
                                                     <div className="flex flex-col md:flex-row justify-between items-center">
                                                         <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
-                                                        <Link title={settings.data.mobile} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {settings.data.mobile}</span></Link>
+                                                        <Link title={formatPhoneNumber(settings.data.mobile)} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {formatPhoneNumber(settings.data.mobile)}</span></Link>
                                                     </div>
                                                     <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                         <div className="flex items-center shadow-md">

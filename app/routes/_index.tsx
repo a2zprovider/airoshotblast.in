@@ -11,6 +11,7 @@ import config from "~/config";
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
+  const baseUrl = `${url.protocol}//${url.host}`;
   const full_url = `${url.origin}${url.pathname}`;
 
   const settingsCacheKey = `settings`;
@@ -105,11 +106,23 @@ export default function Index() {
       full_url
     ]
   }
+  const search_schema = {
+    "@context": "https://schema.org/",
+    "@type": "WebSite",
+    "name": settings.data.title,
+    "url": full_url,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${full_url}/products?s={search_term_string}`,
+      "query-input": "required name=search_term_string"
+    },
+  }
 
   return (
     <div>
       <head>
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
+        <script type="application/ld+json">{JSON.stringify(search_schema)}</script>
       </head>
       <div className="bg-[#E9F1F799]">
         <div className="container mx-auto py-8">
@@ -180,11 +193,11 @@ export default function Index() {
               {settings.data.field && JSON.parse(settings.data.field).title.map((f: any, i: any) => (
                 <div key={i} className={`grid ${JSON.parse(settings.data.field).image[i] ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} grid-cols-1 gap-10`}>
                   <>
-                    <div className={i % 2 === 0 ? 'flex-1 order-1' : 'flex-1 order-2'}>
+                    <div className={i % 2 === 0 ? 'flex-1 order-1' : 'flex-1 order-1 lg:order-2'}>
                       {/* <div className="font-medium text-2xl text-[#4356A2]">{f}</div> */}
                       <div dangerouslySetInnerHTML={{ __html: JSON.parse(settings.data.field).description[i] }} ></div>
                     </div>
-                    <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-1 justify-content-end'}>
+                    <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-2 lg:order-1'}>
                       {
                         JSON.parse(settings.data.field).image[i] ?
                           <img src={config.imgBaseURL + `/setting/other/${JSON.parse(settings.data.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-[#4356A2] w-full" />

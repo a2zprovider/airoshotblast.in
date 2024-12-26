@@ -5,6 +5,7 @@ import config from "~/config";
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     const settingsCacheKey = `settings`;
@@ -12,9 +13,9 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
     const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
-      delete cache[settingsCacheKey];
+        delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
-  
+
     let settings;
     if (!cachedSettings) {
         const setting = await fetch(config.apiBaseURL + 'setting');
@@ -26,7 +27,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     } else {
         settings = cachedSettings;
     }
-    
+
     const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
     const pages = await page.json();
 
@@ -35,7 +36,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
     const slug = "careers";
 
-    return json({ pages, settings, full_url, slug, careers });
+    return json({ pages, settings, full_url, baseUrl, slug, careers });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -66,14 +67,33 @@ export const meta: MetaFunction = ({ data }) => {
 
 export default function Careers() {
     const navigate = useNavigate();
-    const { slug, pages, settings, full_url, careers }: any = useLoaderData();
+    const { slug, pages, settings, full_url, baseUrl, careers }: any = useLoaderData();
 
     const handleClick = (url: any) => {
         navigate(`${url}`);
     };
+
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": 'Careers',
+            "item": full_url
+        }]
+    }
     return (
         <>
             <div className="bg-[#E9F1F799]">
+                <head>
+                    <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+                </head>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
