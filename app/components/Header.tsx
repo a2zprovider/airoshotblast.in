@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import config from "~/config";
 import { useModal } from "./Modalcontext";
+import { formatPhoneNumber } from "~/utils/format-mobile-number";
 
 export default function Header({ settings }: any) {
   const location = useLocation();
@@ -49,7 +50,7 @@ export default function Header({ settings }: any) {
               </Link>
             </div>
             <div className="text-right">
-              <Link title={settings?.mobile} to={'tel:' + settings?.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+              <Link title={formatPhoneNumber(settings?.mobile)} to={'tel:' + settings?.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-phone rotate-90"></i>
                 <span className="md:block hidden">Call Us Now</span>
               </Link>
@@ -61,7 +62,7 @@ export default function Header({ settings }: any) {
         <div className="container mx-auto py-3">
           <div className="flex items-center justify-between">
             {/* Desktop Menu */}
-            <nav className="hidden lg:flex lg:space-x-10">
+            <nav className="hidden lg:flex lg:space-x-3 xl:space-x-10">
               <NavLink to="/" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Home</NavLink>
               <NavLink to="/about" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>About Us</NavLink>
               <NavLink to="/products" className={({ isActive }) => isActive ? "n_btn active" : "n_btn"}>Machines & Abrasives</NavLink>
@@ -121,7 +122,6 @@ export default function Header({ settings }: any) {
       </div>
       <div>
         {/* Mobile Menu */}
-        {/* {isOpen && ( */}
         <>
           <div className={`bg-[#131B23] lg:hidden shadow-md fixed z-[100] top-0 bottom-0 ${!isOpen ? '-left-[110%] right-[110%]' : 'left-0 right-0'} transition-all duration-500 ease-in-out`}>
             <div className="lg:hidden flex items-center justify-center mt-3 mb-3">
@@ -174,20 +174,31 @@ export default function Header({ settings }: any) {
             </div>
           </div>
         </>
-        {/* )} */}
       </div>
       <div className="fixed top-[50%] left-[5px] z-[9]">
-        <Link to={`tel:${settings?.mobile}`} title={`Talk With Us ${settings?.mobile}`} className="mb-3 bg-[#131B23] rounded-md border-b-[#4356A2] border-b-[3px] p-3 space-x-3 w-full flex items-center justify-center">
-          <i className="fa fa-phone text-white text-lg rotate-90"></i>
-          <span className="text-white text-lg hidden md:block transition-all duration-[800ms] ease-in-out">{displayText ? 'Talk With Us' : settings?.mobile}</span>
+        <Link to={`tel:${settings?.mobile}`} title={`Talk With Us ${formatPhoneNumber(settings?.mobile)}`} className={`flex lg:hidden mb-3 lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
+          <i className="fa fa-phone text-white text-lg rotate-90 animate-shake"></i>
+          <span className="text-white text-lg hidden lg:block transition-all duration-[800ms] ease-in-out">
+            {displayText ? 'Talk With Us' : formatPhoneNumber(settings?.mobile)}
+          </span>
         </Link>
-        <div onClick={() => openEnquiry('')} className="cursor-pointer bg-[#131B23] rounded-md border-b-[#4356A2] border-b-[3px] p-3 space-x-3 w-full flex items-center justify-center">
-          <i className="fa fa-file-alt text-white text-lg"></i>
-          <span className="text-white text-lg hidden md:block">{displayText ? 'Get Quotation' : 'Bulk Order'}</span>
+        <Link to={`tel:${settings?.mobile}`} title={`Talk With Us ${formatPhoneNumber(settings?.mobile)}`} className={`hidden lg:flex mb-3 lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
+          <i className="fa fa-phone text-white text-lg rotate-90 group-hover:animate-shake"></i>
+          <span className="text-white text-lg hidden lg:block transition-all duration-[800ms] ease-in-out">
+            {displayText ? 'Talk With Us' : formatPhoneNumber(settings?.mobile)}
+          </span>
+        </Link>
+        <div onClick={() => openEnquiry('')} className={`flex lg:hidden cursor-pointer lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
+          <i className="fa fa-file-alt text-white text-lg animate-shake1"></i>
+          <span className="text-white text-lg hidden lg:block">{displayText ? 'Get Quotation' : 'Bulk Order'}</span>
+        </div>
+        <div onClick={() => openEnquiry('')} className={`hidden lg:flex cursor-pointer lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
+          <i className="fa fa-file-alt text-white text-lg group-hover:animate-shake1"></i>
+          <span className="text-white text-lg hidden lg:block">{displayText ? 'Get Quotation' : 'Bulk Order'}</span>
         </div>
       </div>
       <div>
-        <Link to={`https://wa.me/${settings?.mobile}?text=${encodedMessage}`} title="Whatsapp" target="_blank" className="fixed bottom-[20px] right-[20px] z-[9] bg-[#25d366] h-[50px] w-[50px] rounded-full flex items-center justify-center shadow-xl">
+        <Link to={`https://wa.me/${settings?.mobile}?text=${encodedMessage}`} title="Whatsapp" target="_blank" className="fixed bottom-[20px] right-[20px] z-[9] bg-[#25d366] h-[50px] w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
           <i className="fab fa-whatsapp text-white text-2xl"></i>
         </Link>
       </div>

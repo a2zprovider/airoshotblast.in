@@ -21,10 +21,11 @@ export let loader: LoaderFunction = async ({ request }) => {
     }, CACHE_EXPIRATION_TIME);
 
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     if (cachedPageDetail && cachedSettings) {
-        return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url });
+        return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url, baseUrl });
     }
 
     try {
@@ -81,10 +82,28 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function About() {
-    const { slug, pages, page_detail, settings, full_url }: any = useLoaderData();
+    const { slug, page_detail, settings, full_url, baseUrl }: any = useLoaderData();
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": page_detail.data.title,
+            "item": full_url
+        }]
+    }
     return (
         <>
             <div className="bg-[#E9F1F799]">
+                <head>
+                    <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+                </head>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">

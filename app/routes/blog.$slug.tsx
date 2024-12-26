@@ -2,7 +2,6 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json, Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
 import config from "~/config";
 
 let cache: Record<string, any> = {};
@@ -16,9 +15,9 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
     const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
-      delete cache[settingsCacheKey];
+        delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
-  
+
     let settings;
     if (!cachedSettings) {
         const setting = await fetch(config.apiBaseURL + 'setting');
@@ -85,7 +84,7 @@ export default function BlogSingle() {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 7 }, (_, i) => currentYear - i);
 
-    const schema = {
+    const blog_schema = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": blog.data.title,
@@ -102,11 +101,32 @@ export default function BlogSingle() {
                 "url": config.imgBaseURL + 'setting/logo/' + settings.data.logo
             }
         }
-    };
+    }
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": 'Blogs',
+            "item": baseUrl + '/blogs'
+        }, {
+            "@type": "ListItem",
+            "position": 3,
+            "name": blog.data.title,
+            "item": full_url
+        }]
+    }
     return (
         <div className="bg-[#E9F1F799]">
             <head>
-                <script type="application/ld+json">{JSON.stringify(schema)}</script>
+                <script type="application/ld+json">{JSON.stringify(blog_schema)}</script>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
             </head>
             <div className="container mx-auto">
                 <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">

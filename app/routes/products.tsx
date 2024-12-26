@@ -12,6 +12,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     const search = url_params.get('s');
 
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     const settingsCacheKey = `settings`;
@@ -19,9 +20,9 @@ export let loader: LoaderFunction = async ({ request }) => {
 
     const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
     setTimeout(() => {
-      delete cache[settingsCacheKey];
+        delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
-  
+
     let settings;
     if (!cachedSettings) {
         const setting = await fetch(config.apiBaseURL + 'setting');
@@ -34,7 +35,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         settings = cachedSettings;
     }
 
-    return json({ settings, full_url, search });
+    return json({ settings, full_url, baseUrl, search });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -65,7 +66,7 @@ export const meta: MetaFunction = ({ data }) => {
 
 
 export default function Products() {
-    const { search }: any = useLoaderData();
+    const { search, full_url, baseUrl }: any = useLoaderData();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const openFilter = () => setIsFilterOpen(true);
@@ -147,8 +148,27 @@ export default function Products() {
     //     return () => { window.removeEventListener('scroll', loadMoreProducts) };
     // }, [page, loading, fetcher]);
 
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": 'Products',
+            "item": full_url
+        }]
+    }
+
     return (
         <div className="bg-[#E9F1F799]">
+            <head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+            </head>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex flex-row overflow-auto items-center py-2 gap-4">
@@ -168,7 +188,7 @@ export default function Products() {
                     <div className="py-3">
                         {loading ? <Loader /> :
                             <>
-                                <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
+                                <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6">
                                     {products.map((product: any, index: any) => (
                                         <div key={index}>
                                             <ProductCard product={product} />

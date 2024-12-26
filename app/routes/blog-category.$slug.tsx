@@ -21,9 +21,10 @@ export let loader: LoaderFunction = async ({ request, params }) => {
     const recent_blogs = await recent_blog.json();
 
     const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const full_url = `${url.origin}${url.pathname}`;
 
-    return json({ blogs, full_url, blogcategories, tags, recent_blogs });
+    return json({ blogs, full_url, blogcategories, tags, recent_blogs, baseUrl });
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -51,11 +52,34 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function Blog() {
-    const { blogs, blogcategories, tags, recent_blogs }: any = useLoaderData();
+    const { blogs, blogcategories, tags, recent_blogs, full_url, baseUrl }: any = useLoaderData();
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 7 }, (_, i) => currentYear - i);
+    const breadcrumb_schema = {
+        "@context": "https://schema.org/",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": baseUrl
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": 'Blogs',
+            "item": baseUrl + '/blogs'
+        }, {
+            "@type": "ListItem",
+            "position": 3,
+            "name": blogs.data.title,
+            "item": full_url
+        }]
+    }
     return (
         <div className="bg-[#E9F1F799]">
+            <head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+            </head>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
