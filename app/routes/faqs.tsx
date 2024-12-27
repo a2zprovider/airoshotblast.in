@@ -1,42 +1,52 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link } from "@remix-run/react";
+import { json, Link, useRouteError } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import Accordion from "~/components/Accordion";
 import config from "~/config";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
+    try {
+        const url = new URL(request.url);
+        const baseUrl = `${url.origin}`;
+        const full_url = `${url.origin}${url.pathname}`;
 
-    const settingsCacheKey = `settings`;
-    const cachedSettings = cache[settingsCacheKey];
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
 
-    const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
-    setTimeout(() => {
-        delete cache[settingsCacheKey];
-    }, CACHE_EXPIRATION_TIME);
+        const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+        setTimeout(() => {
+            delete cache[settingsCacheKey];
+        }, CACHE_EXPIRATION_TIME);
 
-    let settings;
-    if (!cachedSettings) {
-        const setting = await fetch(config.apiBaseURL + 'setting');
-        if (!setting.ok) {
-            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        let settings;
+        if (!cachedSettings) {
+            const setting = await fetch(config.apiBaseURL + 'setting');
+            if (!setting.ok) { throw setting; }
+            settings = await setting.json();
+            cache[settingsCacheKey] = settings;
+        } else {
+            settings = cachedSettings;
         }
-        settings = await setting.json();
-        cache[settingsCacheKey] = settings;
-    } else {
-        settings = cachedSettings;
+
+        const faq = await fetch(config.apiBaseURL + 'faqs');
+        if (!faq.ok) { throw faq; }
+        const faqs = await faq.json();
+
+        return json({ faqs, settings, full_url, baseUrl });
+    } catch (error) {
+        throw error;
     }
-
-    const faq = await fetch(config.apiBaseURL + 'faqs');
-    const faqs = await faq.json();
-
-    return json({ faqs, settings, full_url, baseUrl });
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: any) => {
+    if (!data || data.error) {
+        return [
+            { title: "Error - Not found" },
+            { name: "description", content: "We couldn't find you're looking for." },
+        ];
+    }
+
     const { settings, full_url }: any = data;
     const seo_details = JSON.parse(settings.data.seo_details);
 
@@ -82,9 +92,9 @@ export default function Faqs() {
     }
     return (
         <div className="bg-[#E9F1F799]">
-        <head>
-            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-        </head>
+            <head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+            </head>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
@@ -96,5 +106,27 @@ export default function Faqs() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
+    return (
+        <>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto">
+                    <div className="py-8">
+                        <div className="text-center">
+                            <div className="font-medium text-9xl mb-5">{error.status}</div>
+                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                            <div className="mt-5 pt-5">
+                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }

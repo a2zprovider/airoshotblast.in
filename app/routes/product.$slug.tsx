@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useFetcher } from "@remix-run/react";
+import { json, Link, useFetcher, useRouteError } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { useModal } from "~/components/Modalcontext";
@@ -9,37 +9,47 @@ import { formatPhoneNumber } from "~/utils/format-mobile-number";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
+    try {
+        const url = new URL(request.url);
+        const baseUrl = `${url.origin}`;
+        const full_url = `${url.origin}${url.pathname}`;
 
-    const settingsCacheKey = `settings`;
-    const cachedSettings = cache[settingsCacheKey];
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
 
-    const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
-    setTimeout(() => {
-        delete cache[settingsCacheKey];
-    }, CACHE_EXPIRATION_TIME);
+        const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+        setTimeout(() => {
+            delete cache[settingsCacheKey];
+        }, CACHE_EXPIRATION_TIME);
 
-    let settings;
-    if (!cachedSettings) {
-        const setting = await fetch(config.apiBaseURL + 'setting');
-        if (!setting.ok) {
-            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        let settings;
+        if (!cachedSettings) {
+            const setting = await fetch(config.apiBaseURL + 'setting');
+            if (!setting.ok) { throw setting; }
+            settings = await setting.json();
+            cache[settingsCacheKey] = settings;
+        } else {
+            settings = cachedSettings;
         }
-        settings = await setting.json();
-        cache[settingsCacheKey] = settings;
-    } else {
-        settings = cachedSettings;
+
+        const product_detail = await fetch(config.apiBaseURL + 'product/' + params.slug);
+        if (!product_detail.ok) { throw product_detail; }
+        const product = await product_detail.json();
+
+        return json({ product, settings, full_url, baseUrl });
+    } catch (error) {
+        throw error;
     }
-
-    const product_detail = await fetch(config.apiBaseURL + 'product/' + params.slug);
-    const product = await product_detail.json();
-
-    return json({ product, settings, full_url, baseUrl });
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: any) => {
+    if (!data || data.error) {
+        return [
+            { title: "Error - Not found" },
+            { name: "description", content: "We couldn't find you're looking for." },
+        ];
+    }
+
     const { product, full_url }: any = data;
 
     return [
@@ -194,6 +204,11 @@ export default function ProductSingle() {
         }, {
             "@type": "ListItem",
             "position": 2,
+            "name": 'Blogs',
+            "item": baseUrl + '/products'
+        }, {
+            "@type": "ListItem",
+            "position": 3,
             "name": product.data.title,
             "item": full_url
         }]
@@ -360,34 +375,28 @@ export default function ProductSingle() {
                                     {/* Content Area */}
                                     <div className="">
                                         <div className="px-2">
-                                            {activeTab === 0 &&
-                                                <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
-                                                    <table className="w-full">
-                                                        <tbody>
-                                                            {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
-                                                                <tr className="bg-[#f1f1f1]" key={index}>
-                                                                    <td className="px-4 py-2">{f1} : </td>
-                                                                    <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            }
-                                            {activeTab === 1 &&
-                                                <div className="content-details applications font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
-                                                    <p>
-                                                        <div dangerouslySetInnerHTML={{ __html: product.data.application }} ></div>
-                                                    </p>
-                                                </div>
-                                            }
-                                            {activeTab === 2 &&
-                                                <div className="content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8">
-                                                    <p>
-                                                        <div dangerouslySetInnerHTML={{ __html: product.data.description }} ></div>
-                                                    </p>
-                                                </div>
-                                            }
+                                            <div className={`${activeTab === 0 ? 'block' : 'hidden'} content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
+                                                <table className="w-full">
+                                                    <tbody>
+                                                        {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
+                                                            <tr className="bg-[#f1f1f1]" key={index}>
+                                                                <td className="px-4 py-2">{f1} : </td>
+                                                                <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div className={`${activeTab === 1 ? 'block' : 'hidden'} content-details applications font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
+                                                <p>
+                                                    <div dangerouslySetInnerHTML={{ __html: product.data.application }} ></div>
+                                                </p>
+                                            </div>
+                                            <div className={`${activeTab === 2 ? 'block' : 'hidden'} content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
+                                                <p>
+                                                    <div dangerouslySetInnerHTML={{ __html: product.data.description }} ></div>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className={`fixed hidden md:block left-0 right-0 bg-white z-[10] shadow-[0_-4px_10px_0_rgba(0,0,0,0.15)] transition-all duration-[800ms] ${isVisible ? 'bottom-0' : '-bottom-[200px]'}`}>
@@ -396,7 +405,7 @@ export default function ProductSingle() {
                                                 <div className="w-[50%] hidden md:block">
                                                     <div className="flex items-center gap-4">
                                                         <div>
-                                                            <div className="text-xl text-[#131B23] font-normal line-clamp-1">{product.data.title}</div>
+                                                            <h1 className="text-xl text-[#131B23] font-normal line-clamp-1">{product.data.title}</h1>
                                                             <div className="text-md text-[#BF0707] font-normal ">{product.data.price}</div>
                                                         </div>
                                                     </div>
@@ -493,13 +502,24 @@ export default function ProductSingle() {
     );
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
-
+export function ErrorBoundary() {
+    const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
     return (
-        <div>
-            <h1>Error</h1>
-            <p>There was an error: {error ? error.message : ''}</p>
-            <Link to="/">Go back to Homepage</Link>
-        </div>
+        <>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto">
+                    <div className="py-8">
+                        <div className="text-center">
+                            <div className="font-medium text-9xl mb-5">{error.status}</div>
+                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                            <div className="mt-5 pt-5">
+                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }

@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, NavLink, useFetcher } from "@remix-run/react";
+import { json, Link, NavLink, useFetcher, useRouteError } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import config from "~/config";
 import { useEffect, useState } from "react";
@@ -8,32 +8,34 @@ import { formatPhoneNumber } from "~/utils/format-mobile-number";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
+    try {
+        const url = new URL(request.url);
+        const baseUrl = `${url.origin}`;
+        const full_url = `${url.origin}${url.pathname}`;
 
-    const settingsCacheKey = `settings`;
-    const cachedSettings = cache[settingsCacheKey];
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
 
-    const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
-    setTimeout(() => {
-        delete cache[settingsCacheKey];
-    }, CACHE_EXPIRATION_TIME);
+        const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+        setTimeout(() => {
+            delete cache[settingsCacheKey];
+        }, CACHE_EXPIRATION_TIME);
 
-    let settings;
-    if (!cachedSettings) {
-        const setting = await fetch(config.apiBaseURL + 'setting');
-        if (!setting.ok) {
-            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        let settings;
+        if (!cachedSettings) {
+            const setting = await fetch(config.apiBaseURL + 'setting');
+            if (!setting.ok) { throw setting; }
+            settings = await setting.json();
+
+            cache[settingsCacheKey] = settings;
+        } else {
+            settings = cachedSettings;
         }
-        settings = await setting.json();
 
-        cache[settingsCacheKey] = settings;
-    } else {
-        settings = cachedSettings;
+        return json({ settings, full_url, baseUrl });
+    } catch (error) {
+        throw error;
     }
-
-    return json({ settings, full_url, baseUrl });
 };
 
 export let action: ActionFunction = async ({ request }: { request: Request }) => {
@@ -89,7 +91,14 @@ export let action: ActionFunction = async ({ request }: { request: Request }) =>
     }
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: any) => {
+    if (!data || data.error) {
+        return [
+            { title: "Error - Not found" },
+            { name: "description", content: "We couldn't find you're looking for." },
+        ];
+    }
+
     const { settings, full_url }: any = data;
     const seo_details = JSON.parse(settings.data.seo_details);
     return [
@@ -309,10 +318,12 @@ export default function Contact() {
                                 <p className="text-[#131B23] text-base text-normal">If you have any requirement, you can connect with us. Our customer service representative will send you quote ASAP.</p>
                                 <hr className="my-4" />
                                 <div className="px-4">
-                                    <div className="flex items-center justify-center gap-4 py-3">
-                                        <i className="fa fa-map-marker-alt"></i>
-                                        <div className="text-[#131B23] text-lg text-normal">{settings.data.address}</div>
-                                    </div>
+                                    {settings.data.address && settings.data.address != '' ?
+                                        <div className="flex items-center justify-center gap-4 py-3">
+                                            <i className="fa fa-map-marker-alt"></i>
+                                            <div className="text-[#131B23] text-lg text-normal">{settings.data.address}</div>
+                                        </div>
+                                        : <></>}
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-phone rotate-90"></i>
                                         <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{formatPhoneNumber(settings.data.mobile)}</Link>
@@ -324,9 +335,11 @@ export default function Contact() {
                                 </div>
                             </div>
                         </div>
-                        <div className="py-6">
-                            <div dangerouslySetInnerHTML={{ __html: settings.data.map }} ></div>
-                        </div>
+                        {settings.data.map && settings.data.map != '' ?
+                            <div className="py-6">
+                                <div dangerouslySetInnerHTML={{ __html: settings.data.map }} ></div>
+                            </div>
+                            : <></>}
                     </div>
                 </div>
             </div>
@@ -334,3 +347,24 @@ export default function Contact() {
     );
 }
 
+export function ErrorBoundary() {
+    const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
+    return (
+        <>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto">
+                    <div className="py-8">
+                        <div className="text-center">
+                            <div className="font-medium text-9xl mb-5">{error.status}</div>
+                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                            <div className="mt-5 pt-5">
+                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}

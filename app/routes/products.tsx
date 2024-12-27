@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useLoaderData } from "@remix-run/react";
+import { json, Link, useLoaderData, useRouteError } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import Filter from "~/components/Filter";
 import Loader from "~/components/loader";
@@ -8,37 +8,46 @@ import config from "~/config";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
-    const url_params = new URL(request.url).searchParams;
-    const search = url_params.get('s');
+    try {
+        const url_params = new URL(request.url).searchParams;
+        const search = url_params.get('s');
 
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
+        const url = new URL(request.url);
+        const baseUrl = `${url.origin}`;
+        const full_url = `${url.origin}${url.pathname}`;
 
-    const settingsCacheKey = `settings`;
-    const cachedSettings = cache[settingsCacheKey];
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
 
-    const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
-    setTimeout(() => {
-        delete cache[settingsCacheKey];
-    }, CACHE_EXPIRATION_TIME);
+        const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+        setTimeout(() => {
+            delete cache[settingsCacheKey];
+        }, CACHE_EXPIRATION_TIME);
 
-    let settings;
-    if (!cachedSettings) {
-        const setting = await fetch(config.apiBaseURL + 'setting');
-        if (!setting.ok) {
-            throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+        let settings;
+        if (!cachedSettings) {
+            const setting = await fetch(config.apiBaseURL + 'setting');
+            if (!setting.ok) { throw setting; }
+            settings = await setting.json();
+            cache[settingsCacheKey] = settings;
+        } else {
+            settings = cachedSettings;
         }
-        settings = await setting.json();
-        cache[settingsCacheKey] = settings;
-    } else {
-        settings = cachedSettings;
-    }
 
-    return json({ settings, full_url, baseUrl, search });
+        return json({ settings, full_url, baseUrl, search });
+    } catch (error) {
+        throw error;
+    }
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: any) => {
+    if (!data || data.error) {
+        return [
+            { title: "Error - Not found" },
+            { name: "description", content: "We couldn't find you're looking for." },
+        ];
+    }
+
     const { settings, full_url }: any = data;
     const seo_details = JSON.parse(settings.data.seo_details);
 
@@ -63,7 +72,6 @@ export const meta: MetaFunction = ({ data }) => {
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
     ];
 };
-
 
 export default function Products() {
     const { search, full_url, baseUrl }: any = useLoaderData();
@@ -205,5 +213,27 @@ export default function Products() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
+    return (
+        <>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto">
+                    <div className="py-8">
+                        <div className="text-center">
+                            <div className="font-medium text-9xl mb-5">{error.status}</div>
+                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                            <div className="mt-5 pt-5">
+                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }

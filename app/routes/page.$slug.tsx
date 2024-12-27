@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, NavLink, useLoaderData, useNavigate, useParams } from "@remix-run/react";
+import { json, Link, NavLink, useLoaderData, useNavigate, useParams, useRouteError } from "@remix-run/react";
 import config from "~/config";
 
 let cache: Record<string, any> = {};
@@ -23,7 +23,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 
 
     const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
+    const baseUrl = `${url.origin}`;
     const full_url = `${url.origin}${url.pathname}`;
 
     if (cachedPageDetail && cachedPages && cachedSettings) {
@@ -34,9 +34,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         let pages;
         if (!cachedPages) {
             const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
-            if (!page.ok) {
-                throw new Error(`Failed to fetch page details: ${page.statusText}`);
-            }
+            if (!page.ok) { throw page; }
             pages = await page.json();
             cache[pagesCacheKey] = pages;
         }
@@ -44,9 +42,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         let page_detail;
         if (!cachedPageDetail) {
             const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
-            if (!p_detail.ok) {
-                throw new Error(`Failed to fetch page details: ${p_detail.statusText}`);
-            }
+            if (!p_detail.ok) { throw p_detail; }
             page_detail = await p_detail.json();
             cache[pageCacheKey] = page_detail;
         }
@@ -54,21 +50,25 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
-            if (!setting.ok) {
-                throw new Error(`Failed to fetch settings: ${setting.statusText}`);
-            }
+            if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
         }
 
         return json({ slug, pages, page_detail, settings, full_url, baseUrl });
     } catch (error) {
-        console.error('Error during loader execution:', error);
-        return json({ error: 'An error occurred while fetching data.' }, { status: 500 });
+        throw error;
     }
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: any) => {
+    if (!data || data.error) {
+        return [
+            { title: "Error - Not found" },
+            { name: "description", content: "We couldn't find you're looking for." },
+        ];
+    }
+
     const { page_detail, full_url }: any = data;
 
     return [
@@ -169,6 +169,28 @@ export default function Pages() {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
+    return (
+        <>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto">
+                    <div className="py-8">
+                        <div className="text-center">
+                            <div className="font-medium text-9xl mb-5">{error.status}</div>
+                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                            <div className="mt-5 pt-5">
+                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>
