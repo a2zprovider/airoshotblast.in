@@ -9,6 +9,7 @@ const EnquiryForm = () => {
     const [btnLoading, setBtnLoading] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
+
         e.preventDefault();
         setBtnLoading(true);
         const form = e.target as HTMLFormElement;

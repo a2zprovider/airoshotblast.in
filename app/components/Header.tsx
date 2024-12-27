@@ -175,31 +175,15 @@ export default function Header({ settings }: any) {
           </div>
         </>
       </div>
-      <div className="fixed top-[50%] left-[5px] z-[9]">
-        <Link to={`tel:${settings?.mobile}`} title={`Talk With Us ${formatPhoneNumber(settings?.mobile)}`} className={`flex lg:hidden mb-3 lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
-          <i className="fa fa-phone text-white text-lg rotate-90 animate-shake"></i>
-          <span className="text-white text-lg hidden lg:block transition-all duration-[800ms] ease-in-out">
-            {displayText ? 'Talk With Us' : formatPhoneNumber(settings?.mobile)}
-          </span>
-        </Link>
-        <Link to={`tel:${settings?.mobile}`} title={`Talk With Us ${formatPhoneNumber(settings?.mobile)}`} className={`hidden lg:flex mb-3 lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
-          <i className="fa fa-phone text-white text-lg rotate-90 group-hover:animate-shake"></i>
-          <span className="text-white text-lg hidden lg:block transition-all duration-[800ms] ease-in-out">
-            {displayText ? 'Talk With Us' : formatPhoneNumber(settings?.mobile)}
-          </span>
-        </Link>
-        <div onClick={() => openEnquiry('')} className={`flex lg:hidden cursor-pointer lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
-          <i className="fa fa-file-alt text-white text-lg animate-shake1"></i>
-          <span className="text-white text-lg hidden lg:block">{displayText ? 'Get Quotation' : 'Bulk Order'}</span>
-        </div>
-        <div onClick={() => openEnquiry('')} className={`hidden lg:flex cursor-pointer lg:w-[200px] gradient_btn group shadow-xl rounded-md border-b-[3px] border-t-[3px] ${displayText ? 'border-b-[#2953F9] border-t-transparent' : 'border-b-transparent border-t-[#2953F9]'} p-3 space-x-3 w-full flex items-center justify-center`}>
-          <i className="fa fa-file-alt text-white text-lg group-hover:animate-shake1"></i>
-          <span className="text-white text-lg hidden lg:block">{displayText ? 'Get Quotation' : 'Bulk Order'}</span>
-        </div>
-      </div>
       <div>
-        <Link to={`https://wa.me/${settings?.mobile}?text=${encodedMessage}`} title="Whatsapp" target="_blank" className="fixed bottom-[20px] right-[20px] z-[9] bg-[#25d366] h-[50px] w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
-          <i className="fab fa-whatsapp text-white text-2xl"></i>
+        <div onClick={() => openEnquiry('')} title="Enquiry" className="group fixed bottom-[110px] md:bottom-[160px] right-[10px] z-[9] gradient_btn h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
+          <i className="fa fa-file-alt text-white text-lg md:text-2xl group-hover:animate-shake1"></i>
+        </div>
+        <Link to={`tel:${settings?.mobile}`} title={formatPhoneNumber(settings?.mobile)} className="group fixed bottom-[60px] md:bottom-[90px] right-[10px] z-[9] gradient_btn h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
+          <i className="fa fa-phone text-white rotate-90 text-lg md:text-2xl group-hover:animate-shake"></i>
+        </Link>
+        <Link to={`https://wa.me/${settings?.mobile}?text=${encodedMessage}`} title="Whatsapp" target="_blank" className="group fixed bottom-[10px] md:bottom-[20px] right-[10px] z-[9] bg-[#25d366] h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
+          <i className="fab fa-whatsapp text-white text-lg md:text-2xl group-hover:animate-shake1"></i>
         </Link>
       </div>
     </>

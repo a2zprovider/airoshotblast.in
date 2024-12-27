@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link } from "@remix-run/react";
+import { json, Link, useRouteError } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import BlogCard from "~/components/BlogCard";
@@ -7,27 +7,41 @@ import config from "~/config";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
-    const url = new URL(request.url);
-    const baseUrl = `${url.protocol}//${url.host}`;
-    const full_url = `${url.origin}${url.pathname}`;
+    try {
+        const url = new URL(request.url);
+        const baseUrl = `${url.origin}`;
+        const full_url = `${url.origin}${url.pathname}`;
 
-    const blog = await fetch(config.apiBaseURL + 'tag/' + params.slug);
-    const blogs = await blog.json();
+        const blog = await fetch(config.apiBaseURL + 'tag/' + params.slug);
+        if (!blog.ok) { throw blog; }
+        const blogs = await blog.json();
 
-    const tag = await fetch(config.apiBaseURL + 'tags');
-    const tags = await tag.json();
+        const tag = await fetch(config.apiBaseURL + 'tags');
+        if (!tag.ok) { throw tag; }
+        const tags = await tag.json();
 
-    const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
-    const blogcategories = await blogcategory.json();
+        const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
+        if (!blogcategory.ok) { throw blogcategory; }
+        const blogcategories = await blogcategory.json();
 
-    const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
-    const recent_blogs = await recent_blog.json();
+        const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
+        if (!recent_blog.ok) { throw recent_blog; }
+        const recent_blogs = await recent_blog.json();
 
-
-    return json({ blogs, full_url, baseUrl, blogcategories, tags, recent_blogs });
+        return json({ blogs, full_url, baseUrl, blogcategories, tags, recent_blogs });
+    } catch (error) {
+        throw error;
+    }
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: any) => {
+    if (!data || data.error) {
+        return [
+            { title: "Error - Not found" },
+            { name: "description", content: "We couldn't find you're looking for." },
+        ];
+    }
+
     const { blogs, full_url }: any = data;
     return [
         // Seo Details
@@ -87,35 +101,41 @@ export default function Blog() {
                     <div className="py-3">
                         <div className="flex lg:flex-row flex-col gap-4">
                             <div className="lg:w-1/4 pb-4 lg:border-r lg:border-[#dbdada] pr-2">
-                                <div className="pb-4">
-                                    <div className="text-[#4356A2] font-medium text-xl underline pb-3">Blog Categories</div>
-                                    <div>
-                                        {blogcategories.data.data.map((blogcategory: any, index: any) => (
-                                            <div className="text-lg" key={index}>
-                                                <Link title={blogcategory.title} to={'/blog-category/' + blogcategory.slug} className="text-lg leading-10 text-normal text-[#131B23] py-1">{blogcategory.title} ({blogcategory.blogCount})</Link>
-                                            </div>
-                                        ))}
+                                {blogcategories?.data?.data.length ?
+                                    <div className="pb-4">
+                                        <div className="text-[#4356A2] font-medium text-xl underline pb-3">Blog Categories</div>
+                                        <div>
+                                            {blogcategories.data.data.map((blogcategory: any, index: any) => (
+                                                <div className="text-lg" key={index}>
+                                                    <Link title={blogcategory.title} to={'/blog-category/' + blogcategory.slug} className="text-lg leading-10 text-normal text-[#131B23] py-1">{blogcategory.title} ({blogcategory.blogCount})</Link>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="pb-4">
-                                    <div className="text-[#4356A2] font-medium text-xl underline pb-3">Recent Blogs</div>
-                                    <div>
-                                        {recent_blogs.data.data.map((r_blog: any, index: any) => (
-                                            <div className="text-lg text-normal text-[#131B23] py-1" key={index}>
-                                                <Link title={r_blog.title} to={'/blog/' + r_blog.slug} className="text-lg p-0">{r_blog.title}</Link>
-                                                <div className="text-md text-normal text-[#969696]">Published on: {format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
-                                            </div>
-                                        ))}
+                                    : <></>}
+                                {recent_blogs?.data?.data.length ?
+                                    <div className="pb-4">
+                                        <div className="text-[#4356A2] font-medium text-xl underline pb-3">Recent Blogs</div>
+                                        <div>
+                                            {recent_blogs.data.data.map((r_blog: any, index: any) => (
+                                                <div className="text-lg text-normal text-[#131B23] py-1" key={index}>
+                                                    <Link title={r_blog.title} to={'/blog/' + r_blog.slug} className="text-lg p-0">{r_blog.title}</Link>
+                                                    <div className="text-md text-normal text-[#969696]">Published on: {format(new Date(r_blog.createdAt), 'MMM dd, yyyy')}</div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="pb-4">
-                                    <div className="text-[#4356A2] font-medium text-xl underline pb-5">Latest Tags</div>
-                                    <div className="gap-4 flex flex-wrap">
-                                        {tags.data.data.map((tag: any, index: any) => (
-                                            <Link title={tag.title} to={'/tag/' + tag.slug} key={index} className={`text-lg text-normal py-2 px-2 border ${tag.slug == blogs.data.slug ? 'text-[#4356A2] border-[#4356A2]' : 'text-[#131B23] border-[#ccc]'}`}>{tag.title}</Link>
-                                        ))}
+                                    : <></>}
+                                {tags?.data?.data.length ?
+                                    <div className="pb-4">
+                                        <div className="text-[#4356A2] font-medium text-xl underline pb-5">Latest Tags</div>
+                                        <div className="gap-4 flex flex-wrap">
+                                            {tags.data.data.map((tag: any, index: any) => (
+                                                <Link title={tag.title} to={'/tag/' + tag.slug} key={index} className={`text-lg text-normal py-2 px-2 border ${tag.slug == blogs.data.slug ? 'text-[#4356A2] border-[#4356A2]' : 'text-[#131B23] border-[#ccc]'}`}>{tag.title}</Link>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                    : <></>}
                                 <div className="pb-4">
                                     <div className="text-[#4356A2] font-medium text-xl underline pb-5">Publishing Year</div>
                                     <div className="gap-4 flex flex-wrap">
@@ -142,12 +162,24 @@ export default function Blog() {
     );
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary() {
+    const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
     return (
-        <div>
-            <h1>Error</h1>
-            <p>There was an error: {error ? error.message : ''}</p>
-            <Link to="/">Go back to Homepage</Link>
-        </div>
+        <>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto">
+                    <div className="py-8">
+                        <div className="text-center">
+                            <div className="font-medium text-9xl mb-5">{error.status}</div>
+                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                            <div className="mt-5 pt-5">
+                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }
