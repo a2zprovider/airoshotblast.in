@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useNavigate, useLoaderData } from "@remix-run/react";
+import { json, Link, useNavigate, useLoaderData, useRouteError } from "@remix-run/react";
 import Accordion from "~/components/Accordion";
 import BlogSlider from "~/components/BlogSlider";
 import CategorySection from "~/components/CategoryProductSection";
@@ -10,44 +10,55 @@ import config from "~/config";
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url);
-  const baseUrl = `${url.protocol}//${url.host}`;
-  const full_url = `${url.origin}${url.pathname}`;
+  try {
+    const url = new URL(request.url);
+    const baseUrl = `${url.origin}`;
+    const full_url = `${url.origin}${url.pathname}`;
 
-  const settingsCacheKey = `settings`;
-  const cachedSettings = cache[settingsCacheKey];
+    const settingsCacheKey = `settings`;
+    const cachedSettings = cache[settingsCacheKey];
 
-  const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
-  setTimeout(() => {
-    delete cache[settingsCacheKey];
-  }, CACHE_EXPIRATION_TIME);
+    const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+    setTimeout(() => {
+      delete cache[settingsCacheKey];
+    }, CACHE_EXPIRATION_TIME);
 
-  let settings;
-  if (!cachedSettings) {
-    const setting = await fetch(config.apiBaseURL + 'setting');
-    if (!setting.ok) {
-      throw new Error(`Failed to fetch settings: ${setting.statusText}`);
+    let settings;
+    if (!cachedSettings) {
+      const setting = await fetch(config.apiBaseURL + 'setting');
+      if (!setting.ok) { throw setting; }
+      settings = await setting.json();
+      cache[settingsCacheKey] = settings;
+    } else {
+      settings = cachedSettings;
     }
-    settings = await setting.json();
-    cache[settingsCacheKey] = settings;
-  } else {
-    settings = cachedSettings;
+
+    // Fetching data from an external API
+    const category = await fetch(config.apiBaseURL + 'category?parent=null&limit=7');
+    if (!category.ok) { throw category; }
+    const categories = await category.json();
+
+    const blog = await fetch(config.apiBaseURL + 'blogs');
+    if (!blog.ok) { throw blog; }
+    const blogs = await blog.json();
+
+    const faq = await fetch(config.apiBaseURL + 'faqs');
+    if (!faq.ok) { throw faq; }
+    const faqs = await faq.json();
+
+    return json({ categories, blogs, faqs, settings, full_url });
+  } catch (error) {
+    throw error;
   }
-
-  // Fetching data from an external API
-  const category = await fetch(config.apiBaseURL + 'category?parent=null&limit=7');
-  const categories = await category.json();
-
-  const blog = await fetch(config.apiBaseURL + 'blogs');
-  const blogs = await blog.json();
-
-  const faq = await fetch(config.apiBaseURL + 'faqs');
-  const faqs = await faq.json();
-
-  return json({ categories, blogs, faqs, settings, full_url });
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: any) => {
+  if (!data || data.error) {
+    return [
+      { title: "Error - Not found" },
+      { name: "description", content: "We couldn't find you're looking for." },
+    ];
+  }
   const { settings, full_url }: any = data;
   const seo_details = JSON.parse(settings.data.seo_details);
 
@@ -129,7 +140,7 @@ export default function Index() {
           <div className="flex lg:justify-center items-start w-full lg:gap-8 md:gap-4 overflow-x-auto">
             {categories.data.data.map((category: any, index: any) => (
               category.parent == null ?
-                <Link title={category.title} to={'/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
+                <Link title={category.title} to={'/category/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
                   <div className="mb-4 overflow-hidden">
                     <img src={config.imgBaseURL + `/category/${category.image}`} alt={category.title} loading="lazy" className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-[#4356A2] transition-all duration-500 ease-in-out" />
                   </div>
@@ -225,5 +236,27 @@ export default function Index() {
       </div>
 
     </div >
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
+  return (
+    <>
+      <div className="bg-[#E9F1F799]">
+        <div className="container mx-auto">
+          <div className="py-8">
+            <div className="text-center">
+              <div className="font-medium text-9xl mb-5">{error.status}</div>
+              <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+              <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+              <div className="mt-5 pt-5">
+                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

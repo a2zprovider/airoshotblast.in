@@ -1,5 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useLoaderData } from "@remix-run/react";
+import { json, Link, useLoaderData, useRouteError } from "@remix-run/react";
 import { useState } from "react";
 import Filter from "~/components/Filter";
 import ProductCard from "~/components/ProductCard";
@@ -9,31 +9,27 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     try {
         const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
+        if (!cat.ok) { throw cat; }
         const category = await cat.json();
 
         const url = new URL(request.url);
-        const baseUrl = `${url.protocol}//${url.host}`;
+        const baseUrl = `${url.origin}`;
         const full_url = `${url.origin}${url.pathname}`;
 
         return json({ category, full_url, baseUrl });
-
     } catch (error) {
         throw error;
     }
 };
 
-export function ErrorBoundary({ error }: { error: Error }) {
+export const meta: MetaFunction = ({ data }: any) => {
+    if (!data || data.error) {
+        return [
+            { title: "Error - Not found" },
+            { name: "description", content: "We couldn't find you're looking for." },
+        ];
+    }
 
-    return (
-        <div>
-            <h1>Error gfg</h1>
-            <p>There was an error: {error ? error.message : ''}</p>
-            <Link to="/">Go back to Homepage</Link>
-        </div>
-    );
-}
-
-export const meta: MetaFunction = ({ data }) => {
     const { category, full_url }: any = data;
     return [
         // Seo Details
@@ -58,7 +54,6 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function Category() {
-
     const { category, full_url, baseUrl }: any = useLoaderData();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -116,5 +111,27 @@ export default function Category() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
+    return (
+        <>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto">
+                    <div className="py-8">
+                        <div className="text-center">
+                            <div className="font-medium text-9xl mb-5">{error.status}</div>
+                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                            <div className="mt-5 pt-5">
+                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }

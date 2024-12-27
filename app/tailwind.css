@@ -25,7 +25,7 @@ body {
     }
 
     .content-details h1, .content-details h2, .content-details h3, .content-details h4, .content-details h5, .content-details h6 {
-        @apply font-medium text-[#4356A2] text-lg leading-10 mb-4 text-start
+        @apply font-medium text-[#4356A2] text-lg leading-10 mb-4 mt-4 text-start
     }
 
     .content-details h1 {
