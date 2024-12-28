@@ -51,7 +51,7 @@ export default function Footer({ settings }: any) {
           </div>
         </div>
         <div className="text-center mt-6">
-          <p className="text-white text-sm font-normal">Copyright &copy; {new Date().getFullYear()} All rights reserved Airo Shot Blast Equipments.</p>
+          <p className="text-white text-sm font-normal">Copyright &copy; {new Date().getFullYear()} All rights reserved {settings?.title}.</p>
         </div>
       </div>
     </footer>
