@@ -64,7 +64,13 @@ const QuickView = () => {
                     <div className="py-8 pb-3 md:pb-8 w-[100%] md:max-w-[400px] md:w-[400px] overflow-hidden">
                         <div className="px-3 md:px-0">
                             <div className="text-3xl text-[#131B23] font-normal line-clamp-1">{product.title}</div>
-                            <div className="text-2xl text-[#BF0707] font-normal py-2">{product.price}</div>
+                            {/* <div className="text-2xl text-[#BF0707] font-normal py-2">{product.price}</div> */}
+                            <div className="flex items-center space-x-5 mt-3 mb-4">
+                                <div onClick={() => openEnquiry(product)} className="n_btn2 cursor-pointer bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+                                    <i className="fa fa-download"></i>
+                                    <span>Get Quotation</span>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
@@ -78,7 +84,7 @@ const QuickView = () => {
                                         : ''
                                 ))}
                             </div>
-                            <div className="flex items-center gap-2 w-full px-3 md:mx-0 md:pr-3">
+                            <div className="flex items-center gap-2 w-full px-3 md:px-0 md:mx-0 md:pr-3">
                                 <button onClick={() => openEnquiry(product)} title='Enquiry' className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] w-full px-3 py-2 bg-[#4356A2] text-lg text-white font-medium rounded-md h-[44px] gap-3"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Inquiry</span></button>
                                 <Link title='Call Us' to={'tel:' + setting?.data?.mobile} className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-white bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
                                 <Link title='Whatsapp' to={`https://api.whatsapp.com/send?phone=${setting?.data?.mobile}&text=${product.title}`} target='_blank' className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-white bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>

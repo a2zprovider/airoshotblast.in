@@ -26,7 +26,6 @@ const ProductCard = ({ product }: any) => {
             <Link title={product.title} to={`/product/${product.slug}`} className="text-sm font-normal text-[#131B23]">
                 <div className='text-lg font-medium text-[#131B23] hover:text-[#4356A2] transition-all duration-500 ease-out line-clamp-1 mt-4'>{product.title}</div>
             </Link>
-            <div className="my-2 text-sm font-bold text-[#B62C2C]">{product.price}</div>
         </div>
     );
 };
