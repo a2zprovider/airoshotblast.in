@@ -105,7 +105,7 @@ export default function ProductSingle() {
         images.push(`${config.imgBaseURL}product/imgs/${img}`);
     });
 
-    const { openStatusShow } = useModal();
+    const { openStatusShow, openEnquiry } = useModal();
     const fetcher = useFetcher();
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -277,7 +277,13 @@ export default function ProductSingle() {
                                     </div>
                                     <div className="lg:w-[50%] py-1">
                                         <div className="text-3xl text-[#131B23] font-normal">{product.data.title}</div>
-                                        <div className="text-2xl text-[#BF0707] font-normal py-2">{product.data.price}</div>
+                                        <div className="flex items-center space-x-5 mt-4 mb-5">
+                                            <div onClick={() => openEnquiry(product)} className="n_btn2 cursor-pointer bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+                                                <i className="fa fa-download"></i>
+                                                <span>Get Quotation</span>
+                                            </div>
+                                        </div>
+                                        {/* <div className="text-2xl text-[#BF0707] font-normal py-2">{product.data.price}</div> */}
                                         <div>
                                             <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                                             <div className="p-4">
@@ -405,8 +411,14 @@ export default function ProductSingle() {
                                                 <div className="w-[50%] hidden md:block">
                                                     <div className="flex items-center gap-4">
                                                         <div>
-                                                            <h1 className="text-xl text-[#131B23] font-normal line-clamp-1">{product.data.title}</h1>
-                                                            <div className="text-md text-[#BF0707] font-normal ">{product.data.price}</div>
+                                                            <div className="text-xl text-[#131B23] font-normal line-clamp-1">{product.data.title}</div>
+                                                            <div className="flex items-center space-x-5 mt-3 mb-4">
+                                                                <div onClick={() => openEnquiry(product)} className="n_btn2 cursor-pointer bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+                                                                    <i className="fa fa-download"></i>
+                                                                    <span>Get Quotation</span>
+                                                                </div>
+                                                            </div>
+                                                            {/* <div className="text-md text-[#BF0707] font-normal">{product.data.price}</div> */}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -497,7 +509,7 @@ export default function ProductSingle() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }
