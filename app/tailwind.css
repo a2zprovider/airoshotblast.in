@@ -21,11 +21,11 @@ body {
     }
 
     .content-details a {
-        @apply text-[#4356A2] hover:underline
+        @apply text-theme hover:underline
     }
 
     .content-details h1, .content-details h2, .content-details h3, .content-details h4, .content-details h5, .content-details h6 {
-        @apply font-medium text-[#4356A2] text-lg leading-10 mb-4 mt-4 text-start
+        @apply font-medium text-theme text-lg leading-10 mb-4 mt-4 text-start
     }
 
     .content-details h1 {
@@ -101,12 +101,12 @@ body {
 
     .n_btn:hover {
         color: #fff;
-        background-color: #131B23;
+        background-color: #ed7733;
     }
 
     .n_btn.active {
         color: #fff;
-        background-color: #4356A2;
+        background-color: #079946;
     }
 
     .n_btn::before {
@@ -155,7 +155,7 @@ body {
         width: 0%;
         height: 0%;
         border-radius: 50% 50% 0 0;
-        background-color: #131B23;
+        background-color: #ed7733;
         z-index: -1;
         transition: 1s;
     }
@@ -176,7 +176,7 @@ body {
     }
 
     .catModalContent::-webkit-scrollbar-thumb {
-        background: #4356A2;
+        background: #079946;
     }
 
     .gradient_btn {

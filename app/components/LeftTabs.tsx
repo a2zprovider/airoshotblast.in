@@ -29,7 +29,7 @@ export default function LeftSideTabs({ settings }: any) {
                         <li key={index}>
                             <button
                                 className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${activeTab === index
-                                    ? "bg-[#4356A2] border-[#4356A2] text-white"
+                                    ? "bg-theme border-theme text-white"
                                     : "text-gray-700 border-[#CCCCCC80]"
                                     }`}
                                 title={page.title}
@@ -66,13 +66,13 @@ export default function LeftSideTabs({ settings }: any) {
                                 <div key={i} className={`grid ${JSON.parse(page.field).image[i] ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} grid-cols-1 gap-4`}>
                                     <>
                                         <div className={i % 2 === 0 ? 'flex-1 order-1' : 'flex-1 order-1 lg:order-2'}>
-                                            <div className="font-medium text-2xl text-[#4356A2]">{f}</div>
+                                            <div className="font-medium text-2xl text-theme">{f}</div>
                                             <div dangerouslySetInnerHTML={{ __html: JSON.parse(page.field).description[i] }} ></div>
                                         </div>
                                         <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-2 lg:order-1'}>
                                             {
                                                 JSON.parse(page.field).image[i] ?
-                                                    <img src={config.imgBaseURL + `/page/other/${JSON.parse(page.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-[#4356A2] w-full" />
+                                                    <img src={config.imgBaseURL + `/page/other/${JSON.parse(page.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-theme w-full" />
                                                     : ''
                                             }
                                         </div>

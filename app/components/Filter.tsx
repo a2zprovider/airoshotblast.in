@@ -75,7 +75,7 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
                             <div className="font-normal text-[#131B23] text-xl md:max-h-auto overflow-auto catModalContent">
                                 {categories.map((category: any, index: any) => (
                                     <div className="" key={index}>
-                                        <div className="flex justify-between items-center py-2 px-4 bg-[#DEE5FD] border-b">
+                                        <div className="flex justify-between items-center py-2 px-4 bg-theme1 border-b">
                                             <label htmlFor={'cat' + index} className="line-clamp-1">{category.title}</label>
 
                                             <label className="inline-flex items-center space-x-2">
@@ -84,7 +84,7 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
                                                     checked={selectedCategories.some((cat) => cat._id === category._id)}
                                                     id={'cat' + index}
                                                     className="hidden peer" />
-                                                <div className="w-5 h-5 border-2 border-[#131B23] rounded-lg flex items-center justify-center peer-checked:bg-[#4356A2] text-transparent peer-checked:text-white ">
+                                                <div className="w-5 h-5 border-2 border-[#131B23] rounded-lg flex items-center justify-center peer-checked:bg-theme text-transparent peer-checked:text-white ">
                                                     <i className="fa fa-check text-[10px]"></i>
                                                 </div>
                                             </label>
@@ -98,7 +98,7 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
                                                             onChange={() => changeCategory(scat)}
                                                             checked={selectedCategories.some((cat) => cat._id === scat._id)}
                                                             id={'cat' + index + i} className="hidden peer" />
-                                                        <div className="w-5 h-5 border-2 border-[#131B23] rounded-lg flex items-center justify-center peer-checked:bg-[#4356A2] text-transparent peer-checked:text-white ">
+                                                        <div className="w-5 h-5 border-2 border-[#131B23] rounded-lg flex items-center justify-center peer-checked:bg-theme text-transparent peer-checked:text-white ">
                                                             <i className="fa fa-check text-[10px]"></i>
                                                         </div>
                                                     </label>
@@ -109,8 +109,8 @@ export default function Filter({ isOpen, onClose, onApplyFilter, selectedAllCate
                                 ))}
                             </div>
                             <div className="flex items-center justify-between py-4 px-4">
-                                <button title="Clear All" onClick={clearAll} className="bg-[#4356A2] text-lg text-white font-medium rounded-[10px] px-3 py-2">Clear All</button>
-                                <button title="Apply Now" onClick={applyFilter} className="bg-[#4356A2] text-lg text-white font-medium rounded-[10px] px-3 py-2">Apply Now</button>
+                                <button title="Clear All" onClick={clearAll} className="bg-theme text-lg text-white font-medium rounded-[10px] px-3 py-2">Clear All</button>
+                                <button title="Apply Now" onClick={applyFilter} className="bg-theme text-lg text-white font-medium rounded-[10px] px-3 py-2">Apply Now</button>
                             </div>
                         </div>
                     </div>

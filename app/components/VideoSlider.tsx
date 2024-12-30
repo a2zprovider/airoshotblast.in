@@ -121,7 +121,7 @@ const VideoSlider = () => {
                     <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-blue-600' : 'bg-gray-300'}`}
+                        className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-theme' : 'bg-gray-300'}`}
                         aria-label={`Go to slide ${index + 1}`} title={`Go to slide ${index + 1}`}
                     ></button>
                 ))}

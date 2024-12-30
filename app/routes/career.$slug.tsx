@@ -161,7 +161,7 @@ export default function CareerDetail() {
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
-                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
+                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-theme underline">Pages</div>
                         </div>
                         <div className="py-3">
                             <div className="flex md:flex-row flex-col gap-2 min-h-screen">
@@ -173,7 +173,7 @@ export default function CareerDetail() {
                                                 <li key={index}>
                                                     <button
                                                         className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${slug == page.slug
-                                                            ? "bg-[#4356A2] border-[#4356A2] text-white"
+                                                            ? "bg-theme border-theme text-white"
                                                             : "text-gray-700 border-[#CCCCCC80]"
                                                             }`}
                                                         title={page.title}
@@ -186,7 +186,7 @@ export default function CareerDetail() {
                                         ))}
                                         <li>
                                             <button
-                                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-[#4356A2] border-[#4356A2] text-white"
+                                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-theme border-theme text-white"
                                                 onClick={() => handleClick('/careers')}
                                                 title="Career"
                                             >
@@ -201,19 +201,19 @@ export default function CareerDetail() {
                                     <div className="px-2">
                                         <div className="content-detail">
                                             <div className="pb-4">
-                                                <div className="font-medium text-2xl text-[#4356A2]">Job Title:</div>
+                                                <div className="font-medium text-2xl text-theme">Job Title:</div>
                                                 <p className="font-normal text-[#131B23] text-lg">{careers.data.title}</p>
                                             </div>
                                             <div className="pb-4">
-                                                <div className="font-medium text-2xl text-[#4356A2]">Job Vacancy:</div>
+                                                <div className="font-medium text-2xl text-theme">Job Vacancy:</div>
                                                 <p className="font-normal text-[#131B23] text-lg">{careers.data.vacancy}</p>
                                             </div>
                                             <div className="pb-4">
-                                                <div className="font-medium text-2xl text-[#4356A2]">Office Address:</div>
+                                                <div className="font-medium text-2xl text-theme">Office Address:</div>
                                                 <p className="font-normal text-[#131B23] text-lg">{careers.data.address}</p>
                                             </div>
                                             <div className="pb-4">
-                                                <div className="font-medium text-2xl text-[#4356A2]">Job Overview:</div>
+                                                <div className="font-medium text-2xl text-theme">Job Overview:</div>
                                                 <p className="content-detailsfont-normal text-[#131B23] text-lg text-justify">
                                                     <div dangerouslySetInnerHTML={{ __html: careers.data.description }} ></div>
                                                 </p>
@@ -224,7 +224,7 @@ export default function CareerDetail() {
                                                 <input type="hidden" name="career" defaultValue={careers.data._id} />
                                                 <span className="flex flex-col md:flex-row items-center gap-2">
                                                     <input type="file" name="resume" id="resume" className="hidden" placeholder="" onChange={handleFileChange} />
-                                                    <label htmlFor="resume" className="flex items-center bg-[#4356A2] text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px] gap-2"><i className="fa fa-upload"></i><div className="text-xl">Upload Resume</div></label>
+                                                    <label htmlFor="resume" className="flex items-center bg-theme text-[#F6F6F6] font-medium text-xl py-2 px-3 rounded-[10px] gap-2"><i className="fa fa-upload"></i><div className="text-xl">Upload Resume</div></label>
                                                     <span className="text-gray-700">{fileName}</span>
                                                 </span>
                                                 {
@@ -258,7 +258,7 @@ export function ErrorBoundary() {
                             <div className="font-medium text-3xl mb-5">{error.statusText}</div>
                             <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
                             <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>

@@ -11,7 +11,7 @@ const StatusShow = () => {
             <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-[10001]" onClick={closeStatusShow}>
                 <div className="relative bg-[#E9F1F7] rounded-2xl shadow-lg w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
                     <div className="flex justify-center items-center mb-4">
-                        <div className={`w-[110px] h-[110px] bg-[#4356A2] ${data.status ? '' : ''} rounded-full flex items-center justify-center`}>
+                        <div className={`w-[110px] h-[110px] bg-theme ${data.status ? '' : ''} rounded-full flex items-center justify-center`}>
                             {data.status ? <i className='fa fa-check text-6xl text-white'></i> : <i className='fa fa-times text-6xl text-white'></i>}
                         </div>
                     </div>

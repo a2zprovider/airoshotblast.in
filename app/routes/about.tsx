@@ -108,7 +108,7 @@ export default function About() {
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
-                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">About Us</div>
+                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-theme underline">About Us</div>
                         </div>
                         <div className="py-3">
                             <LeftSideTabs settings={settings} />
@@ -132,7 +132,7 @@ export function ErrorBoundary() {
                             <div className="font-medium text-3xl mb-5">{error.statusText}</div>
                             <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
                             <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>
