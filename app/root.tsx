@@ -46,7 +46,6 @@ export let loader: LoaderFunction = async ({ request }) => {
   const cachedSettings = cache[settingsCacheKey];
 
   const url = new URL(request.url);
-  console.log('url : ', url);
 
   const baseUrl = `${url.origin}`;
   const full_url = `${url.origin}${url.pathname}`;

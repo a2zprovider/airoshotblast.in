@@ -112,6 +112,10 @@ export default function Blog() {
             "item": full_url
         }]
     }
+    const filteredBlogs = blogs.data.data.filter((blog: any) => {
+        const blogYear = new Date(blog.createdAt).getFullYear().toString(); // Adjust according to your date format
+        return year ? blogYear === year : true;
+    });
     return (
         <div className="bg-[#E9F1F799]">
             <head>
@@ -171,13 +175,13 @@ export default function Blog() {
                             </div>
                             <div className="lg:w-3/4 pb-4">
                                 <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-[1.3rem]">
-                                    {blogs.data.data.map((blog: any, index: any) => (
+                                    {filteredBlogs.map((blog: any, index: any) => (
                                         <div key={index}>
                                             <BlogCard blog={blog} />
                                         </div>
                                     ))}
                                 </div>
-                                {!(blogs.data.data).length ?
+                                {!(filteredBlogs).length ?
                                     <div className="font-normal text-[#131B23] text-lg text-center">No Blogs Found.</div>
                                     : ''
                                 }

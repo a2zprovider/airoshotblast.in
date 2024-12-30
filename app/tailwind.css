@@ -21,7 +21,7 @@ body {
     }
 
     .content-details a {
-        @apply text-theme hover:underline
+        @apply text-theme hover:underline font-semibold
     }
 
     .content-details h1, .content-details h2, .content-details h3, .content-details h4, .content-details h5, .content-details h6 {

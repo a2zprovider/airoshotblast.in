@@ -93,7 +93,6 @@ export default function ProductSingle() {
     };
 
     const [activeTab, setActiveTab] = useState(0);
-
     const [btnLoading, setBtnLoading] = useState(false);
 
     const tabs = ["Additional Information", "Applications", "Product Description"]; // Define your tabs here
@@ -155,6 +154,10 @@ export default function ProductSingle() {
         };
 
         fetchCountryCodes();
+
+        if (!(JSON.parse(product.data.field).name.length)) {
+            setActiveTab(1);
+        }
     }, []);
 
     const [isVisible, setIsVisible] = useState(false);
@@ -242,14 +245,14 @@ export default function ProductSingle() {
                                                 <button
                                                     onClick={handlePrev}
                                                     title="Prev Buttons"
-                                                    className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0"
+                                                    className={`${images.length <= 1 ? 'hidden' : 'block'} absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0`}
                                                 >
                                                     <i className="fa fa-chevron-left"></i>
                                                 </button>
                                                 <button
                                                     onClick={handleNext}
                                                     title="Next Buttons"
-                                                    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0"
+                                                    className={`${images.length <= 1 ? 'hidden' : 'block'} absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-500 rounded-full text-white px-4 py-[1px] landing-0`}
                                                 >
                                                     <i className="fa fa-chevron-right"></i>
                                                 </button>
@@ -284,17 +287,19 @@ export default function ProductSingle() {
                                             </div>
                                         </div>
                                         {/* <div className="text-2xl text-[#BF0707] font-normal py-2">{product.data.price}</div> */}
-                                        <div>
-                                            <div className="text-[#131B23] bg-theme1 text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
-                                            <div className="p-4">
-                                                {JSON.parse(product.data.field).name.map((f: any, index: any) => (
-                                                    <div className="grid grid-cols-2 gap-5" key={index}>
-                                                        <div>{f} :</div>
-                                                        <div>{JSON.parse(product.data.field).value[index]}</div>
-                                                    </div>
-                                                ))}
+                                        {JSON.parse(product.data.field).name.length ?
+                                            <div>
+                                                <div className="text-[#131B23] bg-theme1 text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
+                                                <div className="p-4">
+                                                    {JSON.parse(product.data.field).name.map((f: any, index: any) => (
+                                                        <div className="grid grid-cols-2 gap-5" key={index}>
+                                                            <div>{f} :</div>
+                                                            <div>{JSON.parse(product.data.field).value[index]}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                            : <></>}
                                         <div className="bg-[#00539C] p-4">
                                             <div className="flex flex-col md:flex-row justify-between items-center">
                                                 <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
@@ -310,7 +315,7 @@ export default function ProductSingle() {
                                                                 <option value="">Loading...</option>
                                                             ) : (
                                                                 countryCodes.map((country, index) => (
-                                                                    country.dial_code == '+91' ?
+                                                                    country.dial_code == '+971' ?
                                                                         <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
                                                                         :
                                                                         <option key={index} value={country.dial_code}>{country.dial_code}</option>
@@ -362,18 +367,33 @@ export default function ProductSingle() {
                                     <div>
                                         <ul className="flex flex-col md:flex-row items-center justify-between w-full">
                                             {tabs.map((tab, index) => (
-                                                <li key={index} className="w-full">
-                                                    <button
-                                                        className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0 bg-theme1 ${activeTab === index
-                                                            ? "text-theme"
-                                                            : "text-[#131B23]"
-                                                            }`}
-                                                        title={tab}
-                                                        onClick={() => setActiveTab(index)}
-                                                    >
-                                                        <span className={activeTab === index ? "border-b-[3px] border-theme py-4 px-2" : ""}>{tab}</span>
-                                                    </button>
-                                                </li>
+                                                !JSON.parse(product.data.field1).name.length ?
+                                                    tab != 'Additional Information' ?
+                                                        <li key={index} className="w-full">
+                                                            <button
+                                                                className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0 bg-theme1 ${activeTab === index
+                                                                    ? "text-theme"
+                                                                    : "text-[#131B23]"
+                                                                    }`}
+                                                                title={tab}
+                                                                onClick={() => setActiveTab(index)}
+                                                            >
+                                                                <span className={activeTab === index ? "border-b-[3px] border-theme py-4 px-2" : ""}>{tab}</span>
+                                                            </button>
+                                                        </li>
+                                                        : <></>
+                                                    : <li key={index} className="w-full">
+                                                        <button
+                                                            className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0 bg-theme1 ${activeTab === index
+                                                                ? "text-theme"
+                                                                : "text-[#131B23]"
+                                                                }`}
+                                                            title={tab}
+                                                            onClick={() => setActiveTab(index)}
+                                                        >
+                                                            <span className={activeTab === index ? "border-b-[3px] border-theme py-4 px-2" : ""}>{tab}</span>
+                                                        </button>
+                                                    </li>
                                             ))}
                                         </ul>
                                     </div>
@@ -381,18 +401,20 @@ export default function ProductSingle() {
                                     {/* Content Area */}
                                     <div className="">
                                         <div className="px-2">
-                                            <div className={`${activeTab === 0 ? 'block' : 'hidden'} content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
-                                                <table className="w-full">
-                                                    <tbody>
-                                                        {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
-                                                            <tr className="bg-[#f1f1f1]" key={index}>
-                                                                <td className="px-4 py-2">{f1} : </td>
-                                                                <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            {JSON.parse(product.data.field1).name.length ?
+                                                <div className={`${activeTab === 0 ? 'block' : 'hidden'} content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
+                                                    <table className="w-full">
+                                                        <tbody>
+                                                            {JSON.parse(product.data.field1).name.map((f1: any, index: any) => (
+                                                                <tr className="bg-[#f1f1f1]" key={index}>
+                                                                    <td className="px-4 py-2">{f1} : </td>
+                                                                    <td className="px-4 py-2">{JSON.parse(product.data.field1).value[index]}</td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                : <></>}
                                             <div className={`${activeTab === 1 ? 'block' : 'hidden'} content-details applications font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
                                                 <p>
                                                     <div dangerouslySetInnerHTML={{ __html: product.data.application }} ></div>
@@ -437,7 +459,7 @@ export default function ProductSingle() {
                                                                         <option value="">Loading...</option>
                                                                     ) : (
                                                                         countryCodes.map((country, index) => (
-                                                                            country.dial_code == '+91' ?
+                                                                            country.dial_code == '+971' ?
                                                                                 <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
                                                                                 :
                                                                                 <option key={index} value={country.dial_code}>{country.dial_code}</option>

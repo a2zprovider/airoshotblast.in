@@ -155,7 +155,7 @@ const EnquiryDetail = (data: any) => {
                                         <option value="">Loading...</option>
                                     ) : (
                                         countryCodes.map((country, index) => (
-                                            country.dial_code == '+91' ?
+                                            country.dial_code == '+971' ?
                                                 <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
                                                 :
                                                 <option key={index} value={country.dial_code}>{country.dial_code}</option>

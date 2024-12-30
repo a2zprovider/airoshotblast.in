@@ -236,7 +236,7 @@ export default function Contact() {
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
-                            <div className="bg-theme p-4">
+                            <div className="bg-formbg p-4">
                                 <div className="font-medium text-lg text-[#f6f6f6] text-center py-2">Tell us your requirement, and we'll send you quotes</div>
 
                                 <form onSubmit={handleSubmit} id="enquiry-form" className="mt-4">
@@ -274,7 +274,7 @@ export default function Contact() {
                                                         <option value="">Loading...</option>
                                                     ) : (
                                                         countryCodes.map((country, index) => (
-                                                            country.dial_code == '+91' ?
+                                                            country.dial_code == '+971' ?
                                                                 <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
                                                                 :
                                                                 <option key={index} value={country.dial_code}>{country.dial_code}</option>
