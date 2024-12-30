@@ -180,7 +180,7 @@ export default function Products() {
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex flex-row overflow-auto items-center py-2 gap-4">
-                        <button onClick={openFilter} title="Filter" className="bg-[#4356A2] text-lg text-white font-medium rounded-md flex items-center gap-2 px-3 py-2">
+                        <button onClick={openFilter} title="Filter" className="bg-theme text-lg text-white font-medium rounded-md flex items-center gap-2 px-3 py-2">
                             <i className="fa fa-sliders-h"></i>
                             <span className="md:block hidden text-lg">Filter</span>
                         </button>
@@ -228,7 +228,7 @@ export function ErrorBoundary() {
                             <div className="font-medium text-3xl mb-5">{error.statusText}</div>
                             <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
                             <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>

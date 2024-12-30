@@ -64,13 +64,13 @@ export const meta: MetaFunction = ({ data }: any) => {
         { name: "og:url", content: full_url },
         { name: "og:title", content: product.data.title },
         { name: "og:description", content: product.data.seo_description },
-        { name: "og:image", content: config.imgBaseURL + 'product/' + product.data.image },
+        { name: "og:image", content: config.imgBaseURL + 'product/thumb/' + product.data.thumb_image },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: product.data.title },
         { name: "twitter:description", content: product.data.seo_description },
-        { name: "twitter:image", content: config.imgBaseURL + 'product/' + product.data.image },
+        { name: "twitter:image", content: config.imgBaseURL + 'product/thumb/' + product.data.thumb_image },
     ];
 };
 
@@ -223,7 +223,7 @@ export default function ProductSingle() {
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
-                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Products" to="/products" className="text-sm font-normal text-[#131B23] line-clamp-1">Machines & Abrasives</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline line-clamp-1">{product.data.title}</div>
+                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Products" to="/products" className="text-sm font-normal text-[#131B23] line-clamp-1">Machines & Abrasives</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-theme underline line-clamp-1">{product.data.title}</div>
                         </div>
                         <div className="py-2">
                             <div>
@@ -276,16 +276,16 @@ export default function ProductSingle() {
                                         </div>
                                     </div>
                                     <div className="lg:w-[50%] py-1">
-                                        <div className="text-3xl text-[#131B23] font-normal">{product.data.title}</div>
+                                        <h1 className="text-3xl text-[#131B23] font-normal">{product.data.title}</h1>
                                         <div className="flex items-center space-x-5 mt-4 mb-5">
-                                            <div onClick={() => openEnquiry(product)} className="n_btn2 cursor-pointer bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+                                            <div onClick={() => openEnquiry(product)} className="n_btn2 cursor-pointer bg-theme text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                                                 <i className="fa fa-download"></i>
                                                 <span>Get Quotation</span>
                                             </div>
                                         </div>
                                         {/* <div className="text-2xl text-[#BF0707] font-normal py-2">{product.data.price}</div> */}
                                         <div>
-                                            <div className="text-[#131B23] bg-[#DEE5FD] text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
+                                            <div className="text-[#131B23] bg-theme1 text-2xl font-normal py-3 text-center border-t-[3px] border-[#131B23]">Technical Specification</div>
                                             <div className="p-4">
                                                 {JSON.parse(product.data.field).name.map((f: any, index: any) => (
                                                     <div className="grid grid-cols-2 gap-5" key={index}>
@@ -364,14 +364,14 @@ export default function ProductSingle() {
                                             {tabs.map((tab, index) => (
                                                 <li key={index} className="w-full">
                                                     <button
-                                                        className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0 bg-[#DEE5FD] ${activeTab === index
-                                                            ? "text-[#4356A2]"
+                                                        className={`w-full font-normal text-2xl mb-2 md:mb-0 py-4 px-4 border-t-[3px] border-[#131B23] outline-0 bg-theme1 ${activeTab === index
+                                                            ? "text-theme"
                                                             : "text-[#131B23]"
                                                             }`}
                                                         title={tab}
                                                         onClick={() => setActiveTab(index)}
                                                     >
-                                                        <span className={activeTab === index ? "border-b-[3px] border-[#4356A2] py-4 px-2" : ""}>{tab}</span>
+                                                        <span className={activeTab === index ? "border-b-[3px] border-theme py-4 px-2" : ""}>{tab}</span>
                                                     </button>
                                                 </li>
                                             ))}
@@ -413,7 +413,7 @@ export default function ProductSingle() {
                                                         <div>
                                                             <div className="text-xl text-[#131B23] font-normal line-clamp-1">{product.data.title}</div>
                                                             <div className="flex items-center space-x-5 mt-3 mb-4">
-                                                                <div onClick={() => openEnquiry(product)} className="n_btn2 cursor-pointer bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+                                                                <div onClick={() => openEnquiry(product)} className="n_btn2 cursor-pointer bg-theme text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                                                                     <i className="fa fa-download"></i>
                                                                     <span>Get Quotation</span>
                                                                 </div>
@@ -526,7 +526,7 @@ export function ErrorBoundary() {
                             <div className="font-medium text-3xl mb-5">{error.statusText}</div>
                             <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
                             <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>

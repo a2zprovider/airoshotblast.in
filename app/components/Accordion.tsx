@@ -18,7 +18,7 @@ export default function Accordion({ faqs }: any) {
           {/* Accordion Header */}
           <button
             onClick={() => toggleAccordion(index)}
-            className="w-full p-4 text-left bg-[#4356A2]"
+            className="w-full p-4 text-left bg-theme"
             title='header'
           >
             <div className="flex justify-between items-center text-white">
