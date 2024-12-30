@@ -16,7 +16,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
 
-        const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+        const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
         setTimeout(() => {
             delete cache[settingsCacheKey];
         }, CACHE_EXPIRATION_TIME);
@@ -236,7 +236,7 @@ export default function Contact() {
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
-                            <div className="bg-theme p-4">
+                            <div className="bg-formbg p-4">
                                 <div className="font-medium text-lg text-[#f6f6f6] text-center py-2">Tell us your requirement, and we'll send you quotes</div>
 
                                 <form onSubmit={handleSubmit} id="enquiry-form" className="mt-4">
@@ -274,7 +274,7 @@ export default function Contact() {
                                                         <option value="">Loading...</option>
                                                     ) : (
                                                         countryCodes.map((country, index) => (
-                                                            country.dial_code == '+91' ?
+                                                            country.dial_code == '+971' ?
                                                                 <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
                                                                 :
                                                                 <option key={index} value={country.dial_code}>{country.dial_code}</option>
@@ -324,10 +324,12 @@ export default function Contact() {
                                             <div className="text-[#131B23] text-lg text-normal">{settings.data.address}</div>
                                         </div>
                                         : <></>}
-                                    <div className="flex items-center justify-center gap-4 py-3">
-                                        <i className="fa fa-phone rotate-90"></i>
-                                        <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{formatPhoneNumber(settings.data.mobile)}</Link>
-                                    </div>
+                                    {settings?.data?.mobileStatus ?
+                                        <div className="flex items-center justify-center gap-4 py-3">
+                                            <i className="fa fa-phone rotate-90"></i>
+                                            <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{formatPhoneNumber(settings.data.mobile)}</Link>
+                                        </div>
+                                        : <></>}
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-envelope"></i>
                                         <Link title="Mail Us" to={'mailto:' + settings.data.email} className="text-[#131B23] text-lg text-normal">{settings.data.email}</Link>

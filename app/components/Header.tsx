@@ -50,10 +50,17 @@ export default function Header({ settings }: any) {
               </Link>
             </div>
             <div className="text-right">
-              <Link title={formatPhoneNumber(settings?.mobile)} to={'tel:' + settings?.mobile} className="n_btn2 bg-theme text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
-                <i className="fa fa-phone rotate-90"></i>
-                <span className="md:block hidden">Call Us Now</span>
-              </Link>
+              {settings?.mobileStatus ?
+                <Link title={formatPhoneNumber(settings?.mobile)} to={'tel:' + settings?.mobile} className="n_btn2 bg-theme text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+                  <i className="fa fa-phone rotate-90"></i>
+                  <span className="md:block hidden">Call Us Now</span>
+                </Link>
+                :
+                <div onClick={() => openEnquiry('')} className="n_btn2 bg-theme text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+                  <i className="fa fa-phone rotate-90"></i>
+                  <span className="md:block hidden">Call Us Now</span>
+                </div>
+              }
             </div>
           </div>
         </div>
@@ -179,12 +186,15 @@ export default function Header({ settings }: any) {
         <div onClick={() => openEnquiry('')} title="Enquiry" className="group fixed bottom-[110px] md:bottom-[160px] right-[10px] z-[9] gradient_btn h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
           <i className="fa fa-file-alt text-white text-lg md:text-2xl group-hover:animate-shake1"></i>
         </div>
-        <Link to={`tel:${settings?.mobile}`} title={formatPhoneNumber(settings?.mobile)} className="group fixed bottom-[60px] md:bottom-[90px] right-[10px] z-[9] gradient_btn h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
-          <i className="fa fa-phone text-white rotate-90 text-lg md:text-2xl group-hover:animate-shake"></i>
-        </Link>
-        <Link to={`https://wa.me/${settings?.mobile}?text=${encodedMessage}`} title="Whatsapp" target="_blank" className="group fixed bottom-[10px] md:bottom-[20px] right-[10px] z-[9] bg-[#25d366] h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
-          <i className="fab fa-whatsapp text-white text-lg md:text-2xl group-hover:animate-shake1"></i>
-        </Link>
+        {settings?.mobileStatus ?
+          <>
+            <Link to={`tel:${settings?.mobile}`} title={formatPhoneNumber(settings?.mobile)} className="group fixed bottom-[60px] md:bottom-[90px] right-[10px] z-[9] gradient_btn h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
+              <i className="fa fa-phone text-white rotate-90 text-lg md:text-2xl group-hover:animate-shake"></i>
+            </Link>
+            <Link to={`https://wa.me/${settings?.mobile}?text=${encodedMessage}`} title="Whatsapp" target="_blank" className="group fixed bottom-[10px] md:bottom-[20px] right-[10px] z-[9] bg-[#25d366] h-[40px] w-[40px] md:h-[50px] md:w-[50px] rounded-full flex items-center justify-center shadow-xl animate-zoom-in-out">
+              <i className="fab fa-whatsapp text-white text-lg md:text-2xl group-hover:animate-shake1"></i>
+            </Link>
+          </> : <></>}
       </div>
     </>
   );
