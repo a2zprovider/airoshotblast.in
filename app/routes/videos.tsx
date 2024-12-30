@@ -28,7 +28,7 @@ export let loader: LoaderFunction = async ({ request }) => {
             settings = cachedSettings;
         }
 
-        const video = await fetch(config.apiBaseURL + 'video');
+        const video = await fetch(config.apiBaseURL + 'video?limit=100');
         if (!video.ok) { throw video; }
         const videos = await video.json();
 
