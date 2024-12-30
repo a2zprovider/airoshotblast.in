@@ -17,7 +17,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
 
-        const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+        const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
         setTimeout(() => {
             delete cache[settingsCacheKey];
         }, CACHE_EXPIRATION_TIME);
@@ -303,7 +303,9 @@ export default function ProductSingle() {
                                         <div className="bg-[#00539C] p-4">
                                             <div className="flex flex-col md:flex-row justify-between items-center">
                                                 <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
-                                                <Link title={formatPhoneNumber(settings.data.mobile)} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {formatPhoneNumber(settings.data.mobile)}</span></Link>
+                                                {settings?.data?.mobileStatus ?
+                                                    <Link title={formatPhoneNumber(settings.data.mobile)} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {formatPhoneNumber(settings.data.mobile)}</span></Link>
+                                                    : <></>}
                                             </div>
                                             <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                 <div className="flex items-center shadow-md">
@@ -447,7 +449,9 @@ export default function ProductSingle() {
                                                 <div className="w-[100%] md:w-[50%] bg-[#00539C] p-4">
                                                     <div className="flex flex-col md:flex-row justify-between items-center">
                                                         <div className="text-[#F6F6F6] text-2xl font-medium">Request Urgent Quote</div>
-                                                        <Link title={formatPhoneNumber(settings.data.mobile)} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {formatPhoneNumber(settings.data.mobile)}</span></Link>
+                                                        {settings?.data?.mobileStatus ?
+                                                            <Link title={formatPhoneNumber(settings.data.mobile)} to={'tel:' + settings.data.mobile} className="text-[#F6F6F6] text-lg font-medium hover:underline"><i className="fa fa-phone rotate-90"></i> <span> {formatPhoneNumber(settings.data.mobile)}</span></Link>
+                                                            : <></>}
                                                     </div>
                                                     <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                         <div className="flex items-center shadow-md">

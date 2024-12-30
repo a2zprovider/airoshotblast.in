@@ -18,7 +18,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     const settingsCacheKey = `settings`;
     const cachedSettings = cache[settingsCacheKey];
 
-    const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+    const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
     setTimeout(() => {
       delete cache[settingsCacheKey];
     }, CACHE_EXPIRATION_TIME);
@@ -101,7 +101,7 @@ export default function Index() {
     "logo": config.imgBaseURL + 'setting/logo/' + settings.data.logo,
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": settings.data.mobile,
+      "telephone": settings?.data?.mobileStatus ? settings.data.mobile : '',
       "contactType": "sales",
       "areaServed": "IN",
       "availableLanguage": "en"

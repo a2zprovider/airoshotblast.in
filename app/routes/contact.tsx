@@ -16,7 +16,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
 
-        const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+        const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
         setTimeout(() => {
             delete cache[settingsCacheKey];
         }, CACHE_EXPIRATION_TIME);
@@ -324,10 +324,12 @@ export default function Contact() {
                                             <div className="text-[#131B23] text-lg text-normal">{settings.data.address}</div>
                                         </div>
                                         : <></>}
-                                    <div className="flex items-center justify-center gap-4 py-3">
-                                        <i className="fa fa-phone rotate-90"></i>
-                                        <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{formatPhoneNumber(settings.data.mobile)}</Link>
-                                    </div>
+                                    {settings?.data?.mobileStatus ?
+                                        <div className="flex items-center justify-center gap-4 py-3">
+                                            <i className="fa fa-phone rotate-90"></i>
+                                            <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{formatPhoneNumber(settings.data.mobile)}</Link>
+                                        </div>
+                                        : <></>}
                                     <div className="flex items-center justify-center gap-4 py-3">
                                         <i className="fa fa-envelope"></i>
                                         <Link title="Mail Us" to={'mailto:' + settings.data.email} className="text-[#131B23] text-lg text-normal">{settings.data.email}</Link>
