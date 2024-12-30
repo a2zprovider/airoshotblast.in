@@ -86,8 +86,12 @@ const QuickView = () => {
                             </div>
                             <div className="flex items-center gap-2 w-full px-3 md:px-0 md:mx-0 md:pr-3">
                                 <button onClick={() => openEnquiry(product)} title='Enquiry' className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] w-full px-3 py-2 bg-theme text-lg text-white font-medium rounded-md h-[44px] gap-3"><i className="fa fa-paper-plane"></i> &nbsp; <span className="text-lg">Send Inquiry</span></button>
-                                <Link title='Call Us' to={'tel:' + setting?.data?.mobile} className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-white bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
-                                <Link title='Whatsapp' to={`https://api.whatsapp.com/send?phone=${setting?.data?.mobile}&text=${product.title}`} target='_blank' className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-white bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
+                                {setting?.data?.mobileStatus ?
+                                    <>
+                                        <Link title='Call Us' to={'tel:' + setting?.data?.mobile} className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-white bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fa fa-phone rotate-90"></i></Link>
+                                        <Link title='Whatsapp' to={`https://api.whatsapp.com/send?phone=${setting?.data?.mobile}&text=${product.title}`} target='_blank' className="n_btn2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-white bg-white text-[#131B23] border border-[#131B23] px-3 py-2 rounded-lg text-lg h-[44px]"><i className="fab fa-whatsapp"></i></Link>
+                                    </>
+                                    : <></>}
                             </div>
                             <div className="py-4 px-3 md:px-0">
                                 <button onClick={() => handleClick(`/product/${product.slug}`)} title='Product Detail' className=" flex items-center text-[#131B23] font-medium text-xl"><div className="text-xl">View Full Details</div> <span className="text-2xl">&nbsp;</span> &#11111; <i className="fa fa-arrow-trend-up"></i></button>

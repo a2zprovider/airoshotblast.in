@@ -46,12 +46,11 @@ export let loader: LoaderFunction = async ({ request }) => {
   const cachedSettings = cache[settingsCacheKey];
 
   const url = new URL(request.url);
-  console.log('url : ', url);
 
   const baseUrl = `${url.origin}`;
   const full_url = `${url.origin}${url.pathname}`;
 
-  const CACHE_EXPIRATION_TIME = 10 * 60 * 1000;
+  const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
   setTimeout(() => {
     delete cache[settingsCacheKey];
     console.error('Setting cache clear');
