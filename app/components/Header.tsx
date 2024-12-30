@@ -39,7 +39,7 @@ export default function Header({ settings }: any) {
         <div className="container mx-auto md:py-3">
           <div className="flex items-center justify-between">
             <div className="text-left">
-              <Link title={settings?.email} to={'mailto:' + settings?.email} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+              <Link title={settings?.email} to={'mailto:' + settings?.email} className="n_btn2 bg-theme text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-envelope "></i>
                 <span className="md:block hidden">Send Inquiry</span>
               </Link>
@@ -50,7 +50,7 @@ export default function Header({ settings }: any) {
               </Link>
             </div>
             <div className="text-right">
-              <Link title={formatPhoneNumber(settings?.mobile)} to={'tel:' + settings?.mobile} className="n_btn2 bg-[#4356A2] text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
+              <Link title={formatPhoneNumber(settings?.mobile)} to={'tel:' + settings?.mobile} className="n_btn2 bg-theme text-base text-white font-normal rounded-md flex items-center gap-2 px-3 py-2 relative overflow-hidden z-0 transition duration-[800ms]">
                 <i className="fa fa-phone rotate-90"></i>
                 <span className="md:block hidden">Call Us Now</span>
               </Link>
@@ -58,7 +58,7 @@ export default function Header({ settings }: any) {
           </div>
         </div>
       </header>
-      <div className="bg-[#dee5fd] sticky top-0 z-50 border-y border-[#D9D9D999]">
+      <div className="bg-theme1 sticky top-0 z-50 border-y border-[#D9D9D999]">
         <div className="container mx-auto py-3">
           <div className="flex items-center justify-between">
             {/* Desktop Menu */}
@@ -113,7 +113,7 @@ export default function Header({ settings }: any) {
                   placeholder="Search Here..."
                   className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23] hover:border-[#131B23] transition-all duration-[800ms] ease-out"
                 />
-                <button type="submit" title="Submit" className="n_btn1 px-4 py-2 bg-[#131B23] text-base text-white font-medium rounded-r-md w-full text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2] border-[1px] border-[#131B23]"><i className="fa fa-search"></i></button>
+                <button type="submit" title="Submit" className="n_btn1 px-4 py-2 bg-[#131B23] text-base text-white font-medium rounded-r-md w-full text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-theme border-[1px] border-[#131B23]"><i className="fa fa-search"></i></button>
               </form>
             </div>
           </div>
@@ -132,12 +132,12 @@ export default function Header({ settings }: any) {
             <hr className="border-[#ffffff45]" />
             <nav>
               <div className="space-y-2 p-4">
-                <NavLink to="/" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-home mr-3"></i> <span>Home</span></NavLink>
-                <NavLink to="/about" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-info-circle mr-3"></i> <span>About Us</span></NavLink>
-                <NavLink to="/products" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-th-large mr-3"></i> <span>Machines & Abrasives</span></NavLink>
-                <NavLink to="/videos" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fab fa-youtube mr-3"></i> <span>Videos</span></NavLink>
-                <NavLink to="/blogs" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-blog mr-3"></i> <span>Blogs</span></NavLink>
-                <NavLink to="/contact" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-[#4356A2] bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-phone rotate-90 mr-3"></i> <span>Contact Us</span></NavLink>
+                <NavLink to="/" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-theme bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-home mr-3"></i> <span>Home</span></NavLink>
+                <NavLink to="/about" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-theme bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-info-circle mr-3"></i> <span>About Us</span></NavLink>
+                <NavLink to="/products" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-theme bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-th-large mr-3"></i> <span>Machines & Abrasives</span></NavLink>
+                <NavLink to="/videos" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-theme bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fab fa-youtube mr-3"></i> <span>Videos</span></NavLink>
+                <NavLink to="/blogs" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-theme bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-blog mr-3"></i> <span>Blogs</span></NavLink>
+                <NavLink to="/contact" onClick={toggleMenu} className={({ isActive }) => isActive ? "block text-theme bg-[#fff] px-3 rounded" : "block text-[#fff] px-3"}><i className="fa fa-phone rotate-90 mr-3"></i> <span>Contact Us</span></NavLink>
               </div>
             </nav>
             <div className="lg:hidden absolute left-[50%] bottom-[20px]">

@@ -155,11 +155,11 @@ const EnquiryForm = () => {
                     <div id="recaptcha-container" className="mb-1 md:mb-0"></div>
                     {
                         btnLoading ?
-                            <button type="submit" title='Processing' className="n_btn2 bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#fff] flex items-center justify-center gap-3" disabled>
+                            <button type="submit" title='Processing' className="n_btn2 bg-white text-lg text-theme font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#fff] flex items-center justify-center gap-3" disabled>
                                 <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                             </button>
                             :
-                            <button type="submit" title='Submit' className="n_btn2 bg-white text-lg text-[#4356A2] font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#fff]">Submit</button>
+                            <button type="submit" title='Submit' className="n_btn2 bg-white text-lg text-theme font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#fff]">Submit</button>
                     }
                 </div>
             </form>

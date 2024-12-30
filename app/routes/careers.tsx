@@ -108,7 +108,7 @@ export default function Careers() {
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
-                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-[#4356A2] underline">Pages</div>
+                            <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-theme underline">Pages</div>
                         </div>
                         <div className="py-3">
                             <div className="flex md:flex-row flex-col gap-2 min-h-screen">
@@ -120,7 +120,7 @@ export default function Careers() {
                                                 <li key={index}>
                                                     <button
                                                         className={`w-full text-left font-medium text-lg py-4 px-4 border outline-0 ${slug == page.slug
-                                                            ? "bg-[#4356A2] border-[#4356A2] text-white"
+                                                            ? "bg-theme border-theme text-white"
                                                             : "text-gray-700 border-[#CCCCCC80]"
                                                             }`}
                                                         title={page.title}
@@ -133,7 +133,7 @@ export default function Careers() {
                                         ))}
                                         <li>
                                             <button
-                                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-[#4356A2] border-[#4356A2] text-white"
+                                                className="w-full text-left font-medium text-lg py-4 px-4 border outline-0 bg-theme border-theme text-white"
                                                 onClick={() => handleClick('/careers')}
                                                 title="Career"
                                             >
@@ -146,12 +146,12 @@ export default function Careers() {
                                 {/* Content Area */}
                                 <div className="md:w-3/4">
                                     <div className="px-2">
-                                        <div className="font-medium text-2xl text-[#4356A2] pb-4">Open Job Positions</div>
+                                        <div className="font-medium text-2xl text-theme pb-4">Open Job Positions</div>
                                         {(careers.data.data).length ?
                                             careers.data.data.map((career: any, index: any) => (
                                                 <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-2 bg-[#F1F1F1] shadow-md md:divide-x divide-[#ccc] mb-4 p-3">
                                                     <div className="px-4 py-2">
-                                                        <div className="text-[#4356A2] text-xl font-medium py-1">{career.title}</div>
+                                                        <div className="text-theme text-xl font-medium py-1">{career.title}</div>
                                                         <div className="flex items-center gap-2 py-1">
                                                             <i className="fa fa-map-marker-alt"></i>
                                                             <div className="text-[#131B23] font-normal text-lg">{career.address}</div>
@@ -160,11 +160,11 @@ export default function Careers() {
                                                     <div className="px-4 py-2">
                                                         <div className="font-normal text-[#131B23] text-lg py-1">
                                                             <span>Posted on: </span>
-                                                            <span className="text-[#4356A2] text-xl font-medium">Nov 13, 2024</span>
+                                                            <span className="text-theme text-xl font-medium">Nov 13, 2024</span>
                                                         </div>
                                                         <div className="font-normal text-[#131B23] text-lg py-1">
                                                             <span>No. of Vacancies: </span>
-                                                            <span className="text-[#4356A2] text-xl font-medium">{career.vacancy}</span>
+                                                            <span className="text-theme text-xl font-medium">{career.vacancy}</span>
                                                         </div>
                                                     </div>
                                                     <div className="p-5 flex items-center justify-center">
@@ -197,7 +197,7 @@ export function ErrorBoundary() {
                             <div className="font-medium text-3xl mb-5">{error.statusText}</div>
                             <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
                             <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>

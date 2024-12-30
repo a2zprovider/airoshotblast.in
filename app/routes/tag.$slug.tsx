@@ -96,14 +96,14 @@ export default function Blog() {
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
-                        <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Blogs" to="/blogs" className="text-sm font-normal text-[#131B23]">Blogs</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-[#4356A2] underline">{blogs.data.title}</div>
+                        <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <Link title="Blogs" to="/blogs" className="text-sm font-normal text-[#131B23]">Blogs</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-theme underline">{blogs.data.title}</div>
                     </div>
                     <div className="py-3">
                         <div className="flex lg:flex-row flex-col gap-4">
                             <div className="lg:w-1/4 pb-4 lg:border-r lg:border-[#dbdada] pr-2">
                                 {blogcategories?.data?.data.length ?
                                     <div className="pb-4">
-                                        <div className="text-[#4356A2] font-medium text-xl underline pb-3">Blog Categories</div>
+                                        <div className="text-theme font-medium text-xl underline pb-3">Blog Categories</div>
                                         <div>
                                             {blogcategories.data.data.map((blogcategory: any, index: any) => (
                                                 <div className="text-lg" key={index}>
@@ -115,7 +115,7 @@ export default function Blog() {
                                     : <></>}
                                 {recent_blogs?.data?.data.length ?
                                     <div className="pb-4">
-                                        <div className="text-[#4356A2] font-medium text-xl underline pb-3">Recent Blogs</div>
+                                        <div className="text-theme font-medium text-xl underline pb-3">Recent Blogs</div>
                                         <div>
                                             {recent_blogs.data.data.map((r_blog: any, index: any) => (
                                                 <div className="text-lg text-normal text-[#131B23] py-1" key={index}>
@@ -128,16 +128,16 @@ export default function Blog() {
                                     : <></>}
                                 {tags?.data?.data.length ?
                                     <div className="pb-4">
-                                        <div className="text-[#4356A2] font-medium text-xl underline pb-5">Latest Tags</div>
+                                        <div className="text-theme font-medium text-xl underline pb-5">Latest Tags</div>
                                         <div className="gap-4 flex flex-wrap">
                                             {tags.data.data.map((tag: any, index: any) => (
-                                                <Link title={tag.title} to={'/tag/' + tag.slug} key={index} className={`text-lg text-normal py-2 px-2 border ${tag.slug == blogs.data.slug ? 'text-[#4356A2] border-[#4356A2]' : 'text-[#131B23] border-[#ccc]'}`}>{tag.title}</Link>
+                                                <Link title={tag.title} to={'/tag/' + tag.slug} key={index} className={`text-lg text-normal py-2 px-2 border ${tag.slug == blogs.data.slug ? 'text-theme border-theme' : 'text-[#131B23] border-[#ccc]'}`}>{tag.title}</Link>
                                             ))}
                                         </div>
                                     </div>
                                     : <></>}
                                 <div className="pb-4">
-                                    <div className="text-[#4356A2] font-medium text-xl underline pb-5">Publishing Year</div>
+                                    <div className="text-theme font-medium text-xl underline pb-5">Publishing Year</div>
                                     <div className="gap-4 flex flex-wrap">
                                         {years.map((year: any, index: any) => (
                                             <Link title={year} key={index} to={'/blogs?year=' + year} className="text-lg text-normal text-[#131B23] py-2 px-2 border border-[#ccc]">{year}</Link>
@@ -146,7 +146,7 @@ export default function Blog() {
                                 </div>
                             </div>
                             <div className="lg:w-3/4 pb-4">
-                                <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6">
+                                <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-[1.3rem]">
                                     {blogs?.blogs?.map((blog: any, index: any) => (
                                         <div key={index}>
                                             <BlogCard blog={blog} />
@@ -174,7 +174,7 @@ export function ErrorBoundary() {
                             <div className="font-medium text-3xl mb-5">{error.statusText}</div>
                             <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
                             <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>

@@ -113,7 +113,7 @@ export function ErrorBoundary() {
               <Link
                 to="/"
                 style={{
-                  backgroundColor: '#4356A2',
+                  backgroundColor: '#079946',
                   color: 'white',
                   borderRadius: '0.375rem',
                   padding: '1.25rem',

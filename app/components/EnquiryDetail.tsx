@@ -106,7 +106,7 @@ const EnquiryDetail = (data: any) => {
 
     return (
         <>
-            <div className="bg-[#4356A2] font-normal text-white text-xl px-10 py-6 rounded-t-2xl text-center">Tell us your requirement, and we'll send you quotes</div>
+            <div className="bg-theme font-normal text-white text-xl px-10 py-6 rounded-t-2xl text-center">Tell us your requirement, and we'll send you quotes</div>
             <div className="p-6">
                 <form onSubmit={handleSubmit} id="enquiry-form1">
                     <div className="flex flex-col mb-2">
@@ -187,11 +187,11 @@ const EnquiryDetail = (data: any) => {
                         <div id="recaptcha-container1" className="mb-1 md:mb-0"></div>
                         {
                             btnLoading ?
-                                <button type="submit" title='Processing' className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2] flex items-center justify-center gap-3" disabled>
+                                <button type="submit" title='Processing' className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-theme flex items-center justify-center gap-3" disabled>
                                     <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                                 </button>
                                 :
-                                <button type="submit" title='submit' className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2]">Submit</button>
+                                <button type="submit" title='submit' className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-theme">Submit</button>
                         }
                     </div>
                 </form>

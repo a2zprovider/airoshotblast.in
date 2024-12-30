@@ -232,11 +232,11 @@ export default function Contact() {
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
-                        <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-[#4356A2] underline">Contact Us</div>
+                        <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-theme underline">Contact Us</div>
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
-                            <div className="bg-[#4356A2] p-4">
+                            <div className="bg-theme p-4">
                                 <div className="font-medium text-lg text-[#f6f6f6] text-center py-2">Tell us your requirement, and we'll send you quotes</div>
 
                                 <form onSubmit={handleSubmit} id="enquiry-form" className="mt-4">
@@ -304,11 +304,11 @@ export default function Contact() {
                                         <div id="recaptcha-container" className="mb-1 md:mb-0"></div>
                                         {
                                             btnLoading ?
-                                                <button type="submit" title="Processing" className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2] flex items-center justify-center gap-3" disabled>
+                                                <button type="submit" title="Processing" className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-theme flex items-center justify-center gap-3" disabled>
                                                     <i className="fa fa-spinner animate-spin"></i> <p className="text-lg">Processing...</p>
                                                 </button>
                                                 :
-                                                <button type="submit" title="Submit" className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-[#4356A2]">Submit</button>
+                                                <button type="submit" title="Submit" className="n_btn1 bg-[#131B23] text-lg text-white font-medium rounded-md w-full h-[75px] text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-theme">Submit</button>
                                         }
                                     </div>
                                 </form>
@@ -359,7 +359,7 @@ export function ErrorBoundary() {
                             <div className="font-medium text-3xl mb-5">{error.statusText}</div>
                             <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
                             <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-[#4356A2] text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
+                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                             </div>
                         </div>
                     </div>
