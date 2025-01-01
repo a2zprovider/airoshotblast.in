@@ -69,70 +69,74 @@ const VideoSlider = () => {
 
     return (
         <div className="relative w-full mx-auto">
-            {/* Product Container */}
-            <div className="overflow-hidden">
-                <div
-                    className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${(currentIndex / visibleItems) * 100}%)` }}
-                >
-                    {videos.map((video: any, index: any) => (
-                        <div key={index} className={cardClass + ` p-2 flex-shrink-0`}>
-                            <div className='flex justify-center'>
-                                <Link title={video.title} to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
-                                    <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
-                                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-                                        <span className="relative flex h-[40px] w-[40px]">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                            <span className="relative inline-flex items-center justify-center rounded-full h-[40px] w-[40px]">
-                                                <i className="fab fa-youtube text-[30px] text-red-500 hover:text-red-600"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                    {!videos.length ?
-                        <div className={cardClass + ` p-2 flex-shrink-0`}>
-                            <div className='flex justify-center'>
-                                <img src={'/video-image.webp'} alt="Video Image" className="shadow-md rounded" />
-                            </div>
-                        </div>
-                        : <></>}
+
+            {!videos.length ?
+                <div className={cardClass + ` p-2 flex-shrink-0`}>
+                    <div className='flex justify-center'>
+                        <img src={'/video-image.webp'} alt="Video Image" className="shadow-md rounded" />
+                    </div>
                 </div>
-            </div>
+                :
+                <>
+                    {/* Product Container */}
+                    <div className="overflow-hidden">
+                        <div
+                            className="flex transition-transform duration-500 ease-in-out"
+                            style={{ transform: `translateX(-${(currentIndex / visibleItems) * 100}%)` }}
+                        >
+                            {videos.map((video: any, index: any) => (
+                                <div key={index} className={cardClass + ` p-2 flex-shrink-0`}>
+                                    <div className='flex justify-center'>
+                                        <Link title={video.title} to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
+                                            <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
+                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+                                                <span className="relative flex h-[40px] w-[40px]">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                    <span className="relative inline-flex items-center justify-center rounded-full h-[40px] w-[40px]">
+                                                        <i className="fab fa-youtube text-[30px] text-red-500 hover:text-red-600"></i>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-            {/* Previous Button */}
-            <button
-                onClick={handlePrevClick}
-                disabled={videos.length <= visibleItems}
-                className={`${videos.length <= visibleItems ? 'hidden' : 'block'} absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
-                aria-label="Previous Slide" title="Previous Slide"
-            >
-                <i className="fa fa-chevron-left"></i>
-            </button>
-
-            {/* Next Button */}
-            <button
-                onClick={handleNextClick}
-                disabled={videos.length <= visibleItems}
-                className={`${videos.length <= visibleItems ? 'hidden' : 'block'} absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
-                aria-label="Next Slide" title="Next Slide"
-            >
-                <i className="fa fa-chevron-right"></i>
-            </button>
-
-            {/* Indicators */}
-            <div className="flex justify-center mt-4 space-x-2">
-                {Array.from({ length: totalSlides }).map((_, index) => (
+                    {/* Previous Button */}
                     <button
-                        key={index}
-                        onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-theme' : 'bg-gray-300'}`}
-                        aria-label={`Go to slide ${index + 1}`} title={`Go to slide ${index + 1}`}
-                    ></button>
-                ))}
-            </div>
+                        onClick={handlePrevClick}
+                        disabled={videos.length <= visibleItems}
+                        className={`${videos.length <= visibleItems ? 'hidden' : 'block'} absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
+                        aria-label="Previous Slide" title="Previous Slide"
+                    >
+                        <i className="fa fa-chevron-left"></i>
+                    </button>
+
+                    {/* Next Button */}
+                    <button
+                        onClick={handleNextClick}
+                        disabled={videos.length <= visibleItems}
+                        className={`${videos.length <= visibleItems ? 'hidden' : 'block'} absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white rounded-full px-4 py-[1px]`}
+                        aria-label="Next Slide" title="Next Slide"
+                    >
+                        <i className="fa fa-chevron-right"></i>
+                    </button>
+
+                    {/* Indicators */}
+                    <div className="flex justify-center mt-4 space-x-2">
+                        {Array.from({ length: totalSlides }).map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => goToSlide(index)}
+                                className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-theme' : 'bg-gray-300'}`}
+                                aria-label={`Go to slide ${index + 1}`} title={`Go to slide ${index + 1}`}
+                            ></button>
+                        ))}
+                    </div>
+                </>
+            }
         </div>
     );
 };
