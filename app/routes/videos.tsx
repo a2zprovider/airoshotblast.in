@@ -101,7 +101,7 @@ export default function Videos() {
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                            {videos.data.data.map((video: any, index: any) => (
+                            {videos?.data?.data.length >0 && videos?.data?.data.map((video: any, index: any) => (
                                 <div key={index} >
                                     <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
                                         <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
@@ -120,7 +120,7 @@ export default function Videos() {
                                 </div>
                             ))}
                         </div>
-                        {!(videos.data.data).length ?
+                        {!(videos?.data?.data).length ?
                             <div className="font-normal text-[#131B23] text-lg text-center">Latest Videos Coming Soon.</div>
                             : ''
                         }

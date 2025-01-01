@@ -161,19 +161,17 @@ export default function App() {
           {/* // Canonical URL */}
           <link rel="canonical" href={full_url} />
           <Links />
-          <meta name="google-site-verification" content={other_details?.google_site_verification} />
           {/* Google Analytics Script */}
           <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`}></script>
           <script>
             {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', ${other_details?.google_analytics_id});  // Replace with your GA4 Tracking ID
+            gtag("js", new Date());
+            gtag("config", ${other_details?.google_analytics_id});  // Replace with your GA4 Tracking ID
           `}
           </script>
-
-
+          
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
         <body className="text-[#131B23]">
