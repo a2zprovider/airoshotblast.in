@@ -121,7 +121,7 @@ export default function Videos() {
                             ))}
                         </div>
                         {!(videos?.data?.data).length ?
-                            <div className="font-normal text-[#131B23] text-lg text-center">Latest Videos Coming Soon.</div>
+                            <div className="font-normal text-[#131B23] text-lg text-center py-5">Latest Videos Coming Soon.</div>
                             : ''
                         }
                     </div>
