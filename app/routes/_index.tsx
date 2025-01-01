@@ -170,7 +170,6 @@ export default function Index() {
               <div className="font-bold text-3xl">Product Videos</div>
               <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
               <div className="flex justify-center py-5">
-                <VideoSlider />
               </div>
               <button onClick={() => navigateTo('/videos')} title="View all Videos" className="n_btn2 bg-theme text-lg text-white font-medium rounded-md w-[196px] h-[46px] relative overflow-hidden z-0 transition duration-[800ms]">
                 View all Videos
