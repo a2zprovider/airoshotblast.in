@@ -142,7 +142,7 @@ export default function Index() {
               category.parent == null ?
                 <Link title={category.title} to={'/category/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
                   <div className="mb-4 overflow-hidden">
-                    <img src={config.imgBaseURL + `/category/${category.image}`} alt={category.title} loading="lazy" className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-theme transition-all duration-500 ease-in-out" />
+                    <img src={config.imgBaseURL + `category/${category.image}`} alt={category.title} loading="lazy" className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-theme transition-all duration-500 ease-in-out" />
                   </div>
                   <p className="text-sm font-normal">{category.title}</p>
                 </Link>
@@ -211,7 +211,7 @@ export default function Index() {
                     <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-2 lg:order-1'}>
                       {
                         JSON.parse(settings.data.field).image[i] ?
-                          <img src={config.imgBaseURL + `/setting/other/${JSON.parse(settings.data.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-theme w-full" />
+                          <img src={config.imgBaseURL + `setting/other/${JSON.parse(settings.data.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-theme w-full" />
                           : ''
                       }
                     </div>

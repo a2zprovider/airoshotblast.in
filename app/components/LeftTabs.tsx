@@ -72,7 +72,7 @@ export default function LeftSideTabs({ settings }: any) {
                                         <div className={i % 2 === 0 ? 'flex-1 order-2' : 'flex-1 order-2 lg:order-1'}>
                                             {
                                                 JSON.parse(page.field).image[i] ?
-                                                    <img src={config.imgBaseURL + `/page/other/${JSON.parse(page.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-theme w-full" />
+                                                    <img src={config.imgBaseURL + `page/other/${JSON.parse(page.field).image[i]}`} alt={f} loading="lazy" className="rounded-lg border-x-[4px] border-theme w-full" />
                                                     : ''
                                             }
                                         </div>
