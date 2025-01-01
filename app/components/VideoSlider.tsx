@@ -75,7 +75,7 @@ const VideoSlider = () => {
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{ transform: `translateX(-${(currentIndex / visibleItems) * 100}%)` }}
                 >
-                    {!videos.map((video: any, index: any) => (
+                    {videos.map((video: any, index: any) => (
                         <div key={index} className={cardClass + ` p-2 flex-shrink-0`}>
                             <div className='flex justify-center'>
                                 <Link title={video.title} to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
@@ -92,7 +92,7 @@ const VideoSlider = () => {
                             </div>
                         </div>
                     ))}
-                    {videos.length ?
+                    {!videos.length ?
                         <div className={cardClass + ` p-2 flex-shrink-0`}>
                             <div className='flex justify-center'>
                                 <img src={'/video-image.webp'} alt="Video Image" className="shadow-md rounded" />
