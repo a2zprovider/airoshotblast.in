@@ -4,13 +4,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
     const baseUrl = `${url.origin}`;
 
-    // const robotsContent = `
-    // User-agent: *
-    // Allow: /
-    // Sitemap: ${baseUrl}/sitemap.xml`;
     const robotsContent = `
     User-agent: *
-    Disallow: /`;
+    Allow: /
+    Sitemap: ${baseUrl}/sitemap.xml`;
 
     return new Response(robotsContent, {
         headers: {

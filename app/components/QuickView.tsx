@@ -56,7 +56,7 @@ const QuickView = () => {
                 <div className="flex overflow-hidden">
                     <div className="hidden md:w-[50%] md:max-w-[60%] md:flex items-center justify-center p-4">
                         <img
-                            src={product.thumb_image ? config.imgBaseURL + `/product/thumb/${product.thumb_image}` : config.imgBaseURL + `/product/${product.image}`}
+                            src={product.thumb_image ? config.imgBaseURL + `product/thumb/${product.thumb_image}` : config.imgBaseURL + `product/${product.image}`}
                             alt={product.title} loading="lazy"
                             className="object-contain rounded-2xl"
                         />

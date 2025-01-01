@@ -64,7 +64,7 @@ const BlogSlider = ({ blogs }: any) => {
                     style={{ transform: `translateX(-${(currentIndex / visibleItems) * 100}%)` }}
                 >
                     {blogs.map((blog: any, index: any) => (
-                        <div key={index} className={cardClass + ` p-2 flex-shrink-0`}>
+                        <div key={index} className={cardClass + ` p-[9px] flex-shrink-0`}>
                             <div className="mt-4">
                                 <BlogCard blog={blog} />
                             </div>

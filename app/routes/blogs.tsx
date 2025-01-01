@@ -182,7 +182,7 @@ export default function Blog() {
                                     ))}
                                 </div>
                                 {!(filteredBlogs).length ?
-                                    <div className="font-normal text-[#131B23] text-lg text-center">No Blogs Found.</div>
+                                    <div className="font-normal text-[#131B23] text-lg text-center py-5">No Blogs Found.</div>
                                     : ''
                                 }
                             </div>

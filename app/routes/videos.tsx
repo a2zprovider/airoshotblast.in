@@ -28,7 +28,7 @@ export let loader: LoaderFunction = async ({ request }) => {
             settings = cachedSettings;
         }
 
-        const video = await fetch(config.apiBaseURL + 'video');
+        const video = await fetch(config.apiBaseURL + 'video?limit=100');
         if (!video.ok) { throw video; }
         const videos = await video.json();
 
@@ -101,8 +101,8 @@ export default function Videos() {
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                            {videos.data.data.map((video: any, index: any) => (
-                                <div key={index} >
+                            {!videos.data.data.map((video: any, index: any) => (
+                                <div key={index}>
                                     <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
                                         <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
                                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
@@ -120,8 +120,8 @@ export default function Videos() {
                                 </div>
                             ))}
                         </div>
-                        {!(videos.data.data).length ?
-                            <div className="font-normal text-[#131B23] text-lg text-center">No Videos Found.</div>
+                        {(videos.data.data).length ?
+                            <div className="font-normal text-[#131B23] text-lg text-center py-5">Latest Videos Coming Soon.</div>
                             : ''
                         }
                     </div>

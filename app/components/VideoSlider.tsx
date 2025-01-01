@@ -92,6 +92,13 @@ const VideoSlider = () => {
                             </div>
                         </div>
                     ))}
+                    {!videos.length ?
+                        <div className={cardClass + ` p-2 flex-shrink-0`}>
+                            <div className='flex justify-center'>
+                                <img src={'/public/video-image.webp'} alt="Video Image" className="shadow-md rounded" />
+                            </div>
+                        </div>
+                        : <></>}
                 </div>
             </div>
 
