@@ -161,7 +161,7 @@ export default function App() {
           {/* // Canonical URL */}
           <link rel="canonical" href={full_url} />
           <Links />
-
+          <meta name="google-site-verification" content={other_details?.google_site_verification} />
           {/* Google Analytics Script */}
           <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`}></script>
           <script>

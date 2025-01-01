@@ -204,7 +204,7 @@ export default function Products() {
                                     ))}
                                 </div>
                                 {!(products).length ?
-                                    <div className="font-normal text-[#131B23] text-lg text-center">No Products Found.</div>
+                                    <div className="font-normal text-[#131B23] text-lg text-center py-5">No Products Found.</div>
                                     : ''
                                 }
                             </>
