@@ -75,7 +75,7 @@ const VideoSlider = () => {
                     className="flex transition-transform duration-500 ease-in-out"
                     style={{ transform: `translateX(-${(currentIndex / visibleItems) * 100}%)` }}
                 >
-                    {videos.map((video: any, index: any) => (
+                    {videos && videos?.map((video: any, index: any) => (
                         <div key={index} className={cardClass + ` p-2 flex-shrink-0`}>
                             <div className='flex justify-center'>
                                 <Link title={video.title} to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
