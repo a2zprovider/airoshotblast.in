@@ -52,7 +52,7 @@ export default function Slider() {
                     {sliders.map((slider: any, index: any) => (
                         <img
                             key={index}
-                            src={`https://img.gs/qbcfbkvfzz/500x500/` + config.imgBaseURL + `slider/${slider.image}`}
+                            src={config.imgBaseURL + `slider/${slider.image}`}
                             alt={slider.title} loading="lazy"
                             className="w-full flex-shrink-0 h-[240px] object-cover md:object-contain md:h-[100%]"
                         />
