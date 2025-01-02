@@ -96,12 +96,11 @@ const ProductSlider = ({ products }: any) => {
             {/* Indicators */}
             <div className="flex justify-center mt-4 space-x-2">
                 {Array.from({ length: totalSlides }).map((_, index) => (
-                    <button
+                    <div
                         key={index}
-                        onClick={() => goToSlide(index)}
                         className={`w-3 h-3 rounded-full ${currentIndex / visibleItems === index ? 'bg-theme' : 'bg-gray-300'}`}
                         aria-label={`Go to slide ${index + 1}`} title={`Go to slide ${index + 1}`}
-                    ></button>
+                    ></div>
                 ))}
             </div>
         </div>

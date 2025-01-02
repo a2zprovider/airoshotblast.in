@@ -37,8 +37,8 @@ export let loader: LoaderFunction = async ({ request }) => {
 
   const url = new URL(request.url);
 
-  const baseUrl = `https://${url.host}`;
-  const full_url = `https://${url.host}${url.pathname}`;
+  const baseUrl = `https://www.${url.host}`;
+  const full_url = `https://www.${url.host}${url.pathname}`;
 
   const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
   setTimeout(() => {
@@ -146,7 +146,7 @@ export default function App() {
           <link rel="canonical" href={full_url} />
           <Links />
           {/* Google Analytics Script */}
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`} />
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`} defer />
           <script
             dangerouslySetInnerHTML={{
               __html: `
