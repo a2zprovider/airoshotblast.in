@@ -20,8 +20,8 @@ export let loader: LoaderFunction = async ({ request }) => {
         const blogs = await blog.json();
 
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
@@ -62,6 +62,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
@@ -72,6 +73,7 @@ export const meta: MetaFunction = ({ data }: any) => {
 
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: seo_details.b_seo_title },
         { name: "description", content: seo_details.b_seo_description },
         { name: "keywords", content: seo_details.b_seo_keywords },
@@ -80,12 +82,14 @@ export const meta: MetaFunction = ({ data }: any) => {
         { name: "og:type", content: "website" },
         { name: "og:locale", content: "en_US" },
         { name: "og:url", content: full_url },
+        { name: "og:site_name", content: settings?.data?.title },
         { name: "og:title", content: seo_details.b_seo_title },
         { name: "og:description", content: seo_details.b_seo_description },
         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:site", content: settings?.data?.title },
         { name: "twitter:title", content: seo_details.b_seo_title },
         { name: "twitter:description", content: seo_details.b_seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
@@ -118,9 +122,7 @@ export default function Blog() {
     });
     return (
         <div className="bg-[#E9F1F799]">
-            <head>
-                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-            </head>
+            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">

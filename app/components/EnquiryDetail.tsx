@@ -103,6 +103,10 @@ const EnquiryDetail = (data: any) => {
             }
         }
     }, [fetcher.data]);
+    const [selectedCode, setSelectedCode] = useState<string>('+971');
+    const handleCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedCode(e.target.value);
+    };
 
     return (
         <>
@@ -149,16 +153,14 @@ const EnquiryDetail = (data: any) => {
                             <div className="relative">
                                 <select className="h-[52px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
                                     name="code"
-                                    defaultValue=""
+                                    value={selectedCode}
+                                    onChange={handleCodeChange}
                                     id="code">
                                     {c_loading ? (
                                         <option value="">Loading...</option>
                                     ) : (
                                         countryCodes.map((country, index) => (
-                                            country.dial_code == '+971' ?
-                                                <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
-                                                :
-                                                <option key={index} value={country.dial_code}>{country.dial_code}</option>
+                                            <option key={index} value={country.dial_code}>{country.dial_code}</option>
                                         ))
                                     )}
                                 </select>

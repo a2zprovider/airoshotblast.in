@@ -8,15 +8,33 @@ import config from "~/config";
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     try {
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
+
+        const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
+        setTimeout(() => {
+            delete cache[settingsCacheKey];
+        }, CACHE_EXPIRATION_TIME);
+
+        let settings;
+        if (!cachedSettings) {
+            const setting = await fetch(config.apiBaseURL + 'setting');
+            if (!setting.ok) { throw setting; }
+            settings = await setting.json();
+            cache[settingsCacheKey] = settings;
+        } else {
+            settings = cachedSettings;
+        }
+
         const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
         if (!cat.ok) { throw cat; }
         const category = await cat.json();
 
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
-        return json({ category, full_url, baseUrl });
+        return json({ category, settings, full_url, baseUrl });
     } catch (error) {
         throw error;
     }
@@ -25,14 +43,16 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
     }
 
-    const { category, full_url }: any = data;
+    const { category, settings, full_url }: any = data;
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: category?.data?.seo_title },
         { name: "description", content: category?.data?.seo_description },
         { name: "keywords", content: category?.data?.seo_keywords },
@@ -41,12 +61,14 @@ export const meta: MetaFunction = ({ data }: any) => {
         { name: "og:type", content: "article" },
         { name: "og:locale", content: "en_US" },
         { name: "og:url", content: full_url },
+        { name: "og:site_name", content: settings?.data?.title },
         { name: "og:title", content: category?.data?.title },
         { name: "og:description", content: category?.data?.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:site", content: settings?.data?.title },
         { name: "twitter:title", content: category?.data?.title },
         { name: "twitter:description", content: category?.data?.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'category/' + category?.data?.image },
@@ -78,9 +100,7 @@ export default function Category() {
 
     return (
         <div className="bg-[#E9F1F799]">
-            <head>
-                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-            </head>
+            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex flex-row overflow-auto items-center py-2 gap-4">
