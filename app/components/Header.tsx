@@ -118,7 +118,7 @@ export default function Header({ settings }: any) {
                   name="s"
                   defaultValue={search ? search : ''}
                   placeholder="Search Here..."
-                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F799] text-lg font-normal text-[#131B234D] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23] hover:border-[#131B23] transition-all duration-[800ms] ease-out"
+                  className="px-3 py-2 md:max-w-sm max-w-48 bg-[#E9F1F7] text-lg font-normal text-[#131B23] rounded-l-md outline-none border-[1px] border-r-0 focus:border-[#131B23] hover:border-[#131B23] transition-all duration-[800ms] ease-out"
                 />
                 <button type="submit" title="Submit" className="n_btn1 px-4 py-2 bg-[#131B23] text-base text-white font-medium rounded-r-md w-full text-center px-2 relative overflow-hidden z-0 transition duration-[800ms] hover:text-theme border-[1px] border-[#131B23]"><i className="fa fa-search"></i></button>
               </form>

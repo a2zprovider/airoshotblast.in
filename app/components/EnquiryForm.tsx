@@ -101,7 +101,7 @@ const EnquiryForm = () => {
                         name="name"
                         required
                         placeholder="Enter Your Name"
-                        className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
+                        className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"
                     />
                 </div>
                 <div className="flex flex-col mb-2">
@@ -112,14 +112,14 @@ const EnquiryForm = () => {
                         required
                         pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                         placeholder="Enter Your E-Mail"
-                        className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
+                        className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"
                     />
                 </div>
                 <div className="flex flex-col mb-2">
                     <label htmlFor="mobile" className="text-white text-lg font-medium">Mobile No.</label>
                     <div className="flex items-center">
                         <div className="relative">
-                            <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                            <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
                                 name="code"
                                 value={selectedCode}
                                 onChange={handleCodeChange}
@@ -144,14 +144,14 @@ const EnquiryForm = () => {
                             name="mobile"
                             pattern="^\+?\d{10,15}$"
                             placeholder="Enter Your Mobile No."
-                            className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-r-md outline-none"
+                            className="flex-1 px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-r-md outline-none"
                         />
                     </div>
                 </div>
                 <input type="hidden" name="captcha" defaultValue="true" />
                 <div className="flex flex-col mb-4">
                     <label htmlFor="message" className="text-white text-lg font-medium">Your Requirement</label>
-                    <textarea name="message" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"></textarea>
+                    <textarea name="message" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"></textarea>
                 </div>
                 <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2">
                     <div id="recaptcha-container" className="mb-1 md:mb-0"></div>

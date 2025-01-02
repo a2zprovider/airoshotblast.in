@@ -18,7 +18,8 @@ export default {
     extend: {
       colors: {
         // theme: '#4356A2',
-        theme: '#079946',
+        // theme: '#079946',
+        theme: '#07642E',
         theme1: '#bad7c7',
         sectheme: '#ed7733',
         formbg: '#5e6466'
