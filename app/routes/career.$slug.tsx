@@ -8,8 +8,8 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     try {
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
@@ -48,6 +48,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
@@ -56,6 +57,7 @@ export const meta: MetaFunction = ({ data }: any) => {
     const { careers, settings, full_url }: any = data;
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: careers.data.seo_title },
         { name: "description", content: careers.data.seo_description },
         { name: "keywords", content: careers.data.seo_keywords },
@@ -155,9 +157,7 @@ export default function CareerDetail() {
     return (
         <>
             <div className="bg-[#E9F1F799]">
-                <head>
-                    <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-                </head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
@@ -214,9 +214,9 @@ export default function CareerDetail() {
                                             </div>
                                             <div className="pb-4">
                                                 <div className="font-medium text-2xl text-theme">Job Overview:</div>
-                                                <p className="content-detailsfont-normal text-[#131B23] text-lg text-justify">
+                                                <div className="content-detailsfont-normal text-[#131B23] text-lg text-justify">
                                                     <div dangerouslySetInnerHTML={{ __html: careers.data.description }} ></div>
-                                                </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="p-4 border rounded-md">

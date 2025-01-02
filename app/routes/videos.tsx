@@ -7,8 +7,8 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
     try {
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
@@ -41,6 +41,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
@@ -51,6 +52,7 @@ export const meta: MetaFunction = ({ data }: any) => {
 
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: seo_details.v_seo_title },
         { name: "description", content: seo_details.v_seo_description },
         { name: "keywords", content: seo_details.v_seo_keywords },
@@ -91,9 +93,7 @@ export default function Videos() {
     }
     return (
         <div className="bg-[#E9F1F799]">
-            <head>
-                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-            </head>
+            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">
@@ -101,7 +101,7 @@ export default function Videos() {
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                            {videos?.data?.data.length >0 && videos?.data?.data.map((video: any, index: any) => (
+                            {videos?.data?.data.length > 0 && videos?.data?.data.map((video: any, index: any) => (
                                 <div key={index} >
                                     <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
                                         <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />

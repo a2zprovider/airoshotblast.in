@@ -11,8 +11,8 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     try {
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
@@ -45,6 +45,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
@@ -54,6 +55,7 @@ export const meta: MetaFunction = ({ data }: any) => {
 
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: product.data.seo_title },
         { name: "description", content: product.data.seo_description },
         { name: "keywords", content: product.data.seo_keywords },
@@ -216,13 +218,15 @@ export default function ProductSingle() {
             "item": full_url
         }]
     }
+    const [selectedCode, setSelectedCode] = useState<string>('+971');
+    const handleCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedCode(e.target.value);
+    };
     return (
         <>
             <div className="bg-[#E9F1F799]">
-                <head>
-                    <script type="application/ld+json">{JSON.stringify(product_schema)}</script>
-                    <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-                </head>
+                <script type="application/ld+json">{JSON.stringify(product_schema)}</script>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
@@ -311,16 +315,15 @@ export default function ProductSingle() {
                                                 <div className="flex items-center shadow-md">
                                                     <div className="relative">
                                                         <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
-                                                            name="code" defaultValue=""
+                                                            name="code"
+                                                            value={selectedCode}
+                                                            onChange={handleCodeChange}
                                                             id="code">
                                                             {c_loading ? (
                                                                 <option value="">Loading...</option>
                                                             ) : (
                                                                 countryCodes.map((country, index) => (
-                                                                    country.dial_code == '+971' ?
-                                                                        <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
-                                                                        :
-                                                                        <option key={index} value={country.dial_code}>{country.dial_code}</option>
+                                                                    <option key={index} value={country.dial_code}>{country.dial_code}</option>
                                                                 ))
                                                             )}
                                                         </select>
@@ -418,14 +421,14 @@ export default function ProductSingle() {
                                                 </div>
                                                 : <></>}
                                             <div className={`${activeTab === 1 ? 'block' : 'hidden'} content-details applications font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
-                                                <p>
+                                                <div>
                                                     <div dangerouslySetInnerHTML={{ __html: product.data.application }} ></div>
-                                                </p>
+                                                </div>
                                             </div>
                                             <div className={`${activeTab === 2 ? 'block' : 'hidden'} content-details font-normal text-lg text-justify space-y-4 px-0 md:px-3 py-8`}>
-                                                <p>
+                                                <div>
                                                     <div dangerouslySetInnerHTML={{ __html: product.data.description }} ></div>
-                                                </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -457,16 +460,15 @@ export default function ProductSingle() {
                                                         <div className="flex items-center shadow-md">
                                                             <div className="relative">
                                                                 <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
-                                                                    name="code" defaultValue=""
+                                                                    name="code"
+                                                                    value={selectedCode}
+                                                                    onChange={handleCodeChange}
                                                                     id="code">
                                                                     {c_loading ? (
                                                                         <option value="">Loading...</option>
                                                                     ) : (
                                                                         countryCodes.map((country, index) => (
-                                                                            country.dial_code == '+971' ?
-                                                                                <option key={index} selected value={country.dial_code}>{country.dial_code}</option>
-                                                                                :
-                                                                                <option key={index} value={country.dial_code}>{country.dial_code}</option>
+                                                                            <option key={index} value={country.dial_code}>{country.dial_code}</option>
                                                                         ))
                                                                     )}
                                                                 </select>

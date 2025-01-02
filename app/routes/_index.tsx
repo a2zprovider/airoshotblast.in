@@ -12,8 +12,8 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
   try {
     const url = new URL(request.url);
-    const baseUrl = `${url.origin}`;
-    const full_url = `${url.origin}${url.pathname}`;
+    const baseUrl = `https://www.${url.host}`;
+    const full_url = `https://www.${url.host}${url.pathname}`;
 
     const settingsCacheKey = `settings`;
     const cachedSettings = cache[settingsCacheKey];
@@ -55,6 +55,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 export const meta: MetaFunction = ({ data }: any) => {
   if (!data || data.error) {
     return [
+      { charSet: "UTF-8" },
       { title: "Error - Not found" },
       { name: "description", content: "We couldn't find you're looking for." },
     ];
@@ -64,6 +65,7 @@ export const meta: MetaFunction = ({ data }: any) => {
 
   return [
     // Seo Details
+    { charSet: "UTF-8" },
     { title: seo_details.h_seo_title },
     { name: "description", content: seo_details.h_seo_description },
     { name: "keywords", content: seo_details.h_seo_keywords },
@@ -93,7 +95,7 @@ export default function Index() {
   };
 
   const social_links = JSON.parse(settings.data.social_links);
-  const schema = {
+  const organization_schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": settings.data.title,
@@ -131,10 +133,8 @@ export default function Index() {
 
   return (
     <div>
-      <head>
-        <script type="application/ld+json">{JSON.stringify(schema)}</script>
-        <script type="application/ld+json">{JSON.stringify(search_schema)}</script>
-      </head>
+      <script type="application/ld+json">{JSON.stringify(organization_schema)}</script>
+      <script type="application/ld+json">{JSON.stringify(search_schema)}</script>
       <div className="bg-[#E9F1F799]">
         <div className="container mx-auto py-8">
           <div className="flex lg:justify-center items-start w-full lg:gap-8 md:gap-4 overflow-x-auto">

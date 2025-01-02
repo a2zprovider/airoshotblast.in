@@ -23,7 +23,7 @@ export default function CategoryProductSection() {
         fetchCategory();
     }, []);
     if (loading) {
-        return <p className='text-center'>
+        return <div className='text-center'>
             <div className='loading'>
                 <svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                     viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
@@ -47,7 +47,7 @@ export default function CategoryProductSection() {
                     </rect>
                 </svg>
             </div>
-        </p>;
+        </div>;
     }
 
     return (

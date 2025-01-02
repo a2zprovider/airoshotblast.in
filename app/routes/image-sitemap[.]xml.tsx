@@ -3,7 +3,7 @@ import config from "~/config";
 
 export let loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
-    const baseUrl = `${url.origin}`;
+    const baseUrl = `https://www.${url.host}`;
 
     // Static pages you want to include in the sitemap
     const staticPages = [

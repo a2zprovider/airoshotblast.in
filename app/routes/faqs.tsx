@@ -8,8 +8,8 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
     try {
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
@@ -42,6 +42,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
@@ -52,6 +53,7 @@ export const meta: MetaFunction = ({ data }: any) => {
 
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: seo_details.f_seo_title },
         { name: "description", content: seo_details.f_seo_description },
         { name: "keywords", content: seo_details.f_seo_keywords },
@@ -92,9 +94,7 @@ export default function Faqs() {
     }
     return (
         <div className="bg-[#E9F1F799]">
-            <head>
-                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-            </head>
+            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">

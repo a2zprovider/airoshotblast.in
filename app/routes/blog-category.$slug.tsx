@@ -25,8 +25,8 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         const recent_blogs = await recent_blog.json();
 
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
         return json({ blogs, full_url, blogcategories, tags, recent_blogs, baseUrl });
     } catch (error) {
@@ -37,6 +37,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
@@ -45,6 +46,7 @@ export const meta: MetaFunction = ({ data }: any) => {
     const { blogs, full_url }: any = data;
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: blogs.data.seo_title },
         { name: "description", content: blogs.data.seo_description },
         { name: "keywords", content: blogs.data.seo_keywords },
@@ -91,9 +93,7 @@ export default function Blog() {
     }
     return (
         <div className="bg-[#E9F1F799]">
-            <head>
-                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-            </head>
+            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">

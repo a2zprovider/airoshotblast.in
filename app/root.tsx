@@ -24,19 +24,9 @@ import Layout from "./components/Layout";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css",
-  }
+  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+  { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap" },
+  { rel: 'stylesheet', href: '/fontawesome/css/all.min.css' },
 ];
 
 let cache: Record<string, any> = {};
@@ -47,8 +37,8 @@ export let loader: LoaderFunction = async ({ request }) => {
 
   const url = new URL(request.url);
 
-  const baseUrl = `${url.origin}`;
-  const full_url = `${url.origin}${url.pathname}`;
+  const baseUrl = `https://www.${url.host}`;
+  const full_url = `https://www.${url.host}${url.pathname}`;
 
   const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
   setTimeout(() => {
@@ -75,27 +65,24 @@ export let loader: LoaderFunction = async ({ request }) => {
   }
 };
 
+export const meta: MetaFunction = ({ data }: any) => {
+  if (!data || data.error) {
+    return [
+      { charSet: "UTF-8" },
+      { charSet: "UTF-8" },
+      { title: "Error - Not found" },
+      { name: "description", content: "We couldn't find you're looking for." },
+    ];
+  }
+
+  return [];
+};
+
 export function ErrorBoundary() {
   const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
-  useEffect(() => {
-    // Create the link element
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap'; // URL of the stylesheet you want to add
-
-    // Append the link tag to the head
-    document.head.appendChild(link);
-
-    // Cleanup when the component unmounts
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, []); // Empty dependency array ensures this runs only once
   return (
     <>
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap" />
-      </head>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap" />
       <div style={{ backgroundColor: '#E9F1F799', fontFamily: 'Solway', height: '100vh', position: 'fixed', top: '0', bottom: '0', left: '0', right: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
           <div style={{ textAlign: 'center' }}>
@@ -162,16 +149,18 @@ export default function App() {
           <link rel="canonical" href={full_url} />
           <Links />
           {/* Google Analytics Script */}
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`}></script>
-          <script>
-            {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag("js", new Date());
-            gtag("config", ${other_details?.google_analytics_id});  // Replace with your GA4 Tracking ID
-          `}
-          </script>
-          
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag("js", new Date());
+                gtag("config", "${other_details?.google_analytics_id}");
+              `,
+            }}
+          />
+
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
         <body className="text-[#131B23]">
