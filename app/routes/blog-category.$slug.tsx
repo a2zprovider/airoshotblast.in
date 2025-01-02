@@ -43,8 +43,8 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         const recent_blogs = await recent_blog.json();
 
         const url = new URL(request.url);
-        const baseUrl = `https://www.${url.host}`;
-        const full_url = `https://www.${url.host}${url.pathname}`;
+        const baseUrl = `https://${url.host}`;
+        const full_url = `https://${url.host}${url.pathname}`;
 
         return json({ blogs, full_url, blogcategories, tags, recent_blogs, settings, baseUrl });
     } catch (error) {

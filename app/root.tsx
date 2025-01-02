@@ -37,8 +37,8 @@ export let loader: LoaderFunction = async ({ request }) => {
 
   const url = new URL(request.url);
 
-  const baseUrl = `https://www.${url.host}`;
-  const full_url = `https://www.${url.host}${url.pathname}`;
+  const baseUrl = `https://${url.host}`;
+  const full_url = `https://${url.host}${url.pathname}`;
 
   const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
   setTimeout(() => {

@@ -2,7 +2,7 @@ import type { LoaderFunction } from '@remix-run/node';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
-    const baseUrl = `https://www.${url.host}`;
+    const baseUrl = `https://${url.host}`;
 
     const robotsContent = `
     User-agent: *

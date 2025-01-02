@@ -20,8 +20,8 @@ export let loader: LoaderFunction = async ({ request }) => {
         const blogs = await blog.json();
 
         const url = new URL(request.url);
-        const baseUrl = `https://www.${url.host}`;
-        const full_url = `https://www.${url.host}${url.pathname}`;
+        const baseUrl = `https://${url.host}`;
+        const full_url = `https://${url.host}${url.pathname}`;
 
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
