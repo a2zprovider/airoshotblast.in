@@ -51,7 +51,7 @@ export const meta: MetaFunction = ({ data }: any) => {
         ];
     }
 
-    const { product,settings, full_url }: any = data;
+    const { product, settings, full_url }: any = data;
 
     return [
         // Seo Details
@@ -198,6 +198,13 @@ export default function ProductSingle() {
         "brand": {
             "@type": "Brand",
             "name": settings.data.title
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "bestRating": "5",
+            "worstRating": "0",
+            "ratingCount": "5"
         }
     }
     const breadcrumb_schema = {

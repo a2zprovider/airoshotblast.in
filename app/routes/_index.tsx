@@ -100,7 +100,7 @@ export default function Index() {
   const organization_schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": settings.data.title,
+    "name": settings?.data?.title || 'Gulf Souks',
     "url": full_url,
     "logo": config.imgBaseURL + 'setting/logo/' + settings.data.logo,
     "contactPoint": {
@@ -124,7 +124,7 @@ export default function Index() {
   const search_schema = {
     "@context": "https://schema.org/",
     "@type": "WebSite",
-    "name": settings.data.title,
+    "name": settings?.data?.title || 'Gulf Souks',
     "url": full_url,
     "potentialAction": {
       "@type": "SearchAction",
@@ -135,8 +135,8 @@ export default function Index() {
 
   return (
     <div>
-      <script type="application/ld+json">{JSON.stringify(organization_schema)}</script>
       <script type="application/ld+json">{JSON.stringify(search_schema)}</script>
+      <script type="application/ld+json">{JSON.stringify(organization_schema)}</script>
       <div className="bg-[#E9F1F799]">
         <div className="container mx-auto py-8">
           <div className="flex lg:justify-center items-start w-full lg:gap-8 md:gap-4 overflow-x-auto">
@@ -144,7 +144,7 @@ export default function Index() {
               category.parent == null ?
                 <Link title={category.title} to={'/category/' + category.slug} key={index} className="group min-w-[100px] w-[100px] text-center flex flex-col justify-center items-center">
                   <div className="mb-4 overflow-hidden">
-                    <img src={config.imgBaseURL + `category/${category.image}`} alt={category.title} loading="lazy" className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-theme transition-all duration-500 ease-in-out" />
+                    <img src={config.imgBaseURL + `category/${category.image}`} alt={category.title + ' category'} loading="lazy" className="w-[80px] h-[80px] object-cover rounded-full bg-[#0000001A] border-[2px] border-[#E9F1F799] group-hover:border-theme transition-all duration-500 ease-in-out" />
                   </div>
                   <p className="text-sm font-normal">{category.title}</p>
                 </Link>

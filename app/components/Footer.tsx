@@ -43,10 +43,18 @@ export default function Footer({ settings }: any) {
           </div>
           <div className="flex justify-end py-2">
             <ul className="grid grid-flow-col auto-cols-max gap-4 text-xl text-white font-normal">
-              <li><Link title="Facebook" to={social_links.facebook} className="text-white"><i className="fab fa-facebook-f text-blue-600 hover:text-blue-800"></i></Link></li>
-              <li><Link title="Instagram" to={social_links.instagram} className="text-white"><i className="fab fa-instagram text-pink-600 hover:text-pink-800"></i></Link></li>
-              <li><Link title="Twitter" to={social_links.twitter} className="text-white"><i className="fab fa-twitter text-blue-400 hover:text-blue-600"></i></Link></li>
-              <li><Link title="Youtube" to={social_links.youtube} className="text-white"><i className="fab fa-youtube text-red-500 hover:text-red-600"></i></Link></li>
+              {social_links.facebook ?
+                <li><Link title="Facebook" to={social_links.facebook} className="text-white"><i className="fab fa-facebook-f text-blue-600 hover:text-blue-800"></i></Link></li>
+                : <></>}
+              {social_links.instagram ?
+                <li><Link title="Instagram" to={social_links.instagram} className="text-white"><i className="fab fa-instagram text-pink-600 hover:text-pink-800"></i></Link></li>
+                : <></>}
+              {social_links.instagram ?
+                <li><Link title="Twitter" to={social_links.twitter} className="text-white"><i className="fab fa-twitter text-blue-400 hover:text-blue-600"></i></Link></li>
+                : <></>}
+              {social_links.youtube ?
+                <li><Link title="Youtube" to={social_links.youtube} className="text-white"><i className="fab fa-youtube text-red-500 hover:text-red-600"></i></Link></li>
+                : <></>}
             </ul>
           </div>
         </div>
