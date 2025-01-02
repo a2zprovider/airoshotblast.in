@@ -8,9 +8,27 @@ import config from "~/config";
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     try {
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
+
+        const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
+        setTimeout(() => {
+            delete cache[settingsCacheKey];
+        }, CACHE_EXPIRATION_TIME);
+
+        let settings;
+        if (!cachedSettings) {
+            const setting = await fetch(config.apiBaseURL + 'setting');
+            if (!setting.ok) { throw setting; }
+            settings = await setting.json();
+            cache[settingsCacheKey] = settings;
+        } else {
+            settings = cachedSettings;
+        }
+
         const url = new URL(request.url);
-        const baseUrl = `${url.origin}`;
-        const full_url = `${url.origin}${url.pathname}`;
+        const baseUrl = `https://www.${url.host}`;
+        const full_url = `https://www.${url.host}${url.pathname}`;
 
         const blog = await fetch(config.apiBaseURL + 'tag/' + params.slug);
         if (!blog.ok) { throw blog; }
@@ -28,7 +46,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         if (!recent_blog.ok) { throw recent_blog; }
         const recent_blogs = await recent_blog.json();
 
-        return json({ blogs, full_url, baseUrl, blogcategories, tags, recent_blogs });
+        return json({ blogs, full_url, baseUrl, blogcategories, tags, settings, recent_blogs });
     } catch (error) {
         throw error;
     }
@@ -37,14 +55,16 @@ export let loader: LoaderFunction = async ({ request, params }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
     }
 
-    const { blogs, full_url }: any = data;
+    const { blogs, settings, full_url }: any = data;
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: blogs.data.seo_title },
         { name: "description", content: blogs.data.seo_description },
         { name: "keywords", content: blogs.data.seo_keywords },
@@ -53,12 +73,14 @@ export const meta: MetaFunction = ({ data }: any) => {
         { name: "og:type", content: "article" },
         { name: "og:locale", content: "en_US" },
         { name: "og:url", content: full_url },
+        { name: "og:site_name", content: settings?.data?.title },
         { name: "og:title", content: blogs.data.title },
         { name: "og:description", content: blogs.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:site", content: settings?.data?.title },
         { name: "twitter:title", content: blogs.data.title },
         { name: "twitter:description", content: blogs.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'blog/' + blogs.data.image },
@@ -90,9 +112,7 @@ export default function Blog() {
     }
     return (
         <div className="bg-[#E9F1F799]">
-            <head>
-                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-            </head>
+            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
             <div className="container mx-auto">
                 <div className="py-3">
                     <div className="flex items-center py-2 text-sm font-normal">

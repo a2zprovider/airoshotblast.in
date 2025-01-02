@@ -21,8 +21,8 @@ export let loader: LoaderFunction = async ({ request }) => {
     }, CACHE_EXPIRATION_TIME);
 
     const url = new URL(request.url);
-    const baseUrl = `${url.origin}`;
-    const full_url = `${url.origin}${url.pathname}`;
+    const baseUrl = `https://www.${url.host}`;
+    const full_url = `https://www.${url.host}${url.pathname}`;
 
     if (cachedPageDetail && cachedSettings) {
         return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url, baseUrl });
@@ -53,15 +53,17 @@ export let loader: LoaderFunction = async ({ request }) => {
 export const meta: MetaFunction = ({ data }: any) => {
     if (!data || data.error) {
         return [
+            { charSet: "UTF-8" },
             { title: "Error - Not found" },
             { name: "description", content: "We couldn't find you're looking for." },
         ];
     }
 
-    const { page_detail, full_url }: any = data;
+    const { page_detail, settings, full_url }: any = data;
 
     return [
         // Seo Details
+        { charSet: "UTF-8" },
         { title: page_detail.data.seo_title },
         { name: "description", content: page_detail.data.seo_description },
         { name: "keywords", content: page_detail.data.seo_keywords },
@@ -70,12 +72,14 @@ export const meta: MetaFunction = ({ data }: any) => {
         { name: "og:type", content: "article" },
         { name: "og:locale", content: "en_US" },
         { name: "og:url", content: full_url },
+        { name: "og:site_name", content: settings?.data?.title },
         { name: "og:title", content: page_detail.data.title },
         { name: "og:description", content: page_detail.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:site", content: settings?.data?.title },
         { name: "twitter:title", content: page_detail.data.title },
         { name: "twitter:description", content: page_detail.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
@@ -102,9 +106,7 @@ export default function About() {
     return (
         <>
             <div className="bg-[#E9F1F799]">
-                <head>
-                    <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-                </head>
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
                         <div className="flex items-center py-2 text-sm font-normal">
