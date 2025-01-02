@@ -323,7 +323,7 @@ export default function ProductSingle() {
                                             <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                 <div className="flex items-center shadow-md">
                                                     <div className="relative">
-                                                        <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                        <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
                                                             name="code"
                                                             value={selectedCode}
                                                             onChange={handleCodeChange}
@@ -358,7 +358,7 @@ export default function ProductSingle() {
                                                     type="text"
                                                     name="subject"
                                                     placeholder="Qty"
-                                                    className="px-3 py-2 md:w-[100px] w-[100%] bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
+                                                    className="px-3 py-2 md:w-[100px] w-[100%] bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"
                                                 />
                                                 {
                                                     btnLoading ?
@@ -468,7 +468,7 @@ export default function ProductSingle() {
                                                     <form className="mt-4 flex flex-col md:flex-row gap-4" id="enquiry-form" onSubmit={handleSubmit}>
                                                         <div className="flex items-center shadow-md">
                                                             <div className="relative">
-                                                                <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B234D] rounded-l-md outline-none border-r appearance-none"
+                                                                <select className="h-[52px] block w-[75px] py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
                                                                     name="code"
                                                                     value={selectedCode}
                                                                     onChange={handleCodeChange}
@@ -503,7 +503,7 @@ export default function ProductSingle() {
                                                             type="text"
                                                             name="subject"
                                                             placeholder="Qty"
-                                                            className="px-3 py-2 md:w-[100px] w-[100%] bg-[#fff] text-lg font-medium text-[#131B234D] rounded-md outline-none"
+                                                            className="px-3 py-2 md:w-[100px] w-[100%] bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"
                                                         />
                                                         {
                                                             btnLoading ?
