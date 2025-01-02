@@ -48,18 +48,23 @@ export let loader: LoaderFunction = async ({ request }) => {
         })),
         ...blogs.data.data.map((blog: any) => ({
             slug: `blog/${blog.slug}`, // Blogs
+            image: `${blog.image}`,
         })),
         ...products.data.data.map((product: any) => ({
             slug: `product/${product.slug}`, // Products
+            image: `${product.image}`,
         })),
         ...blogcategories.data.data.map((bcat: any) => ({
             slug: `blog-category/${bcat.slug}`, // Blog Categories
+            image: `${bcat.image}`,
         })),
         ...careers.data.data.map((career: any) => ({
             slug: `career/${career.slug}`, // Careers
+            image: `${career.image}`,
         })),
         ...tags.data.data.map((tag: any) => ({
             slug: `tag/${tag.slug}`, // Tags
+            image: `${tag.image}`,
         })),
         ...pages.data.data.filter((page: any) => page.slug !== 'about-us').map((page: any) => ({
             slug: `page/${page.slug}`, // Pages

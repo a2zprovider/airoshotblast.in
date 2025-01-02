@@ -13,7 +13,7 @@ const BlogCard = ({ blog }: any) => {
     return (
         <div className='border rounded-2xl border-transparent hover:border-theme transition-all duration-[800ms] ease-in-out'>
             <div className='relative'>
-                <img src={blog.thumb_image ? config.imgBaseURL + `blog/thumb/${blog.thumb_image}` : config.imgBaseURL + `blog/${blog.image}`} alt={blog.title} loading="lazy" className="rounded-t-2xl w-full h-[260px]" />
+                <img src={blog.thumb_image ? config.imgBaseURL + `blog/thumb/${blog.thumb_image}` : config.imgBaseURL + `blog/${blog.image}`} alt={blog.title} loading="lazy" className="rounded-t-2xl w-[356px] h-[260px]" />
                 {blog.createdAt ?
                     <div className='absolute bottom-2 left-2 bg-white px-2 py-1 rounded-lg text-sm font-normal text-[#131B23]'>Published on: {format(new Date(blog.createdAt), 'MMM dd, yyyy')}</div>
                     : <></>}
