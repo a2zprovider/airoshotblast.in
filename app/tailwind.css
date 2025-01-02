@@ -106,7 +106,7 @@ body {
 
     .n_btn.active {
         color: #fff;
-        background-color: #079946;
+        background-color: #07642E;
     }
 
     .n_btn::before {
@@ -176,7 +176,7 @@ body {
     }
 
     .catModalContent::-webkit-scrollbar-thumb {
-        background: #079946;
+        background: #07642E;
     }
 
     .gradient_btn {
