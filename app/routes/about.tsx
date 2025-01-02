@@ -21,8 +21,8 @@ export let loader: LoaderFunction = async ({ request }) => {
     }, CACHE_EXPIRATION_TIME);
 
     const url = new URL(request.url);
-    const baseUrl = `https://www.${url.host}`;
-    const full_url = `https://www.${url.host}${url.pathname}`;
+    const baseUrl = `https://${url.host}`;
+    const full_url = `https://${url.host}${url.pathname}`;
 
     if (cachedPageDetail && cachedSettings) {
         return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url, baseUrl });

@@ -31,8 +31,8 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         const category = await cat.json();
 
         const url = new URL(request.url);
-        const baseUrl = `https://www.${url.host}`;
-        const full_url = `https://www.${url.host}${url.pathname}`;
+        const baseUrl = `https://${url.host}`;
+        const full_url = `https://${url.host}${url.pathname}`;
 
         return json({ category, settings, full_url, baseUrl });
     } catch (error) {

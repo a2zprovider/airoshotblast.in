@@ -27,8 +27,8 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         }
 
         const url = new URL(request.url);
-        const baseUrl = `https://www.${url.host}`;
-        const full_url = `https://www.${url.host}${url.pathname}`;
+        const baseUrl = `https://${url.host}`;
+        const full_url = `https://${url.host}${url.pathname}`;
 
         const blog = await fetch(config.apiBaseURL + 'tag/' + params.slug);
         if (!blog.ok) { throw blog; }
