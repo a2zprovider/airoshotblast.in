@@ -59,7 +59,7 @@ export const meta: MetaFunction = ({ data }: any) => {
         ];
     }
 
-    const { page_detail, full_url }: any = data;
+    const { page_detail, settings, full_url }: any = data;
 
     return [
         // Seo Details
@@ -72,12 +72,14 @@ export const meta: MetaFunction = ({ data }: any) => {
         { name: "og:type", content: "article" },
         { name: "og:locale", content: "en_US" },
         { name: "og:url", content: full_url },
+        { name: "og:site_name", content: settings?.data?.title },
         { name: "og:title", content: page_detail.data.title },
         { name: "og:description", content: page_detail.data.seo_description },
         { name: "og:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:site", content: settings?.data?.title },
         { name: "twitter:title", content: page_detail.data.title },
         { name: "twitter:description", content: page_detail.data.seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'page/' + page_detail.data.image },

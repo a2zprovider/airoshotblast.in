@@ -56,17 +56,19 @@ export const meta: MetaFunction = ({ data }: any) => {
         { title: seo_details.v_seo_title },
         { name: "description", content: seo_details.v_seo_description },
         { name: "keywords", content: seo_details.v_seo_keywords },
-
+        
         // OG Details
         { name: "og:type", content: "website" },
         { name: "og:locale", content: "en_US" },
         { name: "og:url", content: full_url },
+        { name: "og:site_name", content: settings?.data?.title },
         { name: "og:title", content: seo_details.v_seo_title },
         { name: "og:description", content: seo_details.v_seo_description },
         { name: "og:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },
 
         // Twitter Card Details
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:site", content: settings?.data?.title },
         { name: "twitter:title", content: seo_details.v_seo_title },
         { name: "twitter:description", content: seo_details.v_seo_description },
         { name: "twitter:image", content: config.imgBaseURL + 'setting/logo/' + settings.data.logo },

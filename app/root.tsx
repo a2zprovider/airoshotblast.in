@@ -69,7 +69,6 @@ export const meta: MetaFunction = ({ data }: any) => {
   if (!data || data.error) {
     return [
       { charSet: "UTF-8" },
-      { charSet: "UTF-8" },
       { title: "Error - Not found" },
       { name: "description", content: "We couldn't find you're looking for." },
     ];
@@ -142,8 +141,6 @@ export default function App() {
           <link rel="apple-touch-icon" sizes="180x180" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} />
 
           <Meta />
-          <meta name="og:site_name" content={settings?.data?.title} />
-          <meta name="twitter:site" content={settings?.data?.title} />
 
           {/* // Canonical URL */}
           <link rel="canonical" href={full_url} />
