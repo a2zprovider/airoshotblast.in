@@ -94,8 +94,8 @@ const EnquiryForm = () => {
     return (
         <>
             <form className="mt-4" id="enquiry-form" onSubmit={handleSubmit}>
-                <div className="flex flex-col mb-2">
-                    <label htmlFor="name" className="text-white text-lg font-medium">Name</label>
+                <div className="flex flex-col mb-2 py-2">
+                    <label htmlFor="name" className="text-white text-lg font-medium py-2">Name</label>
                     <input
                         type="text"
                         name="name"
@@ -104,8 +104,8 @@ const EnquiryForm = () => {
                         className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"
                     />
                 </div>
-                <div className="flex flex-col mb-2">
-                    <label htmlFor="email" className="text-white text-lg font-medium">Email</label>
+                <div className="flex flex-col mb-2 py-2">
+                    <label htmlFor="email" className="text-white text-lg font-medium py-2">Email</label>
                     <input
                         type="email"
                         name="email"
@@ -115,8 +115,8 @@ const EnquiryForm = () => {
                         className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"
                     />
                 </div>
-                <div className="flex flex-col mb-2">
-                    <label htmlFor="mobile" className="text-white text-lg font-medium">Mobile No.</label>
+                <div className="flex flex-col mb-2 py-2">
+                    <label htmlFor="mobile" className="text-white text-lg font-medium py-2">Mobile No.</label>
                     <div className="flex items-center">
                         <div className="relative">
                             <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
@@ -149,11 +149,11 @@ const EnquiryForm = () => {
                     </div>
                 </div>
                 <input type="hidden" name="captcha" defaultValue="true" />
-                <div className="flex flex-col mb-4">
-                    <label htmlFor="message" className="text-white text-lg font-medium">Your Requirement</label>
+                <div className="flex flex-col mb-4 py-2">
+                    <label htmlFor="message" className="text-white text-lg font-medium py-2">Your Requirement</label>
                     <textarea name="message" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"></textarea>
                 </div>
-                <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2">
+                <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2 py-2">
                     <div id="recaptcha-container" className="mb-1 md:mb-0"></div>
                     {
                         btnLoading ?
