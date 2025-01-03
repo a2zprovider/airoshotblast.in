@@ -242,12 +242,12 @@ export default function Contact() {
                     </div>
                     <div className="py-3">
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
-                            <div className="bg-formbg p-4">
-                                <div className="font-medium text-lg text-[#f6f6f6] text-center py-2">Tell us your requirement, and we'll send you quotes</div>
+                            <div className="bg-theme1 p-8 pt-10 pb-10">
+                                <div className="font-medium text-lg text-theme text-center py-2 flex items-center justify-center gap-2"><i className="fa fa-dot-circle text-sm"></i> <span>Tell us your requirement, and we'll send you quotes</span> <i className="fa fa-dot-circle text-sm "></i></div>
 
                                 <form onSubmit={handleSubmit} id="enquiry-form" className="mt-4">
-                                    <div className="flex flex-col mb-2">
-                                        <label htmlFor="name" className="text-white text-lg font-medium">Name</label>
+                                    <div className="flex flex-col mb-2 py-2">
+                                        <label htmlFor="name" className="text-white text-lg font-medium py-2">Name</label>
                                         <input
                                             type="text"
                                             name="name"
@@ -257,8 +257,8 @@ export default function Contact() {
                                         />
                                     </div>
                                     <input type="hidden" name="captcha" defaultValue="true" />
-                                    <div className="flex flex-col mb-2">
-                                        <label htmlFor="email" className="text-white text-lg font-medium">Email</label>
+                                    <div className="flex flex-col mb-2 py-2">
+                                        <label htmlFor="email" className="text-white text-lg font-medium py-2">Email</label>
                                         <input
                                             type="email"
                                             name="email"
@@ -268,8 +268,8 @@ export default function Contact() {
                                             className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"
                                         />
                                     </div>
-                                    <div className="flex flex-col mb-2">
-                                        <label htmlFor="mobile" className="text-white text-lg font-medium">Mobile No.</label>
+                                    <div className="flex flex-col mb-2 py-2">
+                                        <label htmlFor="mobile" className="text-white text-lg font-medium py-2">Mobile No.</label>
                                         <div className="flex items-center">
                                             <div className="relative">
                                                 <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
@@ -300,11 +300,11 @@ export default function Contact() {
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex flex-col mb-4">
-                                        <label htmlFor="requirement" className="text-white text-lg font-medium">Your Requirement</label>
+                                    <div className="flex flex-col mb-4 py-2">
+                                        <label htmlFor="requirement" className="text-white text-lg font-medium py-2">Your Requirement</label>
                                         <textarea name="message" id="" required rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"></textarea>
                                     </div>
-                                    <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2">
+                                    <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2 py-2">
                                         <div id="recaptcha-container" className="mb-1 md:mb-0"></div>
                                         {
                                             btnLoading ?
@@ -317,25 +317,49 @@ export default function Contact() {
                                     </div>
                                 </form>
                             </div>
-                            <div className="bg-white text-center px-4 py-8">
+                            <div className="bg-white text-center px-8 py-8 contact-bg-image">
                                 <div className="text-[#131B23] text-xl font-medium py-2">Get In Touch</div>
                                 <p className="text-[#131B23] text-base text-normal">If you have any requirement, you can connect with us. Our customer service representative will send you quote ASAP.</p>
                                 <hr className="my-4" />
                                 <div className="px-4">
                                     {settings.data.address && settings.data.address != '' ?
-                                        <div className="flex items-center justify-center gap-4 py-3">
+                                        <div className="flex items-center justify-left gap-4 py-3">
                                             <i className="fa fa-map-marker-alt"></i>
                                             <div className="text-[#131B23] text-lg text-normal">{settings.data.address}</div>
                                         </div>
                                         : <></>}
+                                    <div className="flex items-center justify-left gap-4 py-3">
+                                        <img src="/location-svg.svg" alt="" width="30" height="30" />
+                                        <div className="text-[#131B23] text-lg text-normal">Kuwait</div>
+                                    </div>
+                                    <div className="flex items-center justify-left gap-4 py-3">
+                                        <img src="/location-svg.svg" alt="" width="30" height="30" />
+                                        <div className="text-[#131B23] text-lg text-normal">Qatar</div>
+                                    </div>
+                                    <div className="flex items-center justify-left gap-4 py-3">
+                                        <img src="/location-svg.svg" alt="" width="30" height="30" />
+                                        <div className="text-[#131B23] text-lg text-normal">United Arab Emirates</div>
+                                    </div>
+                                    <div className="flex items-center justify-left gap-4 py-3">
+                                        <img src="/location-svg.svg" alt="" width="30" height="30" />
+                                        <div className="text-[#131B23] text-lg text-normal">South Arabia</div>
+                                    </div>
+                                    <div className="flex items-center justify-left gap-4 py-3">
+                                        <img src="/location-svg.svg" alt="" width="30" height="30" />
+                                        <div className="text-[#131B23] text-lg text-normal">Oman</div>
+                                    </div>
+                                    <div className="flex items-center justify-left gap-4 py-3">
+                                        <img src="/location-svg.svg" alt="" width="30" height="30" />
+                                        <div className="text-[#131B23] text-lg text-normal">Bahrain</div>
+                                    </div>
                                     {settings?.data?.mobileStatus ?
-                                        <div className="flex items-center justify-center gap-4 py-3">
-                                            <i className="fa fa-phone rotate-90"></i>
+                                        <div className="flex items-center justify-left gap-4 py-3">
+                                            <img src="/call.svg" alt="" width="30" height="30" />
                                             <Link title="Call Us" to={'tel:' + settings.data.mobile} className="text-[#131B23] text-lg text-normal">{formatPhoneNumber(settings.data.mobile)}</Link>
                                         </div>
                                         : <></>}
-                                    <div className="flex items-center justify-center gap-4 py-3">
-                                        <i className="fa fa-envelope"></i>
+                                    <div className="flex items-center justify-left gap-4 py-3">
+                                        <img src="/mail.svg" alt="" width="30" height="30" />
                                         <Link title="Mail Us" to={'mailto:' + settings.data.email} className="text-[#131B23] text-lg text-normal">{settings.data.email}</Link>
                                     </div>
                                 </div>

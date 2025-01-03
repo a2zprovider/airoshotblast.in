@@ -23,6 +23,10 @@ export let loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
     const baseUrl = `https://${url.host}`;
     const full_url = `https://${url.host}${url.pathname}`;
+    console.log('url : ', url);
+    console.log('baseUrl : ', baseUrl);
+    console.log('full_url : ', full_url);
+
 
     if (cachedPageDetail && cachedSettings) {
         return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url, baseUrl });
