@@ -1,6 +1,9 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useRouteError } from "@remix-run/react";
+import { json, Link, useNavigate, useRouteError } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
+import Accordion from "~/components/Accordion";
+import EnquiryForm from "~/components/EnquiryForm";
+import VideoSlider from "~/components/VideoSlider";
 import config from "~/config";
 
 let cache: Record<string, any> = {};
@@ -32,7 +35,11 @@ export let loader: LoaderFunction = async ({ request }) => {
         if (!video.ok) { throw video; }
         const videos = await video.json();
 
-        return json({ videos, settings, full_url, baseUrl });
+        const faq = await fetch(config.apiBaseURL + 'faqs');
+        if (!faq.ok) { throw faq; }
+        const faqs = await faq.json();
+
+        return json({ videos, settings, faqs, full_url, baseUrl });
     } catch (error) {
         throw error;
     }
@@ -56,7 +63,7 @@ export const meta: MetaFunction = ({ data }: any) => {
         { title: seo_details.v_seo_title },
         { name: "description", content: seo_details.v_seo_description },
         { name: "keywords", content: seo_details.v_seo_keywords },
-        
+
         // OG Details
         { name: "og:type", content: "website" },
         { name: "og:locale", content: "en_US" },
@@ -76,7 +83,7 @@ export const meta: MetaFunction = ({ data }: any) => {
 };
 
 export default function Videos() {
-    const { videos, full_url, baseUrl }: any = useLoaderData();
+    const { videos, faqs, full_url, baseUrl }: any = useLoaderData();
 
     const breadcrumb_schema = {
         "@context": "https://schema.org/",
@@ -93,43 +100,77 @@ export default function Videos() {
             "item": full_url
         }]
     }
+
+    const navigate = useNavigate();
+    const navigateTo = (url: any) => {
+        navigate(url);
+    }
     return (
-        <div className="bg-[#E9F1F799]">
-            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-            <div className="container mx-auto">
-                <div className="py-3">
-                    <div className="flex items-center py-2 text-sm font-normal">
-                        <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-theme underline">Videos</div>
-                    </div>
+        <>
+            <div className="bg-[#E9F1F799]">
+                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+                <div className="container mx-auto">
                     <div className="py-3">
-                        <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                            {videos?.data?.data.length > 0 && videos?.data?.data.map((video: any, index: any) => (
-                                <div key={index} >
-                                    <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
-                                        <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
-                                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-                                            <span className="relative flex h-[40px] w-[40px]">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                                <span className="relative inline-flex items-center justify-center rounded-full h-[40px] w-[40px]">
-                                                    <i className="fab fa-youtube text-[30px] text-red-500 hover:text-red-600"></i>
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </Link>
-                                    <div className="mt-2">
-                                        <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="font-normal text-lg line-clamp-1">{video.title}</Link>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="flex items-center py-2 text-sm font-normal">
+                            <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-theme underline">Videos</div>
                         </div>
-                        {!(videos?.data?.data).length ?
-                            <div className="font-normal text-[#131B23] text-lg text-center py-5">Latest Videos Coming Soon.</div>
-                            : ''
-                        }
+                        <div className="py-3">
+                            <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
+                                {videos?.data?.data.length > 0 && videos?.data?.data.map((video: any, index: any) => (
+                                    <div key={index} >
+                                        <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
+                                            <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
+                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+                                                <span className="relative flex h-[40px] w-[40px]">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                    <span className="relative inline-flex items-center justify-center rounded-full h-[40px] w-[40px]">
+                                                        <i className="fab fa-youtube text-[30px] text-red-500 hover:text-red-600"></i>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </Link>
+                                        <div className="mt-2">
+                                            <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="font-normal text-lg line-clamp-1">{video.title}</Link>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            {!(videos?.data?.data).length ?
+                                <div className="font-normal text-[#131B23] text-lg text-center py-5">Latest Videos Coming Soon.</div>
+                                : ''
+                            }
+                        </div>
+                    </div>
+                    <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
+                        <div className="p-3 text-center my-6">
+                            <div className="font-bold text-3xl">Product Videos</div>
+                            <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
+                            <div className="flex justify-center py-5">
+                                <VideoSlider />
+                            </div>
+                            <button onClick={() => navigateTo('/videos')} title="View all Videos" className="n_btn2 bg-theme text-lg text-white font-medium rounded-md w-[196px] h-[46px] relative overflow-hidden z-0 transition duration-[800ms]">
+                                View all Videos
+                            </button>
+                        </div>
+                        <div className="bg-theme1 my-6 p-8 pt-10 pb-10">
+                            <div className="text-center text-white font-bold text-3xl">Contact Us</div>
+                            <EnquiryForm />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto pb-8">
+                    <div>
+                        <div className="text-3xl font-bold text-center">Frequently Asked Questions</div>
+                        <p className="text-sm font-normal text-center my-2">Have any questions about sand blasting & shot blasting machine? Find answers here</p>
+                        <div className="py-4">
+                            <Accordion faqs={faqs.data.data} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }
 

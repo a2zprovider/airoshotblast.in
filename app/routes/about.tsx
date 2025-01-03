@@ -1,7 +1,10 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json, Link, useRouteError } from "@remix-run/react";
+import { json, Link, useNavigate, useRouteError } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
+import Accordion from "~/components/Accordion";
+import EnquiryForm from "~/components/EnquiryForm";
 import LeftSideTabs from "~/components/LeftTabs";
+import VideoSlider from "~/components/VideoSlider";
 import config from "~/config";
 
 let cache: Record<string, any> = {};
@@ -29,7 +32,12 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 
     if (cachedPageDetail && cachedSettings) {
-        return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url, baseUrl });
+
+        const faq = await fetch(config.apiBaseURL + 'faqs');
+        if (!faq.ok) { throw faq; }
+        const faqs = await faq.json();
+
+        return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url, baseUrl, faqs });
     }
 
     try {
@@ -49,7 +57,11 @@ export let loader: LoaderFunction = async ({ request }) => {
             cache[settingsCacheKey] = settings;
         }
 
-        return json({ slug, page_detail, settings, full_url });
+        const faq = await fetch(config.apiBaseURL + 'faqs');
+        if (!faq.ok) { throw faq; }
+        const faqs = await faq.json();
+
+        return json({ slug, page_detail, settings, faqs, full_url });
     } catch (error) {
         throw error;
     }
@@ -91,7 +103,7 @@ export const meta: MetaFunction = ({ data }: any) => {
 };
 
 export default function About() {
-    const { slug, page_detail, settings, full_url, baseUrl }: any = useLoaderData();
+    const { slug, page_detail, settings, faqs, full_url, baseUrl }: any = useLoaderData();
     const breadcrumb_schema = {
         "@context": "https://schema.org/",
         "@type": "BreadcrumbList",
@@ -107,6 +119,10 @@ export default function About() {
             "item": full_url
         }]
     }
+    const navigate = useNavigate();
+    const navigateTo = (url: any) => {
+        navigate(url);
+    }
     return (
         <>
             <div className="bg-[#E9F1F799]">
@@ -118,6 +134,34 @@ export default function About() {
                         </div>
                         <div className="py-3">
                             <LeftSideTabs settings={settings} />
+                        </div>
+                        <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
+                            <div className="p-3 text-center my-6">
+                                <div className="font-bold text-3xl">Product Videos</div>
+                                <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
+                                <div className="flex justify-center py-5">
+                                    <VideoSlider />
+                                </div>
+                                <button onClick={() => navigateTo('/videos')} title="View all Videos" className="n_btn2 bg-theme text-lg text-white font-medium rounded-md w-[196px] h-[46px] relative overflow-hidden z-0 transition duration-[800ms]">
+                                    View all Videos
+                                </button>
+                            </div>
+                            <div className="bg-theme1 my-6 p-8 pt-10 pb-10">
+                                <div className="text-center text-white font-bold text-3xl">Contact Us</div>
+                                <EnquiryForm />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto pb-8">
+                    <div>
+                        <div className="text-3xl font-bold text-center">Frequently Asked Questions</div>
+                        <p className="text-sm font-normal text-center my-2">Have any questions about sand blasting & shot blasting machine? Find answers here</p>
+                        <div className="py-4">
+                            <Accordion faqs={faqs.data.data} />
                         </div>
                     </div>
                 </div>

@@ -244,7 +244,6 @@ export default function Contact() {
                         <div className="grid lg:grid-cols-2 grid-cols-1 bg-white items-center">
                             <div className="bg-theme1 p-8 pt-10 pb-10">
                                 <div className="font-medium text-lg text-theme text-center py-2 flex items-center justify-center gap-2"><i className="fa fa-dot-circle text-sm"></i> <span>Tell us your requirement, and we'll send you quotes</span> <i className="fa fa-dot-circle text-sm "></i></div>
-
                                 <form onSubmit={handleSubmit} id="enquiry-form" className="mt-4">
                                     <div className="flex flex-col mb-2 py-2">
                                         <label htmlFor="name" className="text-white text-lg font-medium py-2">Name</label>
