@@ -178,7 +178,7 @@ export default function Index() {
                 View all Videos
               </button>
             </div>
-            <div className="bg-formbg p-6 my-6">
+            <div className="bg-theme1 my-6 p-8 pt-10 pb-10">
               <div className="text-center text-white font-bold text-3xl">Contact Us</div>
               <EnquiryForm />
             </div>

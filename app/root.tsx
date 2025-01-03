@@ -137,7 +137,7 @@ export default function App() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
 
           {/* <!-- Favicon --> */}
-          <link rel="icon" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} type="image/x-icon" />
+          <link rel="icon" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} type="image/webp" />
           {/* <!-- Apple Touch Icon --> */}
           <link rel="apple-touch-icon" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} />
           <link rel="apple-touch-icon" sizes="180x180" href={config.imgBaseURL + 'setting/favicon/' + settings?.data?.favicon} />
@@ -159,7 +159,6 @@ export default function App() {
               `,
             }}
           />
-
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         </head>
         <body className="text-[#131B23]">
