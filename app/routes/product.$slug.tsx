@@ -201,10 +201,10 @@ export default function ProductSingle() {
         },
         "aggregateRating": {
             "@type": "AggregateRating",
-            "ratingValue": "5",
+            "ratingValue": "4.8",
             "bestRating": "5",
             "worstRating": "0",
-            "ratingCount": "5"
+            "ratingCount": "5000"
         }
     }
     const breadcrumb_schema = {
@@ -218,7 +218,7 @@ export default function ProductSingle() {
         }, {
             "@type": "ListItem",
             "position": 2,
-            "name": 'Blogs',
+            "name": 'Products',
             "item": baseUrl + '/products'
         }, {
             "@type": "ListItem",
