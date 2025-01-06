@@ -81,7 +81,7 @@ const VideoSlider = () => {
                                 <div key={index} className={cardClass + ` p-2 flex-shrink-0`}>
                                     <div className='flex justify-center'>
                                         <Link title={video.title} to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
-                                            <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
+                                            <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md w-full rounded" />
                                             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
                                                 <span className="relative flex h-[40px] w-[40px]">
                                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>

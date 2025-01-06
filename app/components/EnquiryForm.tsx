@@ -125,7 +125,7 @@ const EnquiryForm = () => {
                                 onChange={handleCodeChange}
                                 id="code">
                                 {c_loading ? (
-                                    <option value="">Loading...</option>
+                                    <option value={selectedCode}>{selectedCode}</option>
                                 ) : (
                                     countryCodes.map((country, index) => (
                                         <option key={index} value={country.dial_code}>{country.dial_code}</option>

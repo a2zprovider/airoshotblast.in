@@ -16,7 +16,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
 
-        const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
+        const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
         setTimeout(() => {
             delete cache[settingsCacheKey];
         }, CACHE_EXPIRATION_TIME);
@@ -107,7 +107,7 @@ export default function Videos() {
     }
     return (
         <>
-            <div className="bg-[#E9F1F799]">
+            <div className="bg-[#E9F1F799] pb-6">
                 <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
                 <div className="container mx-auto">
                     <div className="py-3">
@@ -141,6 +141,10 @@ export default function Videos() {
                             }
                         </div>
                     </div>
+                </div>
+            </div>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto pb-8">
                     <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
                         <div className="p-3 text-center my-6">
                             <div className="font-bold text-3xl">Product Videos</div>

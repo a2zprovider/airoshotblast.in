@@ -8,7 +8,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     // Static pages you want to include in the sitemap
     const staticPages = [
         { slug: "" }, // Homepage
-        { slug: "about-us" },
+        { slug: "about" },
         { slug: "products" },
         { slug: "blogs" },
         { slug: "careers" },
@@ -18,22 +18,22 @@ export let loader: LoaderFunction = async ({ request }) => {
     ];
 
     // Fetch API data
-    const category = await fetch(config.apiBaseURL + 'category');
+    const category = await fetch(config.apiBaseURL + 'category?limit=1000');
     const categories = await category.json();
 
-    const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
+    const blogcategory = await fetch(config.apiBaseURL + 'blogcategory?limit=1000');
     const blogcategories = await blogcategory.json();
 
-    const blog = await fetch(config.apiBaseURL + 'blogs');
+    const blog = await fetch(config.apiBaseURL + 'blogs?limit=1000');
     const blogs = await blog.json();
 
-    const product = await fetch(config.apiBaseURL + 'products');
+    const product = await fetch(config.apiBaseURL + 'products?limit=1000');
     const products = await product.json();
 
-    const tag = await fetch(config.apiBaseURL + 'tags');
+    const tag = await fetch(config.apiBaseURL + 'tags?limit=1000');
     const tags = await tag.json();
 
-    const career = await fetch(config.apiBaseURL + 'careers');
+    const career = await fetch(config.apiBaseURL + 'careers?limit=1000');
     const careers = await career.json();
 
     const page = await fetch(config.apiBaseURL + 'pages?parent=null');
