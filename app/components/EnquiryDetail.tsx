@@ -151,7 +151,7 @@ const EnquiryDetail = (data: any) => {
                         <label htmlFor="mobile" className="text-[#131B23] text-lg font-medium">Mobile No.</label>
                         <div className="flex items-center shadow-md">
                             <div className="relative">
-                                <label htmlFor="code" className='hidden'>Code</label>
+                                <label htmlFor="code" className=''></label>
                                 <select className="h-[52px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
                                     name="code"
                                     value={selectedCode}
