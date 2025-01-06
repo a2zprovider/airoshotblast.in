@@ -95,7 +95,7 @@ const EnquiryForm = () => {
         <>
             <form className="mt-4" id="enquiry-form" onSubmit={handleSubmit}>
                 <div className="flex flex-col mb-2 py-2">
-                    <label htmlFor="name" className="text-white text-lg font-medium py-2">Name</label>
+                    <label htmlFor="name" className="text-[#383838] text-lg font-medium py-2">Name</label>
                     <input
                         type="text"
                         name="name"
@@ -105,7 +105,7 @@ const EnquiryForm = () => {
                     />
                 </div>
                 <div className="flex flex-col mb-2 py-2">
-                    <label htmlFor="email" className="text-white text-lg font-medium py-2">Email</label>
+                    <label htmlFor="email" className="text-[#383838] text-lg font-medium py-2">Email</label>
                     <input
                         type="email"
                         name="email"
@@ -116,9 +116,10 @@ const EnquiryForm = () => {
                     />
                 </div>
                 <div className="flex flex-col mb-2 py-2">
-                    <label htmlFor="mobile" className="text-white text-lg font-medium py-2">Mobile No.</label>
+                    <label htmlFor="mobile" className="text-[#383838] text-lg font-medium py-2">Mobile No.</label>
                     <div className="flex items-center">
                         <div className="relative">
+                            <label htmlFor="code" className='hidden'>Code</label>
                             <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
                                 name="code"
                                 value={selectedCode}
@@ -150,7 +151,7 @@ const EnquiryForm = () => {
                 </div>
                 <input type="hidden" name="captcha" defaultValue="true" />
                 <div className="flex flex-col mb-4 py-2">
-                    <label htmlFor="message" className="text-white text-lg font-medium py-2">Your Requirement</label>
+                    <label htmlFor="message" className="text-[#383838] text-lg font-medium py-2">Your Requirement</label>
                     <textarea name="message" id="" rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"></textarea>
                 </div>
                 <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2 py-2">
