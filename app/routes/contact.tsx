@@ -246,7 +246,7 @@ export default function Contact() {
                                 <div className="font-medium text-lg text-theme text-center py-2 flex items-center justify-center gap-2"><i className="fa fa-dot-circle text-sm"></i> <span>Tell us your requirement, and we'll send you quotes</span> <i className="fa fa-dot-circle text-sm "></i></div>
                                 <form onSubmit={handleSubmit} id="enquiry-form" className="mt-4">
                                     <div className="flex flex-col mb-2 py-2">
-                                        <label htmlFor="name" className="text-white text-lg font-medium py-2">Name</label>
+                                        <label htmlFor="name" className="text-[#383838] text-lg font-medium py-2">Name</label>
                                         <input
                                             type="text"
                                             name="name"
@@ -257,7 +257,7 @@ export default function Contact() {
                                     </div>
                                     <input type="hidden" name="captcha" defaultValue="true" />
                                     <div className="flex flex-col mb-2 py-2">
-                                        <label htmlFor="email" className="text-white text-lg font-medium py-2">Email</label>
+                                        <label htmlFor="email" className="text-[#383838] text-lg font-medium py-2">Email</label>
                                         <input
                                             type="email"
                                             name="email"
@@ -268,9 +268,10 @@ export default function Contact() {
                                         />
                                     </div>
                                     <div className="flex flex-col mb-2 py-2">
-                                        <label htmlFor="mobile" className="text-white text-lg font-medium py-2">Mobile No.</label>
+                                        <label htmlFor="mobile" className="text-[#383838] text-lg font-medium py-2">Mobile No.</label>
                                         <div className="flex items-center">
                                             <div className="relative">
+                                                <label htmlFor="code" className="hidden">Mobile No.</label>
                                                 <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
                                                     name="code"
                                                     value={selectedCode}
@@ -300,7 +301,7 @@ export default function Contact() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col mb-4 py-2">
-                                        <label htmlFor="requirement" className="text-white text-lg font-medium py-2">Your Requirement</label>
+                                        <label htmlFor="requirement" className="text-[#383838] text-lg font-medium py-2">Your Requirement</label>
                                         <textarea name="message" id="" required rows={5} placeholder="Describe Your Requirement in Detail..." className="px-3 py-2 bg-[#fff] text-lg font-medium text-[#131B23] rounded-md outline-none"></textarea>
                                     </div>
                                     <div className="flex flex-col md:flex-row mb-2 md:items-center gap-2 py-2">

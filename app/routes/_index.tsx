@@ -179,7 +179,7 @@ export default function Index() {
               </button>
             </div>
             <div className="bg-theme1 my-6 p-8 pt-10 pb-10">
-              <div className="text-center text-white font-bold text-3xl">Contact Us</div>
+              <div className="text-center text-[#383838] font-bold text-3xl">Contact Us</div>
               <EnquiryForm />
             </div>
           </div>
