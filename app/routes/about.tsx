@@ -17,7 +17,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     const cachedPageDetail = cache[pageCacheKey];
     const cachedSettings = cache[settingsCacheKey];
 
-    const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
+    const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
     setTimeout(() => {
         delete cache[settingsCacheKey];
         delete cache[pageCacheKey];
@@ -125,36 +125,39 @@ export default function About() {
     }
     return (
         <>
-            <div className="bg-[#E9F1F799]">
+            <div className="bg-[#E9F1F799] pb-6">
                 <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
                 <div className="container mx-auto">
-                    <div className="bg-[#f6f6f6] px-3 md:px-6 py-3">
+                    <div className="bg-[#f6f6f6] px-3 md:px-6 py-3 pb-5">
                         <div className="flex items-center py-2 text-sm font-normal">
                             <Link title="Home" to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp; <div className="text-sm font-normal text-theme underline">About Us</div>
                         </div>
                         <div className="py-3">
                             <LeftSideTabs settings={settings} />
                         </div>
-                        <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
-                            <div className="p-3 text-center my-6">
-                                <div className="font-bold text-3xl">Product Videos</div>
-                                <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
-                                <div className="flex justify-center py-5">
-                                    <VideoSlider />
-                                </div>
-                                <button onClick={() => navigateTo('/videos')} title="View all Videos" className="n_btn2 bg-theme text-lg text-white font-medium rounded-md w-[196px] h-[46px] relative overflow-hidden z-0 transition duration-[800ms]">
-                                    View all Videos
-                                </button>
+                    </div>
+                </div>
+            </div>
+            <div className="bg-[#E9F1F799]">
+                <div className="container mx-auto pb-8">
+                    <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
+                        <div className="p-3 text-center my-6">
+                            <div className="font-bold text-3xl">Product Videos</div>
+                            <div className="font-normal text-sm py-2">Check Out Our Latest Videos of Sand Blasting Machine, & Shot Blasting Machine</div>
+                            <div className="flex justify-center py-5">
+                                <VideoSlider />
                             </div>
-                            <div className="bg-theme1 my-6 p-8 pt-10 pb-10">
-                                <div className="text-center text-white font-bold text-3xl">Contact Us</div>
-                                <EnquiryForm />
-                            </div>
+                            <button onClick={() => navigateTo('/videos')} title="View all Videos" className="n_btn2 bg-theme text-lg text-white font-medium rounded-md w-[196px] h-[46px] relative overflow-hidden z-0 transition duration-[800ms]">
+                                View all Videos
+                            </button>
+                        </div>
+                        <div className="bg-theme1 my-6 p-8 pt-10 pb-10">
+                            <div className="text-center text-white font-bold text-3xl">Contact Us</div>
+                            <EnquiryForm />
                         </div>
                     </div>
                 </div>
             </div>
-
             <div className="bg-[#E9F1F799]">
                 <div className="container mx-auto pb-8">
                     <div>

@@ -3,25 +3,25 @@ import { useEffect, useState } from "react";
 import config from "~/config";
 
 // app/components/Footer.tsx
-export default function Footer({ settings }: any) {
+export default function Footer({ settings, pages }: any) {
   const social_links = settings ? JSON.parse(settings?.social_links) : {};
 
-  const [pages, setPages] = useState<any[]>([]);
+  // const [pages, setPages] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchPages = async () => {
-      try {
-        const page = await fetch(config.apiBaseURL + 'pages?parent=null');
-        const pages = await page.json();
+  // useEffect(() => {
+  //   const fetchPages = async () => {
+  //     try {
+  //       const page = await fetch(config.apiBaseURL + 'pages?parent=null');
+  //       const pages = await page.json();
 
-        setPages(pages.data.data);
-      } catch (error) {
-        console.error('Error fetching pages:', error);
-      }
-    };
+  //       setPages(pages.data.data);
+  //     } catch (error) {
+  //       console.error('Error fetching pages:', error);
+  //     }
+  //   };
 
-    fetchPages();
-  }, []);
+  //   fetchPages();
+  // }, []);
 
   return (
     <footer className="bg-[#11151C]">
