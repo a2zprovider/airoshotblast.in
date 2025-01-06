@@ -271,7 +271,7 @@ export default function Contact() {
                                         <label htmlFor="mobile" className="text-[#383838] text-lg font-medium py-2">Mobile No.</label>
                                         <div className="flex items-center">
                                             <div className="relative">
-                                                <label htmlFor="code" className="hidden">Mobile No.</label>
+                                                <label htmlFor="code" className=""></label>
                                                 <select className="h-[44px] block w-full py-2 pl-4 pr-4 bg-[#fff] text-lg font-medium text-[#131B23] rounded-l-md outline-none border-r appearance-none"
                                                     name="code"
                                                     value={selectedCode}

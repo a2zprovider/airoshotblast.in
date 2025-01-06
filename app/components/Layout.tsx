@@ -5,7 +5,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
     return (
         <div>
-            <main>{children}</main>
+            <main className="min-h-screen">{children}</main>
         </div>
     );
 }

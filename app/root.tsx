@@ -25,7 +25,7 @@ import Layout from "./components/Layout";
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-  { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap" },
+  // { rel: "preload", href: "https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap" },
   { rel: 'stylesheet', href: '/fontawesome/css/all.min.css' },
 ];
 
@@ -159,7 +159,7 @@ export default function App() {
           <link rel="canonical" href={full_url} />
           <Links />
           {/* Google Analytics Script */}
-          <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`} defer />
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${other_details?.google_analytics_id}`} />
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -170,7 +170,8 @@ export default function App() {
               `,
             }}
           />
-          <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+          <script async src="https://www.google.com/recaptcha/api.js" ></script>
+          {/* <link rel="preload" href="https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500;700;800&display=swap" as="style" /> */}
         </head>
         <body className="text-[#131B23]">
           <Header settings={settings?.data} />
