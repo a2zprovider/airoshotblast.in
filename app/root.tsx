@@ -31,35 +31,46 @@ export const links: LinksFunction = () => [
 
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
-  const settingsCacheKey = `settings`;
-
-  const cachedSettings = cache[settingsCacheKey];
-
-  const url = new URL(request.url);
-
-  const baseUrl = `https://${url.host}`;
-  const full_url = `https://${url.host}${url.pathname}`;
-
-  const CACHE_EXPIRATION_TIME = 2 * 60 * 1000;
-  setTimeout(() => {
-    delete cache[settingsCacheKey];
-    console.error('Setting cache clear');
-  }, CACHE_EXPIRATION_TIME);
-
-  if (cachedSettings) {
-    return json({ settings: cachedSettings, full_url, });
-  }
-
   try {
+    const settingsCacheKey = `settings`;
+    const pagesCacheKey = `pages`;
+
+    const cachedSettings = cache[settingsCacheKey];
+    const cachedPages = cache[pagesCacheKey];
+
+    const url = new URL(request.url);
+
+    const baseUrl = `https://${url.host}`;
+    const full_url = `https://${url.host}${url.pathname}`;
+
+    const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
+    setTimeout(() => {
+      delete cache[settingsCacheKey];
+      delete cache[cachedPages];
+      console.error('Setting cache clear');
+    }, CACHE_EXPIRATION_TIME);
+
     let settings;
     if (!cachedSettings) {
       const setting = await fetch(config.apiBaseURL + 'setting');
       if (!setting.ok) { throw setting; }
       settings = await setting.json();
       cache[settingsCacheKey] = settings;
+    } else {
+      settings = cachedSettings;
     }
 
-    return json({ settings, full_url, });
+    let pages;
+    if (!cachedPages) {
+      const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
+      if (!page.ok) { throw page; }
+      pages = await page.json();
+      cache[pagesCacheKey] = pages;
+    } else {
+      pages = cachedPages;
+    }
+
+    return json({ settings, pages, full_url });
   } catch (error) {
     throw error;
   }
@@ -119,7 +130,7 @@ export function ErrorBoundary() {
 }
 
 export default function App() {
-  const { settings, full_url }: any = useLoaderData();
+  const { settings, pages, full_url }: any = useLoaderData();
 
   const other_details = settings?.data?.other_details ? JSON.parse(settings?.data?.other_details) : {};
 
@@ -170,7 +181,7 @@ export default function App() {
               <Outlet />
             )}
           </Layout>
-          <Footer settings={settings?.data} />
+          <Footer settings={settings?.data} pages={pages?.data?.data} />
 
           <StatusShow />
           <Enquiry />
