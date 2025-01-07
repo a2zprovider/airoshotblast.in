@@ -137,7 +137,7 @@ export default function Index() {
     <div>
       <script type="application/ld+json">{JSON.stringify(search_schema)}</script>
       <script type="application/ld+json">{JSON.stringify(organization_schema)}</script>
-      <div className="bg-[#E9F1F799]">
+      <>
         <div className="container mx-auto py-8">
           <div className="flex lg:justify-center items-start w-full lg:gap-8 md:gap-4 overflow-x-auto">
             {categories.data.data.map((category: any, index: any) => (
@@ -160,7 +160,7 @@ export default function Index() {
             </Link>
           </div>
         </div>
-      </div >
+      </>
       <div>
         <Slider />
       </div>
@@ -186,9 +186,8 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="bg-[#E9F1F799]">
+      <>
         <div className="container mx-auto py-8">
-
           {/* Section 1 */}
           <div className="">
             <div className="py-4">
@@ -223,9 +222,9 @@ export default function Index() {
             </div>
           </div>
         </div>
-      </div>
+      </>
 
-      <div className="bg-[#E9F1F799]">
+      <>
         <div className="container mx-auto pb-8">
           <div>
             <div className="text-3xl font-bold text-center">Frequently Asked Questions</div>
@@ -235,7 +234,7 @@ export default function Index() {
             </div>
           </div>
         </div>
-      </div>
+      </>
 
     </div >
   );
@@ -245,16 +244,14 @@ export function ErrorBoundary() {
   const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
   return (
     <>
-      <div className="bg-[#E9F1F799]">
-        <div className="container mx-auto">
-          <div className="py-8">
-            <div className="text-center">
-              <div className="font-medium text-9xl mb-5">{error.status}</div>
-              <div className="font-medium text-3xl mb-5">{error.statusText}</div>
-              <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
-              <div className="mt-5 pt-5">
-                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
-              </div>
+      <div className="container mx-auto">
+        <div className="py-8">
+          <div className="text-center">
+            <div className="font-medium text-9xl mb-5">{error.status}</div>
+            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+            <div className="mt-5 pt-5">
+              <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
             </div>
           </div>
         </div>
