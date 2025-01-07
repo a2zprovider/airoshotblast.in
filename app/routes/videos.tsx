@@ -107,43 +107,41 @@ export default function Videos() {
     }
     return (
         <>
-            <div className="bg-[#E9F1F799] pb-6">
-                <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
-                <div className="container mx-auto">
+            <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
+            <div className="container mx-auto">
+                <div className="py-3">
+                    <div className="flex items-center py-2 text-sm font-normal">
+                        <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-theme underline">Videos</div>
+                    </div>
                     <div className="py-3">
-                        <div className="flex items-center py-2 text-sm font-normal">
-                            <Link to="/" className="text-sm font-normal text-[#131B23]">Home</Link> &nbsp;<i className="fa fa-chevron-right text-[10px]"></i><i className="fa fa-chevron-right text-[10px]"></i>&nbsp;  <div className="text-sm font-normal text-theme underline">Videos</div>
-                        </div>
-                        <div className="py-3">
-                            <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
-                                {videos?.data?.data.length > 0 && videos?.data?.data.map((video: any, index: any) => (
-                                    <div key={index} >
-                                        <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
-                                            <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
-                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-                                                <span className="relative flex h-[40px] w-[40px]">
-                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                                    <span className="relative inline-flex items-center justify-center rounded-full h-[40px] w-[40px]">
-                                                        <i className="fab fa-youtube text-[30px] text-red-500 hover:text-red-600"></i>
-                                                    </span>
+                        <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-6">
+                            {videos?.data?.data.length > 0 && videos?.data?.data.map((video: any, index: any) => (
+                                <div key={index} >
+                                    <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="relative">
+                                        <img src={'https://i.ytimg.com/vi/' + video.url + '/hqdefault.jpg'} alt={video.title} className="shadow-md rounded" />
+                                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+                                            <span className="relative flex h-[40px] w-[40px]">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                <span className="relative inline-flex items-center justify-center rounded-full h-[40px] w-[40px]">
+                                                    <i className="fab fa-youtube text-[30px] text-red-500 hover:text-red-600"></i>
                                                 </span>
-                                            </div>
-                                        </Link>
-                                        <div className="mt-2">
-                                            <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="font-normal text-lg line-clamp-1">{video.title}</Link>
+                                            </span>
                                         </div>
+                                    </Link>
+                                    <div className="mt-2">
+                                        <Link to={'https://www.youtube.com/watch?v=' + video.url} target="_blank" className="font-normal text-lg line-clamp-1">{video.title}</Link>
                                     </div>
-                                ))}
-                            </div>
-                            {!(videos?.data?.data).length ?
-                                <div className="font-normal text-[#131B23] text-lg text-center py-5">Latest Videos Coming Soon.</div>
-                                : ''
-                            }
+                                </div>
+                            ))}
                         </div>
+                        {!(videos?.data?.data).length ?
+                            <div className="font-normal text-[#131B23] text-lg text-center py-5">Latest Videos Coming Soon.</div>
+                            : ''
+                        }
                     </div>
                 </div>
             </div>
-            <div className="bg-[#E9F1F799]">
+            <>
                 <div className="container mx-auto pb-8">
                     <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
                         <div className="p-3 text-center my-6">
@@ -162,8 +160,8 @@ export default function Videos() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="bg-[#E9F1F799]">
+            </>
+            <>
                 <div className="container mx-auto pb-8">
                     <div>
                         <div className="text-3xl font-bold text-center">Frequently Asked Questions</div>
@@ -173,7 +171,7 @@ export default function Videos() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         </>
     );
 }
@@ -182,16 +180,14 @@ export function ErrorBoundary() {
     const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
     return (
         <>
-            <div className="bg-[#E9F1F799]">
-                <div className="container mx-auto">
-                    <div className="py-8">
-                        <div className="text-center">
-                            <div className="font-medium text-9xl mb-5">{error.status}</div>
-                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
-                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
-                            <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
-                            </div>
+            <div className="container mx-auto">
+                <div className="py-8">
+                    <div className="text-center">
+                        <div className="font-medium text-9xl mb-5">{error.status}</div>
+                        <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                        <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                        <div className="mt-5 pt-5">
+                            <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                         </div>
                     </div>
                 </div>
