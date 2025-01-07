@@ -51,7 +51,7 @@ export default function CategoryProductSection() {
     }
 
     return (
-        <div className="bg-[#E9F1F799]">
+        <>
             <div className="container mx-auto py-8">
                 {category.map((cat: any, index: any) => (
                     cat.parent == null ?
@@ -65,6 +65,6 @@ export default function CategoryProductSection() {
                         : ''
                 ))}
             </div>
-        </div>
+        </>
     );
 }

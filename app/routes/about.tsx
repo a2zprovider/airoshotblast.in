@@ -125,7 +125,7 @@ export default function About() {
     }
     return (
         <>
-            <div className="bg-[#E9F1F799] pb-6">
+            <div className="pb-6">
                 <script type="application/ld+json">{JSON.stringify(breadcrumb_schema)}</script>
                 <div className="container mx-auto">
                     <div className="bg-[#f6f6f6] px-3 md:px-6 py-3 pb-5">
@@ -138,7 +138,7 @@ export default function About() {
                     </div>
                 </div>
             </div>
-            <div className="bg-[#E9F1F799]">
+            <>
                 <div className="container mx-auto pb-8">
                     <div className="grid lg:grid-cols-2 md:grid-cols-1 items-center">
                         <div className="p-3 text-center my-6">
@@ -157,8 +157,8 @@ export default function About() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="bg-[#E9F1F799]">
+            </>
+            <>
                 <div className="container mx-auto pb-8">
                     <div>
                         <div className="text-3xl font-bold text-center">Frequently Asked Questions</div>
@@ -168,7 +168,7 @@ export default function About() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         </>
     );
 }
@@ -177,16 +177,14 @@ export function ErrorBoundary() {
     const error = useRouteError() as { status: number; statusText: string; data?: { message?: string } };
     return (
         <>
-            <div className="bg-[#E9F1F799]">
-                <div className="container mx-auto">
-                    <div className="py-8">
-                        <div className="text-center">
-                            <div className="font-medium text-9xl mb-5">{error.status}</div>
-                            <div className="font-medium text-3xl mb-5">{error.statusText}</div>
-                            <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
-                            <div className="mt-5 pt-5">
-                                <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
-                            </div>
+            <div className="container mx-auto">
+                <div className="py-8">
+                    <div className="text-center">
+                        <div className="font-medium text-9xl mb-5">{error.status}</div>
+                        <div className="font-medium text-3xl mb-5">{error.statusText}</div>
+                        <p>{error && error?.data && error.data.message ? error.data.message : 'Sorry, something went wrong.'}</p>
+                        <div className="mt-5 pt-5">
+                            <Link to="/" className="bg-theme text-white rounded p-5 font-medium text-xl">Go To Homepage</Link>
                         </div>
                     </div>
                 </div>
