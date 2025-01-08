@@ -8,27 +8,37 @@ import config from "~/config";
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     try {
+        const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
-
-        const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-        setTimeout(() => {
-            delete cache[settingsCacheKey];
-        }, CACHE_EXPIRATION_TIME);
-
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
             if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
+            setTimeout(() => {
+                delete cache[settingsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
         } else {
             settings = cachedSettings;
         }
 
-        const cat = await fetch(config.apiBaseURL + 'category/' + params.catslug);
-        if (!cat.ok) { throw cat; }
-        const category = await cat.json();
+        const cdetailCacheKey = `category-${params.catslug}`;
+        const cachedCDetail = cache[cdetailCacheKey];
+        let category;
+        if (!cachedCDetail) {
+            const c_detail = await fetch(config.apiBaseURL + 'category/' + params.catslug);
+            if (!c_detail.ok) { throw c_detail; }
+            category = await c_detail.json();
+            cache[cdetailCacheKey] = category;
+            setTimeout(() => {
+                delete cache[cdetailCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            category = cachedCDetail;
+        }
 
         const url = new URL(request.url);
         const baseUrl = `https://${url.host}`;

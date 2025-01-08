@@ -10,56 +10,57 @@ import config from "~/config";
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
     const slug = 'about-us';
-
-    const pageCacheKey = `page-${slug}`;
-    const settingsCacheKey = `settings`;
-
-    const cachedPageDetail = cache[pageCacheKey];
-    const cachedSettings = cache[settingsCacheKey];
-
-    const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-    setTimeout(() => {
-        delete cache[settingsCacheKey];
-        delete cache[pageCacheKey];
-    }, CACHE_EXPIRATION_TIME);
-
-    const url = new URL(request.url);
-    const baseUrl = `https://${url.host}`;
-    const full_url = `https://${url.host}${url.pathname}`;
-    console.log('url : ', url);
-    console.log('baseUrl : ', baseUrl);
-    console.log('full_url : ', full_url);
-
-
-    if (cachedPageDetail && cachedSettings) {
-
-        const faq = await fetch(config.apiBaseURL + 'faqs');
-        if (!faq.ok) { throw faq; }
-        const faqs = await faq.json();
-
-        return json({ slug, page_detail: cachedPageDetail, settings: cachedSettings, full_url, baseUrl, faqs });
-    }
+    const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
 
     try {
-        let page_detail;
-        if (!cachedPageDetail) {
-            const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
-            if (!p_detail.ok) { throw p_detail; }
-            page_detail = await p_detail.json();
-            cache[pageCacheKey] = page_detail;
-        }
-
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
             if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
+            setTimeout(() => {
+                delete cache[settingsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            settings = cachedSettings;
         }
 
-        const faq = await fetch(config.apiBaseURL + 'faqs');
-        if (!faq.ok) { throw faq; }
-        const faqs = await faq.json();
+        const faqsCacheKey = `faqs-limit_10`;
+        const cachedFaqs = cache[faqsCacheKey];
+        let faqs;
+        if (!cachedFaqs) {
+            const faq = await fetch(config.apiBaseURL + 'faqs?limit=10');
+            if (!faq.ok) { throw faq; }
+            faqs = await faq.json();
+            cache[faqsCacheKey] = faqs;
+            setTimeout(() => {
+                delete cache[faqsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            faqs = cachedFaqs;
+        }
+
+        const pageCacheKey = `page-${slug}`;
+        const cachedPageDetail = cache[pageCacheKey];
+        let page_detail;
+        if (!cachedPageDetail) {
+            const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
+            if (!p_detail.ok) { throw p_detail; }
+            page_detail = await p_detail.json();
+            cache[pageCacheKey] = page_detail;
+            setTimeout(() => {
+                delete cache[pageCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            page_detail = cachedPageDetail;
+        }
+
+        const url = new URL(request.url);
+        const baseUrl = `https://${url.host}`;
+        const full_url = `https://${url.host}${url.pathname}`;
 
         return json({ slug, page_detail, settings, faqs, full_url });
     } catch (error) {

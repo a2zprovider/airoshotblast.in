@@ -6,53 +6,56 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     const { slug } = params;
 
-    const pageCacheKey = `page-${slug}`;
-    const pagesCacheKey = `pages`;
-    const settingsCacheKey = `settings`;
-
-    const cachedPageDetail = cache[pageCacheKey];
-    const cachedPages = cache[pagesCacheKey];
-    const cachedSettings = cache[settingsCacheKey];
-
-    const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-    setTimeout(() => {
-        delete cache[pageCacheKey];
-        delete cache[pagesCacheKey];
-        delete cache[settingsCacheKey];
-    }, CACHE_EXPIRATION_TIME);
-
+    const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
 
     const url = new URL(request.url);
     const baseUrl = `https://${url.host}`;
     const full_url = `https://${url.host}${url.pathname}`;
 
-    if (cachedPageDetail && cachedPages && cachedSettings) {
-        return json({ slug, pages: cachedPages, page_detail: cachedPageDetail, settings: cachedSettings, full_url });
-    }
-
     try {
+        const pagesCacheKey = `pages-limit_100-parent_null`;
+        const cachedPages = cache[pagesCacheKey];
         let pages;
         if (!cachedPages) {
             const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
             if (!page.ok) { throw page; }
             pages = await page.json();
             cache[pagesCacheKey] = pages;
+            setTimeout(() => {
+                delete cache[pagesCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            pages = cachedPages;
         }
 
+        const pageCacheKey = `page-${slug}`;
+        const cachedPageDetail = cache[pageCacheKey];
         let page_detail;
         if (!cachedPageDetail) {
             const p_detail = await fetch(config.apiBaseURL + 'page/' + slug);
             if (!p_detail.ok) { throw p_detail; }
             page_detail = await p_detail.json();
             cache[pageCacheKey] = page_detail;
+            setTimeout(() => {
+                delete cache[pageCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            page_detail = cachedPageDetail;
         }
 
+        const settingsCacheKey = `settings`;
+        const cachedSettings = cache[settingsCacheKey];
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
             if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
+            setTimeout(() => {
+                delete cache[settingsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            settings = cachedSettings;
         }
 
         return json({ slug, pages, page_detail, settings, full_url, baseUrl });

@@ -10,48 +10,87 @@ export let loader: LoaderFunction = async ({ request }) => {
     try {
         const url_params = new URL(request.url).searchParams;
         const year = url_params.get('year');
-        let blog_url = config.apiBaseURL + 'blogs?limit=1000';
-        if (year) {
-            blog_url = config.apiBaseURL + 'blogs?limit=1000&year=' + year;
-        }
-
-        const blog = await fetch(blog_url);
-        if (!blog.ok) { throw blog; }
-        const blogs = await blog.json();
 
         const url = new URL(request.url);
         const baseUrl = `https://${url.host}`;
         const full_url = `https://${url.host}${url.pathname}`;
 
+        const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+
+        const blogsCacheKey = `blogs-limit_1000`;
+        const cachedBlogs = cache[blogsCacheKey];
+        let blogs;
+        if (!cachedBlogs) {
+            const all_blogs = await fetch(config.apiBaseURL + 'blogs?limit=1000');
+            if (!all_blogs.ok) { throw all_blogs; }
+            blogs = await all_blogs.json();
+            cache[blogsCacheKey] = blogs;
+            setTimeout(() => {
+                delete cache[blogsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            blogs = cachedBlogs;
+        }
+
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
-
-        const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-        setTimeout(() => {
-            delete cache[settingsCacheKey];
-        }, CACHE_EXPIRATION_TIME);
-
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
             if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
+            setTimeout(() => {
+                delete cache[settingsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
         } else {
             settings = cachedSettings;
         }
 
-        const tag = await fetch(config.apiBaseURL + 'tags');
-        if (!tag.ok) { throw tag; }
-        const tags = await tag.json();
+        const tagsCacheKey = `tags-limit_10`;
+        const cachedTags = cache[tagsCacheKey];
+        let tags;
+        if (!cachedTags) {
+            const tag = await fetch(config.apiBaseURL + 'tags?limit=10');
+            if (!tag.ok) { throw tag; }
+            tags = await tag.json();
+            cache[tagsCacheKey] = tags;
+            setTimeout(() => {
+                delete cache[tagsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            tags = cachedTags;
+        }
 
-        const blogcategory = await fetch(config.apiBaseURL + 'blogcategory');
-        if (!blogcategory.ok) { throw blogcategory; }
-        const blogcategories = await blogcategory.json();
+        const blogcategoryCacheKey = `blogcategories-limit_10`;
+        const cachedBlogcategory = cache[blogcategoryCacheKey];
+        let blogcategories;
+        if (!cachedBlogcategory) {
+            const blogcategory = await fetch(config.apiBaseURL + 'blogcategory?limit=10');
+            if (!blogcategory.ok) { throw blogcategory; }
+            blogcategories = await blogcategory.json();
+            cache[blogcategoryCacheKey] = blogcategories;
+            setTimeout(() => {
+                delete cache[blogcategoryCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            blogcategories = cachedBlogcategory;
+        }
 
-        const recent_blog = await fetch(config.apiBaseURL + 'blogs?limit=5');
-        if (!recent_blog.ok) { throw recent_blog; }
-        const recent_blogs = await recent_blog.json();
+        const recentblogsCacheKey = `blogs-limit_5`;
+        const cachedRecentblogs = cache[recentblogsCacheKey];
+        let recent_blogs;
+        if (!cachedRecentblogs) {
+            const r_blogs = await fetch(config.apiBaseURL + 'blogs?limit=5');
+            if (!r_blogs.ok) { throw r_blogs; }
+            recent_blogs = await r_blogs.json();
+            cache[recentblogsCacheKey] = recent_blogs;
+            setTimeout(() => {
+                delete cache[recentblogsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            recent_blogs = cachedRecentblogs;
+        }
 
         return json({ blogs, blogcategories, tags, recent_blogs, settings, full_url, baseUrl, year });
     } catch (error) {

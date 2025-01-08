@@ -32,40 +32,41 @@ export const links: LinksFunction = () => [
 let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request }) => {
   try {
-    const settingsCacheKey = `settings`;
-    const pagesCacheKey = `pages`;
-
-    const cachedSettings = cache[settingsCacheKey];
-    const cachedPages = cache[pagesCacheKey];
-
     const url = new URL(request.url);
 
     const baseUrl = `https://${url.host}`;
     const full_url = `https://${url.host}${url.pathname}`;
 
-    const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-    setTimeout(() => {
-      delete cache[settingsCacheKey];
-      delete cache[cachedPages];
-      console.error('Setting cache clear');
-    }, CACHE_EXPIRATION_TIME);
+    const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
 
+    const settingsCacheKey = `settings`;
+    const cachedSettings = cache[settingsCacheKey];
     let settings;
     if (!cachedSettings) {
       const setting = await fetch(config.apiBaseURL + 'setting');
       if (!setting.ok) { throw setting; }
       settings = await setting.json();
       cache[settingsCacheKey] = settings;
+      setTimeout(() => {
+        delete cache[settingsCacheKey];
+      }, CACHE_EXPIRATION_TIME);
+      console.log('setting api run : ');
     } else {
+      console.log('setting cache api run : ');
       settings = cachedSettings;
     }
 
+    const pagesCacheKey = `pages-limit_100-parent_null`;
+    const cachedPages = cache[pagesCacheKey];
     let pages;
     if (!cachedPages) {
       const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
       if (!page.ok) { throw page; }
       pages = await page.json();
       cache[pagesCacheKey] = pages;
+      setTimeout(() => {
+        delete cache[pagesCacheKey];
+      }, CACHE_EXPIRATION_TIME);
     } else {
       pages = cachedPages;
     }
