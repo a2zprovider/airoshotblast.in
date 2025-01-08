@@ -11,27 +11,37 @@ export let loader: LoaderFunction = async ({ request }) => {
         const baseUrl = `https://${url.host}`;
         const full_url = `https://${url.host}${url.pathname}`;
 
+        const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
-
-        const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-        setTimeout(() => {
-            delete cache[settingsCacheKey];
-        }, CACHE_EXPIRATION_TIME);
-
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
             if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
+            setTimeout(() => {
+                delete cache[settingsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
         } else {
             settings = cachedSettings;
         }
 
-        const faq = await fetch(config.apiBaseURL + 'faqs');
-        if (!faq.ok) { throw faq; }
-        const faqs = await faq.json();
+        const faqsCacheKey = `faqs-limit_1000`;
+        const cachedFaqs = cache[faqsCacheKey];
+        let faqs;
+        if (!cachedFaqs) {
+            const faq = await fetch(config.apiBaseURL + 'faqs?limit=1000');
+            if (!faq.ok) { throw faq; }
+            faqs = await faq.json();
+            cache[faqsCacheKey] = faqs;
+            setTimeout(() => {
+                delete cache[faqsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            faqs = cachedFaqs;
+        }
 
         return json({ faqs, settings, full_url, baseUrl });
     } catch (error) {
