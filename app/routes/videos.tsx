@@ -13,31 +13,52 @@ export let loader: LoaderFunction = async ({ request }) => {
         const baseUrl = `https://${url.host}`;
         const full_url = `https://${url.host}${url.pathname}`;
 
+        const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
-
-        const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-        setTimeout(() => {
-            delete cache[settingsCacheKey];
-        }, CACHE_EXPIRATION_TIME);
-
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
             if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
+            setTimeout(() => {
+                delete cache[settingsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
         } else {
             settings = cachedSettings;
         }
 
-        const video = await fetch(config.apiBaseURL + 'video?limit=100');
-        if (!video.ok) { throw video; }
-        const videos = await video.json();
+        const videosCacheKey = `videos-limit_100`;
+        const cachedVideos = cache[videosCacheKey];
+        let videos;
+        if (!cachedVideos) {
+            const video = await fetch(config.apiBaseURL + 'video?limit=100');
+            if (!video.ok) { throw video; }
+            videos = await video.json();
+            cache[videosCacheKey] = videos;
+            setTimeout(() => {
+                delete cache[videosCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            videos = cachedVideos;
+        }
 
-        const faq = await fetch(config.apiBaseURL + 'faqs');
-        if (!faq.ok) { throw faq; }
-        const faqs = await faq.json();
+        const faqsCacheKey = `faqs-limit_10`;
+        const cachedFaqs = cache[faqsCacheKey];
+        let faqs;
+        if (!cachedFaqs) {
+            const faq = await fetch(config.apiBaseURL + 'faqs?limit=10');
+            if (!faq.ok) { throw faq; }
+            faqs = await faq.json();
+            cache[faqsCacheKey] = faqs;
+            setTimeout(() => {
+                delete cache[faqsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            faqs = cachedFaqs;
+        }
 
         return json({ videos, settings, faqs, full_url, baseUrl });
     } catch (error) {

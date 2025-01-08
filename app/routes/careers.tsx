@@ -9,31 +9,52 @@ export let loader: LoaderFunction = async ({ request, params }) => {
         const baseUrl = `https://${url.host}`;
         const full_url = `https://${url.host}${url.pathname}`;
 
+        const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+
         const settingsCacheKey = `settings`;
         const cachedSettings = cache[settingsCacheKey];
-
-        const CACHE_EXPIRATION_TIME = 1 * 60 * 60 * 1000;
-        setTimeout(() => {
-            delete cache[settingsCacheKey];
-        }, CACHE_EXPIRATION_TIME);
-
         let settings;
         if (!cachedSettings) {
             const setting = await fetch(config.apiBaseURL + 'setting');
             if (!setting.ok) { throw setting; }
             settings = await setting.json();
             cache[settingsCacheKey] = settings;
+            setTimeout(() => {
+                delete cache[settingsCacheKey];
+            }, CACHE_EXPIRATION_TIME);
         } else {
             settings = cachedSettings;
         }
 
-        const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
-        if (!page.ok) { throw page; }
-        const pages = await page.json();
+        const pagesCacheKey = `pages-limit_100-parent_null`;
+        const cachedPages = cache[pagesCacheKey];
+        let pages;
+        if (!cachedPages) {
+            const page = await fetch(config.apiBaseURL + 'pages?limit=100&parent=null');
+            if (!page.ok) { throw page; }
+            pages = await page.json();
+            cache[pagesCacheKey] = pages;
+            setTimeout(() => {
+                delete cache[pagesCacheKey];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            pages = cachedPages;
+        }
 
-        const career = await fetch(config.apiBaseURL + 'careers');
-        if (!career.ok) { throw career; }
-        const careers = await career.json();
+        const careersCacheKey = `careers-limit_100`;
+        const cachedCareers = cache[careersCacheKey];
+        let careers;
+        if (!cachedCareers) {
+            const career = await fetch(config.apiBaseURL + 'careers?limit=100');
+            if (!career.ok) { throw career; }
+            careers = await career.json();
+            cache[careersCacheKey] = careers;
+            setTimeout(() => {
+                delete cache[cachedCareers];
+            }, CACHE_EXPIRATION_TIME);
+        } else {
+            careers = cachedCareers;
+        }
 
         const slug = "careers";
 
