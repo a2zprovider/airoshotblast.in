@@ -6,7 +6,7 @@ let cache: Record<string, any> = {};
 export let loader: LoaderFunction = async ({ request, params }) => {
     const { slug } = params;
 
-    const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+    const CACHE_EXPIRATION_TIME = 1 * 60 * 1000;
 
     const url = new URL(request.url);
     const baseUrl = `https://${url.host}`;
